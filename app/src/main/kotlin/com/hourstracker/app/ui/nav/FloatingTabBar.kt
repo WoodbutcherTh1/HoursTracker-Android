@@ -36,7 +36,7 @@ fun FloatingTabBar(selected: TopLevelTab, onSelect: (TopLevelTab) -> Unit, modif
         modifier = modifier
             .fillMaxWidth()
             .height(68.dp)
-            .background(Palette.card.copy(alpha = 0.92f), shape)
+            .background(Palette.card, shape)
             .border(width = 1.dp, color = Palette.hairline, shape = shape)
             .padding(Space.xxs),
         horizontalArrangement = Arrangement.SpaceEvenly,

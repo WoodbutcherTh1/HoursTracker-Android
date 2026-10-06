@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -241,7 +242,7 @@ private fun TopBar(step: Step, language: AppLanguage, onLanguageChange: (AppLang
                     )
                 }
                 // The language picker keeps each language in its own script so anyone can find their way back.
-                Box(Modifier.semantics { contentDescription = languageDescription }) {
+                Box(Modifier.width(150.dp).semantics { contentDescription = languageDescription }) {
                     PickerRow(
                         label = "",
                         selected = language,
@@ -253,7 +254,14 @@ private fun TopBar(step: Step, language: AppLanguage, onLanguageChange: (AppLang
                 }
             }
             if (step != Step.Result) {
-                Text(text = stringResource(R.string.onb_skip), style = DsText.callout, color = Palette.textSecondary, modifier = Modifier.clickable(onClick = onSkip))
+                Text(
+                    text = stringResource(R.string.onb_skip),
+                    style = DsText.callout,
+                    color = Palette.textSecondary,
+                    maxLines = 1,
+                    softWrap = false,
+                    modifier = Modifier.clickable(onClick = onSkip).padding(start = Space.sm),
+                )
             }
         }
         if (step != Step.Welcome) {
