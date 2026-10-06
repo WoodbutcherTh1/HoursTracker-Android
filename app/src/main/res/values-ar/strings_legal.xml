@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="legal_gate_accept">أوافق وأتابع</string>
+    <string name="legal_gate_body">لاستخدام HoursTracker، يُرجى قراءة شروط الاستخدام وسياسة الخصوصية والموافقة عليهما.</string>
+    <string name="legal_gate_checkbox">قرأت شروط الاستخدام وسياسة الخصوصية وأوافق عليهما</string>
+    <string name="legal_gate_decline">لا أوافق</string>
+    <string name="legal_gate_decline_message">بياناتك تبقى على هذا الآيفون. يمكنك تصديرها الآن، أو حذف التطبيق، أو العودة والموافقة في أي وقت.</string>
+    <string name="legal_gate_decline_title">لا يمكن استخدام HoursTracker دون الموافقة</string>
+    <string name="legal_gate_point_control">يمكنك تصدير بياناتك أو حذفها في أي وقت.</string>
+    <string name="legal_gate_point_data">بياناتك تبقى على الآيفون، إلا إذا فعّلت نسخًا احتياطيًا أو مزامنة أو ميزة ذكية.</string>
+    <string name="legal_gate_point_estimates">مبالغ الراتب تقديرية. قسيمة الراتب والقانون هما ما يحدّد راتبك الفعلي.</string>
+    <string name="legal_gate_read_again">اقرأ مرة أخرى</string>
+    <string name="legal_gate_title">قبل أن تبدأ</string>
+    <string name="legal_gate_title_updated">حدّثنا الشروط</string>
+</resources>

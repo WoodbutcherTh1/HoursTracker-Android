@@ -34,6 +34,19 @@ class AppFlags(context: Context) {
         onboardingFlow.value = true
     }
 
+    // Onboarding answers that are not workplace settings. DISPLAY ONLY: they never reach the pay engine.
+    var weekPattern: String?
+        get() = prefs.getString(KEY_WEEK_PATTERN, null)
+        set(value) = prefs.edit { putString(KEY_WEEK_PATTERN, value) }
+
+    var customWorkdays: Set<Int>
+        get() = prefs.getStringSet(KEY_CUSTOM_DAYS, emptySet()).orEmpty().mapNotNull { it.toIntOrNull() }.toSet()
+        set(value) = prefs.edit { putStringSet(KEY_CUSTOM_DAYS, value.map { it.toString() }.toSet()) }
+
+    var weeklyGoalHours: Int?
+        get() = if (prefs.contains(KEY_WEEKLY_GOAL)) prefs.getInt(KEY_WEEKLY_GOAL, 0) else null
+        set(value) = prefs.edit { if (value == null) remove(KEY_WEEKLY_GOAL) else putInt(KEY_WEEKLY_GOAL, value) }
+
     var language: AppLanguage
         get() = AppLanguage.entries.firstOrNull { it.name == prefs.getString(KEY_LANGUAGE, null) } ?: AppLanguage.System
         set(value) = prefs.edit { putString(KEY_LANGUAGE, value.name) }
@@ -43,5 +56,8 @@ class AppFlags(context: Context) {
         private const val KEY_CONSENT = "legalVersion"
         private const val KEY_ONBOARDING = "onboardingDone"
         private const val KEY_LANGUAGE = "language"
+        private const val KEY_WEEK_PATTERN = "weekPattern"
+        private const val KEY_CUSTOM_DAYS = "customWorkdays"
+        private const val KEY_WEEKLY_GOAL = "weeklyGoalHoursDisplayOnly"
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onb_back">חזרה</string>
+    <string name="onb_clock_in_now">כניסה עכשיו</string>
+    <string name="onb_cta_show_result">הציגו את התוצאה שלי</string>
+    <string name="onb_cta_start">בואו נתחיל</string>
+    <string name="onb_days_subtitle">רק לצורך ההערכה — כללי שכר ביום מנוחה נשארים בהגדרות</string>
+    <string name="onb_days_title">באילו ימים אתם עובדים?</string>
+    <string name="onb_estimate_caption">הערכה לפני מס</string>
+    <string name="onb_example_caption">דוגמה · ברוטו משוער</string>
+    <string name="onb_hours_estimate">≈ %1$s בשבוע</string>
+    <string name="onb_hours_note">רק לצורך ההערכה — זה לא משנה את חישוב השכר</string>
+    <string name="onb_hours_title">כמה שעות אתם מצפים לעבוד בשבוע?</string>
+    <string name="onb_hours_value">%1$s ש׳</string>
+    <string name="onb_language">שפה</string>
+    <string name="onb_progress">שלב %1$s מתוך %2$s</string>
+    <string name="onb_rate_a11y">שכר לשעה</string>
+    <string name="onb_rate_error">הזינו סכום בין 1 ל-500</string>
+    <string name="onb_rate_subtitle">ברוטו, לפני מס — כמו בתלוש השכר</string>
+    <string name="onb_rate_title">כמה אתם מרוויחים לשעה?</string>
+    <string name="onb_result_caption">ברוטו משוער · לפני מס</string>
+    <string name="onb_result_hours">שעות</string>
+    <string name="onb_result_per_hour">לשעה</string>
+    <string name="onb_result_privacy">הנתונים שלכם נשארים במכשיר</string>
+    <string name="onb_result_title">אם תעבדו היום 8 שעות</string>
+    <string name="onb_skip">אחר כך</string>
+    <string name="onb_today">היום</string>
+    <string name="onb_week_custom">אחר / מותאם אישית</string>
+    <string name="onb_week_custom_sub">בחרו את הימים שלכם</string>
+    <string name="onb_week_five">5 ימים</string>
+    <string name="onb_week_five_sub">ראשון–חמישי</string>
+    <string name="onb_week_six">6 ימים</string>
+    <string name="onb_week_six_sub">ראשון–שישי</string>
+    <string name="onb_week_title">איך נראה שבוע העבודה שלכם?</string>
+    <string name="onb_week_varies">משתנה / משמרות</string>
+    <string name="onb_week_varies_sub">אגדיר אחר כך</string>
+    <string name="onb_welcome_row1">כניסה ויציאה בלחיצה אחת</string>
+    <string name="onb_welcome_row2">חוקי שעות נוספות ומס בישראל — מובנים</string>
+    <string name="onb_welcome_title">דעו כמה הרווחתם — דקה אחרי דקה</string>
+    <string name="onboarding_next">הבא</string>
+    <string name="onboarding_start">להתחיל לעקוב</string>
+</resources>

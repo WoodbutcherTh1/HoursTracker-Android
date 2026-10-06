@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onb_back">رجوع</string>
+    <string name="onb_clock_in_now">سجّل دخول هلأ</string>
+    <string name="onb_cta_show_result">ورجيني النتيجة</string>
+    <string name="onb_cta_start">يلا نبلّش</string>
+    <string name="onb_days_subtitle">بس للتقدير — قواعد أجر يوم الراحة بتضل بالإعدادات</string>
+    <string name="onb_days_title">بأي أيام بتشتغل؟</string>
+    <string name="onb_estimate_caption">تقدير قبل الضريبة</string>
+    <string name="onb_example_caption">مثال · إجمالي تقريبي</string>
+    <string name="onb_hours_estimate">≈ %1$s بالأسبوع</string>
+    <string name="onb_hours_note">بس للتقدير — ما بيغيّر طريقة حساب الراتب</string>
+    <string name="onb_hours_title">كم ساعة متوقع تشتغل بالأسبوع؟</string>
+    <string name="onb_hours_value">%1$s ساعة</string>
+    <string name="onb_language">اللغة</string>
+    <string name="onb_progress">الخطوة %1$s من %2$s</string>
+    <string name="onb_rate_a11y">الأجر بالساعة</string>
+    <string name="onb_rate_error">أدخل مبلغ بين 1 و 500</string>
+    <string name="onb_rate_subtitle">إجمالي، قبل الضريبة — مثل ما بيطلع بقسيمة الراتب</string>
+    <string name="onb_rate_title">قديش بتقبض بالساعة؟</string>
+    <string name="onb_result_caption">إجمالي تقريبي · قبل الضريبة</string>
+    <string name="onb_result_hours">الساعات</string>
+    <string name="onb_result_per_hour">بالساعة</string>
+    <string name="onb_result_privacy">بياناتك بتضل على جهازك</string>
+    <string name="onb_result_title">إذا اشتغلت اليوم 8 ساعات</string>
+    <string name="onb_skip">لاحقاً</string>
+    <string name="onb_today">اليوم</string>
+    <string name="onb_week_custom">غير ذلك / مخصّص</string>
+    <string name="onb_week_custom_sub">اختار أيامك</string>
+    <string name="onb_week_five">5 أيام</string>
+    <string name="onb_week_five_sub">الأحد–الخميس</string>
+    <string name="onb_week_six">6 أيام</string>
+    <string name="onb_week_six_sub">الأحد–الجمعة</string>
+    <string name="onb_week_title">كيف أسبوع شغلك؟</string>
+    <string name="onb_week_varies">متغيّر / ورديات</string>
+    <string name="onb_week_varies_sub">بحدده بعدين</string>
+    <string name="onb_welcome_row1">دخول وخروج بكبسة وحدة</string>
+    <string name="onb_welcome_row2">قوانين الساعات الإضافية والضريبة بإسرائيل — مدمجة</string>
+    <string name="onb_welcome_title">اعرف كم ربحت — دقيقة بدقيقة</string>
+    <string name="onboarding_next">التالي</string>
+    <string name="onboarding_start">ابدأ التتبع</string>
+</resources>

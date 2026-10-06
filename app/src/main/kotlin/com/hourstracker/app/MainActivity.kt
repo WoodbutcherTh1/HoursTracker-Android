@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.hourstracker.app.data.AppFlags
 import com.hourstracker.app.data.AppLanguage
-import com.hourstracker.app.ui.nav.AppRoot
+import com.hourstracker.app.ui.nav.AppGate
 import com.hourstracker.app.ui.theme.HoursTrackerTheme
 import java.util.Locale
 
@@ -35,8 +35,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             HoursTrackerTheme {
-                AppRoot(
-                    language = container.flags.language,
+                AppGate(
+                    container = container,
                     onLanguageChange = { chosen: AppLanguage ->
                         container.flags.language = chosen
                         recreate()

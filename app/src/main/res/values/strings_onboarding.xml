@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onb_back">Back</string>
+    <string name="onb_clock_in_now">Clock in now</string>
+    <string name="onb_cta_show_result">Show my result</string>
+    <string name="onb_cta_start">Let\'s start</string>
+    <string name="onb_days_subtitle">Only for your estimate — rest-day pay rules stay in Settings</string>
+    <string name="onb_days_title">Which days do you work?</string>
+    <string name="onb_estimate_caption">estimate before tax</string>
+    <string name="onb_example_caption">Example · estimated gross</string>
+    <string name="onb_hours_estimate">≈ %1$s a week</string>
+    <string name="onb_hours_note">Only for the estimate — it doesn\'t change how pay is calculated</string>
+    <string name="onb_hours_title">How many hours do you expect a week?</string>
+    <string name="onb_hours_value">%1$s h</string>
+    <string name="onb_language">Language</string>
+    <string name="onb_progress">Step %1$s of %2$s</string>
+    <string name="onb_rate_a11y">Hourly rate</string>
+    <string name="onb_rate_error">Enter an amount between 1 and 500</string>
+    <string name="onb_rate_subtitle">Gross, before tax — as it appears on your payslip</string>
+    <string name="onb_rate_title">How much do you earn per hour?</string>
+    <string name="onb_result_caption">estimated gross · before tax</string>
+    <string name="onb_result_hours">Hours</string>
+    <string name="onb_result_per_hour">Per hour</string>
+    <string name="onb_result_privacy">Your data stays on your device</string>
+    <string name="onb_result_title">If you work 8 hours today</string>
+    <string name="onb_skip">Later</string>
+    <string name="onb_today">Today</string>
+    <string name="onb_week_custom">Other / custom</string>
+    <string name="onb_week_custom_sub">Pick your own days</string>
+    <string name="onb_week_five">5 days</string>
+    <string name="onb_week_five_sub">Sunday–Thursday</string>
+    <string name="onb_week_six">6 days</string>
+    <string name="onb_week_six_sub">Sunday–Friday</string>
+    <string name="onb_week_title">How is your work week?</string>
+    <string name="onb_week_varies">Varies / shifts</string>
+    <string name="onb_week_varies_sub">I\'ll set this later</string>
+    <string name="onb_welcome_row1">Clock in and out with one tap</string>
+    <string name="onb_welcome_row2">Israeli overtime and tax rules, built in</string>
+    <string name="onb_welcome_title">Know what you earn — minute by minute</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_start">Start Tracking</string>
+</resources>

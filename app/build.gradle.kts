@@ -48,6 +48,8 @@ android {
     lint {
         warningsAsErrors = true
         abortOnError = true
+        // Typography style hints only; the strings come from the iOS catalog and are not rewritten here.
+        disable += listOf("TypographyDashes", "TypographyQuotes", "TypographyEllipsis", "TypographyFractions", "TypographyOther")
     }
 }
 

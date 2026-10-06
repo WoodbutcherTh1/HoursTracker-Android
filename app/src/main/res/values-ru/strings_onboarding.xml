@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onb_back">Назад</string>
+    <string name="onb_clock_in_now">Начать смену сейчас</string>
+    <string name="onb_cta_show_result">Показать результат</string>
+    <string name="onb_cta_start">Начнём</string>
+    <string name="onb_days_subtitle">Только для оценки — правила оплаты выходных остаются в Настройках</string>
+    <string name="onb_days_title">В какие дни вы работаете?</string>
+    <string name="onb_estimate_caption">оценка до налогов</string>
+    <string name="onb_example_caption">Пример · примерно брутто</string>
+    <string name="onb_hours_estimate">≈ %1$s в неделю</string>
+    <string name="onb_hours_note">Только для оценки — на расчёт зарплаты не влияет</string>
+    <string name="onb_hours_title">Сколько часов в неделю вы планируете?</string>
+    <string name="onb_hours_value">%1$s ч</string>
+    <string name="onb_language">Язык</string>
+    <string name="onb_progress">Шаг %1$s из %2$s</string>
+    <string name="onb_rate_a11y">Почасовая ставка</string>
+    <string name="onb_rate_error">Введите сумму от 1 до 500</string>
+    <string name="onb_rate_subtitle">Брутто, до налогов — как в расчётном листе</string>
+    <string name="onb_rate_title">Сколько вы получаете в час?</string>
+    <string name="onb_result_caption">примерно брутто · до налогов</string>
+    <string name="onb_result_hours">Часы</string>
+    <string name="onb_result_per_hour">В час</string>
+    <string name="onb_result_privacy">Ваши данные остаются на устройстве</string>
+    <string name="onb_result_title">Если сегодня вы отработаете 8 часов</string>
+    <string name="onb_skip">Позже</string>
+    <string name="onb_today">Сегодня</string>
+    <string name="onb_week_custom">Другое / свой график</string>
+    <string name="onb_week_custom_sub">Выберите свои дни</string>
+    <string name="onb_week_five">5 дней</string>
+    <string name="onb_week_five_sub">Воскресенье–четверг</string>
+    <string name="onb_week_six">6 дней</string>
+    <string name="onb_week_six_sub">Воскресенье–пятница</string>
+    <string name="onb_week_title">Какая у вас рабочая неделя?</string>
+    <string name="onb_week_varies">По-разному / сменами</string>
+    <string name="onb_week_varies_sub">Настрою позже</string>
+    <string name="onb_welcome_row1">Начало и конец смены одним нажатием</string>
+    <string name="onb_welcome_row2">Израильские правила сверхурочных и налогов уже встроены</string>
+    <string name="onb_welcome_title">Знайте, сколько зарабатываете, — поминутно</string>
+    <string name="onboarding_next">Далее</string>
+    <string name="onboarding_start">Начать учёт</string>
+</resources>
