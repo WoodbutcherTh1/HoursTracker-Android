@@ -17,7 +17,7 @@ internal fun ShiftRecord.toEntity(): WorkSessionEntity = WorkSessionEntity(
     clockIn = session.clockIn.ms(),
     clockOut = session.clockOut?.ms(),
     isManualEntry = isManualEntry,
-    isAIImported = false,
+    isAIImported = isAIImported,
     breakMinutes = session.breakMinutes,
     dayType = session.dayType.raw,
     isNightShift = session.isNightShift,
@@ -43,6 +43,7 @@ internal fun SessionWithBreaks.toRecord(): ShiftRecord = ShiftRecord(
     ),
     notes = session.notes,
     isManualEntry = session.isManualEntry,
+    isAIImported = session.isAIImported,
     modifiedAt = session.modifiedAt.instant(),
     workplaceId = session.workplaceId?.let(UUID::fromString),
 )

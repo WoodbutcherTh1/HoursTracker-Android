@@ -11,6 +11,8 @@ data class ShiftRecord(
     val session: WorkSession,
     val notes: String? = null,
     val isManualEntry: Boolean = false,
+    /** Imported by the timesheet scanner. */
+    val isAIImported: Boolean = false,
     val modifiedAt: Instant = Instant.EPOCH,
     /** `null` is the main workplace. */
     val workplaceId: UUID? = null,

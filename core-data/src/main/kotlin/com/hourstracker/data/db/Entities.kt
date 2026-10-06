@@ -67,3 +67,54 @@ data class SessionWithBreaks(
     @Embedded val session: WorkSessionEntity,
     @Relation(parentColumn = "id", entityColumn = "sessionId") val breaks: List<BreakIntervalEntity>,
 )
+
+/**
+ * The settings of one workplace: row `main` for the main workplace, one row per extra job. Everything the iOS settings
+ * hold has a column, including the workplace location (nullable) that arrival reminders will use later. The worker's ID
+ * number is deliberately not here: it is encrypted in the Android Keystore and never stored in the database.
+ */
+@Entity(tableName = "workplace_settings")
+data class WorkplaceSettingsEntity(
+    @PrimaryKey val id: String,
+    /** Index into the workplace colors; 0 for the main workplace. */
+    val colorIndex: Int,
+    val workplaceName: String,
+    val contractorName: String?,
+    val workerFullName: String,
+    val employeeNumber: String,
+    val hourlyRate: Double,
+    val dailyGasAllowance: Double,
+    val standardDayHours: Double,
+    val ot125HoursCap: Double,
+    val locationLatitude: Double?,
+    val locationLongitude: Double?,
+    val locationRadiusMeters: Double,
+    val maritalStatus: String,
+    val hasChildren: Boolean,
+    val numberOfChildren: Int,
+    val spouseEmployed: Boolean,
+    val birthDate: Long?,
+    val payrollStartDay: Int,
+    val restDayWeekday: Int,
+    val secondRestDayWeekday: Int?,
+    val defaultBreakMinutes: Int,
+    val breaksArePaid: Boolean,
+    val nightStandardDayHours: Double,
+    val weeklyStandardHours: Double,
+    val weeklyOvertimeCapHours: Double,
+    val currencyCode: String,
+    val arrivalRemindersEnabled: Boolean,
+    val expectedShiftStartHour: Int,
+    val expectedShiftStartMinute: Int,
+    val modifiedAt: Long,
+)
+
+/** A vacation or recuperation day marked in History. Display only: pay never reads it. */
+@Entity(tableName = "leave_day", indices = [Index(value = ["date"], name = "index_leave_day_date")])
+data class LeaveDayEntity(
+    @PrimaryKey val id: String,
+    /** Start of the marked day (epoch ms, UTC). */
+    val date: Long,
+    /** `vacation` or `recuperation`. */
+    val kind: String,
+)
