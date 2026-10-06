@@ -101,6 +101,7 @@ fun HomeScreen() {
 
         val shift = active
         if (shift == null) {
+            // Clocked-out state: greeting, hours today/week, and Clock In button
             StatCards(stats)
             ClockInDoor(onClick = ::requestClockIn)
         } else {
