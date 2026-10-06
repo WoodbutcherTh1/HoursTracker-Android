@@ -44,7 +44,7 @@ import com.hourstracker.app.ui.theme.dsCard
 
 /** A section title: a small accent icon and the title in secondary text above a card. */
 @Composable
-fun SectionHeader(title: String, icon: ImageVector? = null, modifier: Modifier = Modifier) {
+fun SectionHeader(title: String, modifier: Modifier = Modifier, icon: ImageVector? = null) {
     Row(
         modifier = modifier.padding(start = Space.xs, end = Space.xs, top = Space.lg, bottom = Space.xs),
         verticalAlignment = Alignment.CenterVertically,
@@ -177,10 +177,10 @@ fun StepperRow(
     value: Int,
     range: IntRange,
     onValueChange: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-    step: Int = 1,
     minusDescription: String,
     plusDescription: String,
+    modifier: Modifier = Modifier,
+    step: Int = 1,
 ) {
     FormRow(label = label, modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.sm)) {

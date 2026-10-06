@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HoursTracker</string>
-
-    <string name="tab_home">Home</string>
-    <string name="tab_history">History</string>
-    <string name="tab_payslips">Payslips</string>
-    <string name="tab_export">Export</string>
-    <string name="tab_settings">Settings</string>
+    <string name="app_name" translatable="false">HoursTracker</string>
 </resources>

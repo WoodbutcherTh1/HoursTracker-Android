@@ -43,6 +43,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -91,6 +92,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
         ) {
             Text(text = stringResource(R.string.settings_title), style = DsText.titleScreen, color = Palette.textPrimary)
             val canSave = vm.hasUnsavedChanges
+            val unsavedDescription = stringResource(R.string.settings_unsaved_title)
             Text(
                 text = stringResource(if (vm.justSaved) R.string.settings_saved else R.string.settings_save),
                 style = DsText.headline,
@@ -98,6 +100,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
                 modifier = Modifier
                     .background(Palette.card, CircleShape)
                     .clickable(enabled = canSave, onClick = vm::save)
+                    .semantics { if (canSave) stateDescription = unsavedDescription }
                     .padding(horizontal = Space.md, vertical = Space.xs),
             )
         }
@@ -106,7 +109,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
             modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = Space.md),
         ) {
             // Worker information
-            SectionHeader(stringResource(R.string.settings_worker_info), Icons.Filled.Person)
+            SectionHeader(stringResource(R.string.settings_worker_info), icon = Icons.Filled.Person)
             FormCard {
                 TextRow(d.fullName, { v -> vm.edit { it.copy(fullName = v) } }, stringResource(R.string.settings_full_name))
                 RowDivider()
@@ -148,7 +151,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
             }
 
             // Workplace
-            SectionHeader(stringResource(R.string.settings_workplace), Icons.Filled.AccountBox)
+            SectionHeader(stringResource(R.string.settings_workplace), icon = Icons.Filled.AccountBox)
             FormCard {
                 TextRow(d.workplaceName, { v -> vm.edit { it.copy(workplaceName = v) } }, stringResource(R.string.settings_workplace_name))
                 RowDivider()
@@ -156,7 +159,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
             }
 
             // Pay and hours
-            SectionHeader(stringResource(R.string.settings_pay_hours), Icons.Filled.Info)
+            SectionHeader(stringResource(R.string.settings_pay_hours), icon = Icons.Filled.Info)
             FormCard {
                 NumberRow(stringResource(R.string.settings_hourly_rate), d.hourlyRate, { v -> vm.edit { it.copy(hourlyRate = v) } }, unit = currencySymbol)
                 RowDivider()
@@ -172,7 +175,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
             }
 
             // Work rules
-            SectionHeader(stringResource(R.string.settings_work_rules), Icons.Filled.Settings)
+            SectionHeader(stringResource(R.string.settings_work_rules), icon = Icons.Filled.Settings)
             FormCard {
                 val weekdays = (1..7).toList()
                 PickerRow(
@@ -228,10 +231,23 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
                     optionLabel = { "$it  ${Currency.getInstance(it).getSymbol(locale)}" },
                     onSelect = { v -> vm.edit { it.copy(currencyCode = v) } },
                 )
+                RowDivider()
+                var noteOpen by remember { mutableStateOf(false) }
+                FormRow(label = stringResource(R.string.settings_work_rules_note_title), modifier = Modifier.clickable { noteOpen = !noteOpen }) {
+                    Text(if (noteOpen) "−" else "+", style = DsText.headline, color = Palette.accent)
+                }
+                if (noteOpen) {
+                    Text(
+                        text = stringResource(R.string.settings_work_rules_note),
+                        style = DsText.meta,
+                        color = Palette.textSecondary,
+                        modifier = Modifier.padding(horizontal = Space.md, vertical = Space.xs),
+                    )
+                }
             }
 
             // Payroll cycle
-            SectionHeader(stringResource(R.string.payroll_section), Icons.Filled.DateRange)
+            SectionHeader(stringResource(R.string.payroll_section), icon = Icons.Filled.DateRange)
             FormCard {
                 Text(
                     text = stringResource(R.string.payroll_start_day_help),
@@ -275,7 +291,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
             }
 
             // Tax profile
-            SectionHeader(stringResource(R.string.tax_section), Icons.Filled.Info)
+            SectionHeader(stringResource(R.string.tax_section), icon = Icons.Filled.Info)
             FormCard {
                 var pickDate by remember { mutableStateOf(false) }
                 FormRow(label = stringResource(R.string.tax_birth_date), modifier = Modifier.clickable { pickDate = true }) {
@@ -335,7 +351,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
             }
 
             // Language
-            SectionHeader(stringResource(R.string.settings_app_language), null)
+            SectionHeader(stringResource(R.string.settings_app_language))
             FormCard {
                 PickerRow(
                     label = stringResource(R.string.settings_app_language),
@@ -389,4 +405,4 @@ private fun BirthDateDialog(initial: Instant?, onDismiss: () -> Unit, onConfirm:
 }
 
 private fun Modifier.clearAndSetSemanticsDescription(description: String): Modifier =
-    this.then(semantics { this.contentDescription = description })
+    semantics { this.contentDescription = description }

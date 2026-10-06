@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_home">Главная</string>
+    <string name="tab_history">История</string>
+    <string name="tab_payslips">Листы</string>
+    <string name="tab_export">Экспорт</string>
+    <string name="tab_settings">Настройки</string>
+</resources>
