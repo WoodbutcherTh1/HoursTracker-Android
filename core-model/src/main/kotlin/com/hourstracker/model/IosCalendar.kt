@@ -3,6 +3,7 @@ package com.hourstracker.model
 import java.time.Clock
 import java.time.DayOfWeek
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
@@ -37,15 +38,28 @@ class IosCalendar(
 
     fun isSameDay(a: Instant, b: Instant): Boolean = localDate(a) == localDate(b)
 
+    /**
+     * A wall-clock time to an instant, the way Foundation resolves it on the Mac: a time that
+     * occurs twice resolves to its first occurrence, and a time that does not exist (inside a
+     * spring-forward gap) resolves to the first valid instant after the gap ("next time").
+     * `ZonedDateTime` would instead push it forward by the length of the gap.
+     */
+    private fun resolve(local: LocalDateTime): Instant {
+        val transition = zone.rules.getTransition(local)
+        return if (transition != null && transition.isGap) transition.instant else local.atZone(zone).toInstant()
+    }
+
+    private fun wallClock(instant: Instant): LocalDateTime = instant.atZone(zone).toLocalDateTime()
+
     /** `date(byAdding: .day, ...)`: the same wall-clock time, `days` calendar days later. */
-    fun addDays(instant: Instant, days: Int): Instant = instant.atZone(zone).plusDays(days.toLong()).toInstant()
+    fun addDays(instant: Instant, days: Int): Instant = resolve(wallClock(instant).plusDays(days.toLong()))
 
     /** `date(byAdding: .month, ...)`: the same wall-clock time, clamped to the end of a shorter month. */
-    fun addMonths(instant: Instant, months: Int): Instant = instant.atZone(zone).plusMonths(months.toLong()).toInstant()
+    fun addMonths(instant: Instant, months: Int): Instant = resolve(wallClock(instant).plusMonths(months.toLong()))
 
     /** `date(bySettingHour:minute:second:of:)`: that wall-clock time on the local day of [instant]. */
     fun setTime(instant: Instant, hour: Int, minute: Int, second: Int): Instant =
-        localDate(instant).atTime(hour, minute, second).atZone(zone).toInstant()
+        resolve(localDate(instant).atTime(hour, minute, second))
 
     /** `date(from: DateComponents(year:month:day:))` at midnight. */
     fun dateFrom(year: Int, month: Int, day: Int): Instant = LocalDate.of(year, month, day).atStartOfDay(zone).toInstant()
