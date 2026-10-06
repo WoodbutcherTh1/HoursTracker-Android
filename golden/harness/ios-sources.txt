@@ -1,0 +1,5 @@
+# iOS source files the harness needs, one path per line, relative to the iOS repository root.
+# run.sh links them temporarily into golden/harness/Sources/iOSSources (ignored by git) and
+# removes the links when it finishes. iOS source code is never copied into this repository.
+#
+# Empty for now: the list is decided in milestone M1 together with the test cases.

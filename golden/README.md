@@ -1,0 +1,52 @@
+# Golden files
+
+The Android pay engine must produce **exactly** the same numbers as the iOS app. Golden files are the proof: a Swift harness runs the real iOS code on a Mac and records inputs and outputs as JSON. The Kotlin tests in `core-model` then compare against them bit for bit.
+
+- `harness/` — Swift package that generates the data.
+- `data/` — the generated JSON files and `manifest.json` (the iOS commit SHA and generation time).
+- `run.sh` — the only supported way to run the harness.
+
+**iOS source code is never copied into this repository.** `run.sh` links the files listed in `harness/ios-sources.txt` into an ignored folder for the duration of the run and removes the links afterwards. Only the generated data is committed.
+
+## How to regenerate (on a Mac)
+
+You need a Mac with Xcode or the Command Line Tools (`xcode-select --install`), a local checkout of the iOS repository, and this repository.
+
+1. In the **iOS** checkout, switch to the commit you want to test against, and make sure the working tree is clean (`git status` shows nothing). `run.sh` refuses to run otherwise, because the recorded SHA must describe exactly the code that produced the data.
+2. In **this** repository, switch to the branch you are working on and pull.
+3. Run the harness, passing the path to the iOS checkout:
+
+   ```
+   golden/run.sh ~/path/to/HoursTracker
+   ```
+
+4. Look at what changed:
+
+   ```
+   git status golden/data
+   git diff --stat golden/data
+   ```
+
+5. Commit and push the data (the script prints the commit command, including the short SHA):
+
+   ```
+   git add golden/data
+   git commit -m "test(golden): regenerate from iOS <sha7>"
+   git push
+   ```
+
+The results do not depend on the Mac's region, language, or time zone: every case passes an explicit calendar, locale, and time zone to the iOS code.
+
+## Troubleshooting
+
+- **"run this on a Mac"** — `Foundation` on Linux differs from Apple's (notably `Calendar`), so golden data must come from macOS.
+- **"uncommitted changes"** — commit or stash the changes in the iOS checkout and run again.
+- **A Swift build error** — copy the full message and send it over. Do not edit the iOS repository to work around it.
+
+## Data format
+
+- A `Double` is stored as an object with its raw IEEE-754 bits and a readable value: `{"bits": "4021333333333333", "value": 8.6}`. Tests compare the bits.
+- Dates are stored as an ISO-8601 instant plus the explicit time zone identifier used.
+- `manifest.json` lists every data file and the iOS commit it came from.
+
+The test cases themselves are defined in milestone M1.
