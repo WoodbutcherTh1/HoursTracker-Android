@@ -49,6 +49,10 @@ So `run.sh` runs the harness once per environment, each in its own process with 
 
 At startup the harness checks that `Calendar.current` really has the pinned time zone, first weekday, and minimal days, and **stops with a clear message if it does not**. Each file in `data/` records the environment it was produced in (including the first weekday and minimal days actually read from the system), so the result never depends on the Mac's own region, language, or time zone.
 
+## What only the Mac can settle
+
+Foundation on Linux and on macOS are not the same implementation. The clearest known difference is a wall-clock time that does not exist: asking for 02:30 on the spring daylight-saving day (when 02:00 jumps to 03:00). Linux answers 03:00; macOS may answer 03:30. The data produced on a Mac is the reference, which is why provisional (Linux) output is never committed. The Kotlin side follows whatever the Mac data says.
+
 ## Troubleshooting
 
 - **"run this on a Mac"** — `Foundation` on Linux differs from Apple's (notably `Calendar`), so golden data must come from macOS.

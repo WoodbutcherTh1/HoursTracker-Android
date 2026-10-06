@@ -27,7 +27,17 @@ let goldenGroups: [GoldenGroup] = [
     GoldenGroup("tax_monthly", environments: ["il"], run: writeTaxMonthly),
     GoldenGroup("tax_daily", environments: ["il"], run: writeTaxDaily),
     GoldenGroup("tax_credit", environments: ["il"], run: writeTaxCredit),
-    GoldenGroup("settings_normalization", environments: ["il"], run: writeSettingsNormalization)
+    GoldenGroup("settings_normalization", environments: ["il"], run: writeSettingsNormalization),
+    GoldenGroup("calendar_ops", run: writeCalendarOps),
+    GoldenGroup("night_shift", run: writeNightShift),
+    GoldenGroup("clock_pair", run: writeClockPair),
+    GoldenGroup("break_rounding", environments: ["il"], run: writeBreakRounding),
+    GoldenGroup("default_break", environments: ["il"], run: writeDefaultBreak),
+    GoldenGroup("paid_elapsed", environments: ["il"], run: writeCompletedPaidElapsed),
+    GoldenGroup("period_payroll", run: writePeriodPayroll),
+    GoldenGroup("period_weeks", run: writePeriodWeeks),
+    GoldenGroup("period_misc", run: writePeriodMisc),
+    GoldenGroup("daily_hours_week", run: writeDailyHoursWeek)
 ]
 
 /// The result of `OvertimeCalculator` for one session or day, with every number as raw bits.
