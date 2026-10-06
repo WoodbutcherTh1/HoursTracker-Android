@@ -34,6 +34,7 @@ let goldenGroups: [GoldenGroup] = [
     GoldenGroup("break_rounding", environments: ["il"], run: writeBreakRounding),
     GoldenGroup("default_break", environments: ["il"], run: writeDefaultBreak),
     GoldenGroup("paid_elapsed", environments: ["il"], run: writeCompletedPaidElapsed),
+    GoldenGroup("aggregate", run: writeAggregate),
     GoldenGroup("period_payroll", run: writePeriodPayroll),
     GoldenGroup("period_weeks", run: writePeriodWeeks),
     GoldenGroup("period_misc", run: writePeriodMisc),
