@@ -35,7 +35,19 @@ You need a Mac with Xcode or the Command Line Tools (`xcode-select --install`), 
    git push
    ```
 
-The results do not depend on the Mac's region, language, or time zone: every case passes an explicit calendar, locale, and time zone to the iOS code.
+## Why the harness runs in three environments
+
+Some iOS functions use `Calendar.current` internally (for example `aggregate` groups days with it, and the week-of-year grouping depends on the first weekday and the minimal days in the first week), and `Calendar.current` follows the device. Passing a calendar as a parameter is therefore not enough.
+
+So `run.sh` runs the harness once per environment, each in its own process with the time zone and the calendar settings pinned:
+
+| Environment | Time zone | First weekday | Purpose |
+|---|---|---|---|
+| `il` | `Asia/Jerusalem` | as defined by the Israeli locale | the real target; has daylight saving |
+| `ru` | `Europe/Moscow` | Monday | week start differs; no daylight saving |
+| `utc` | `UTC` | Monday | neutral reference |
+
+At startup the harness checks that `Calendar.current` really has the pinned time zone, first weekday, and minimal days, and **stops with a clear message if it does not**. Each file in `data/` records the environment it was produced in (including the first weekday and minimal days actually read from the system), so the result never depends on the Mac's own region, language, or time zone.
 
 ## Troubleshooting
 
@@ -47,6 +59,8 @@ The results do not depend on the Mac's region, language, or time zone: every cas
 
 - A `Double` is stored as an object with its raw IEEE-754 bits and a readable value: `{"bits": "4021333333333333", "value": 8.6}`. Tests compare the bits.
 - Dates are stored as an ISO-8601 instant plus the explicit time zone identifier used.
+- Money strings are compared after removing bidirectional marks and special spaces; digits, currency, and rounding must match exactly. Exact text equality is not required because Apple and Android ship different locale data.
+- Cases whose result depends on summation order (weekly overtime) use hours that are multiples of 0.25 for bit-for-bit checks; other inputs are compared with a tolerance of 1e-9.
 - `manifest.json` lists every data file and the iOS commit it came from.
 
 The test cases themselves are defined in milestone M1.
