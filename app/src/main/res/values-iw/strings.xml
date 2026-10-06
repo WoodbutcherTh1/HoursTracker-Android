@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HoursTracker</string>
+
+    <string name="tab_home">בית</string>
+    <string name="tab_history">היסטוריה</string>
+    <string name="tab_payslips">תלושים</string>
+    <string name="tab_export">ייצוא</string>
+    <string name="tab_settings">הגדרות</string>
+</resources>
