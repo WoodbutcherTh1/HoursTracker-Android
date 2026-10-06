@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="history_title">История</string>
+    <string name="history_col_date">Дата</string>
+    <string name="history_col_in">Начало</string>
+    <string name="history_col_out">Конец</string>
+    <string name="history_col_hours">Часы</string>
+    <string name="history_col_amount">Сумма</string>
+    <string name="history_pay_gross">Брутто</string>
+    <string name="history_pay_net">Нетто</string>
+    <string name="history_empty">Записей пока нет</string>
+    <string name="history_empty_description">История работы появится здесь после начала первой смены.</string>
+    <string name="history_empty_period">В этот день смен нет</string>
+    <string name="history_empty_period_hint">Выберите другой день или добавьте смену.</string>
+    <string name="history_total_hours_value">Часы: %1$s</string>
+    <string name="history_total_pay_value">Итого: %1$s</string>
+</resources>

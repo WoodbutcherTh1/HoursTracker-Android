@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="history_title">History</string>
+    <string name="history_col_date">Date</string>
+    <string name="history_col_in">In</string>
+    <string name="history_col_out">Out</string>
+    <string name="history_col_hours">Hours</string>
+    <string name="history_col_amount">Amount</string>
+    <string name="history_pay_gross">Gross</string>
+    <string name="history_pay_net">Net</string>
+    <string name="history_empty">No Entries Yet</string>
+    <string name="history_empty_description">Your work history will appear here after you clock in.</string>
+    <string name="history_empty_period">No shifts this day</string>
+    <string name="history_empty_period_hint">Pick another day or add a shift.</string>
+    <string name="history_total_hours_value">Hours: %1$s</string>
+    <string name="history_total_pay_value">Total: %1$s</string>
+</resources>

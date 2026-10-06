@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manual_title">Manual Entry</string>
+    <string name="manual_date">Date</string>
+    <string name="manual_work_day">Work Day</string>
+    <string name="session_day_type">Day Type</string>
+    <string name="day_type_regular">Regular Day</string>
+    <string name="day_type_rest_day">Rest Day</string>
+    <string name="day_type_holiday">Holiday</string>
+    <string name="day_type_sick">Sick Day</string>
+    <string name="manual_entry_mode">Entry Mode</string>
+    <string name="manual_mode">Mode</string>
+    <string name="manual_clock_in_out">Clock In / Out</string>
+    <string name="manual_total_hours">Total Hours</string>
+    <string name="manual_hours">Hours</string>
+    <string name="manual_hours_format">%1$s hours</string>
+    <string name="edit_times">Times</string>
+    <string name="edit_clock_in">Clock In</string>
+    <string name="edit_clock_out">Clock Out</string>
+    <string name="session_night_shift">Night Shift</string>
+    <string name="session_break_minutes">Break (minutes)</string>
+    <string name="edit_notes">Notes</string>
+    <string name="edit_notes_placeholder">Add notes (optional)</string>
+    <string name="edit_save">Save</string>
+    <string name="manual_error_zero_duration">Shift duration must be greater than zero.</string>
+    <string name="manual_error_break_exceeds_shift">Break can\'t be longer than the shift.</string>
+    <string name="manual_holiday_auto_filled_title">Holiday Hours</string>
+    <string name="manual_holiday_auto_filled_hint">Filled in automatically from your usual work hours — holidays aren\'t punched in manually.</string>
+    <string name="manual_sick_preview">Day %1$d of this sick streak — %2$d%% of pay</string>
+    <string name="manual_sick_hint">Day 1 is unpaid, days 2–3 are half pay, day 4 onward is full pay. Pay is calculated automatically — no clock-in/out needed.</string>
+    <string name="sick_day_cap_reached">Annual sick-day allowance reached (18 days). Check with your employer before recording more sick days this year.</string>
+    <string name="error_ok">OK</string>
+    <string name="error_title">Error</string>
+    <string name="feedback_session_saved">Shift saved</string>
+</resources>

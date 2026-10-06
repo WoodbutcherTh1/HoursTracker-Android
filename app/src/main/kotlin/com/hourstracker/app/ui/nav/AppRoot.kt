@@ -18,12 +18,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hourstracker.app.data.AppLanguage
 import com.hourstracker.app.ui.export.ExportScreen
+import com.hourstracker.app.LocalAppContainer
 import com.hourstracker.app.ui.history.HistoryScreen
+import com.hourstracker.app.ui.manual.ManualEntryScreen
 import com.hourstracker.app.ui.home.HomeScreen
 import com.hourstracker.app.ui.payslips.PayslipsScreen
 import com.hourstracker.app.ui.settings.SettingsScreen
 import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Space
+
+private const val MANUAL_ENTRY_ROUTE = "history/new"
 
 /** The signed-in shell: five tabs with a back stack each, and the floating tab bar over the content. */
 @Composable
@@ -41,12 +45,13 @@ fun AppRoot(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
             modifier = Modifier.fillMaxSize().statusBarsPadding(),
         ) {
             composable(TopLevelTab.Home.route) { HomeScreen() }
-            composable(TopLevelTab.History.route) { HistoryScreen() }
+            composable(TopLevelTab.History.route) { HistoryScreen(onAdd = { navController.navigate(MANUAL_ENTRY_ROUTE) }) }
+            composable(MANUAL_ENTRY_ROUTE) { ManualEntryScreen(LocalAppContainer.current, onClose = { navController.popBackStack() }) }
             composable(TopLevelTab.Payslips.route) { PayslipsScreen() }
             composable(TopLevelTab.Export.route) { ExportScreen() }
             composable(TopLevelTab.Settings.route) { SettingsScreen(language, onLanguageChange) }
         }
-        FloatingTabBar(
+        if (backStackEntry?.destination?.route != MANUAL_ENTRY_ROUTE) FloatingTabBar(
             selected = currentTab,
             onSelect = { tab ->
                 navController.navigate(tab.route) {

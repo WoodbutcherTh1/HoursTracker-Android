@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manual_title">إدخال يدوي</string>
+    <string name="manual_date">التاريخ</string>
+    <string name="manual_work_day">يوم العمل</string>
+    <string name="session_day_type">نوع اليوم</string>
+    <string name="day_type_regular">يوم عادي</string>
+    <string name="day_type_rest_day">يوم راحة</string>
+    <string name="day_type_holiday">عيد</string>
+    <string name="day_type_sick">يوم مرضي</string>
+    <string name="manual_entry_mode">طريقة الإدخال</string>
+    <string name="manual_mode">الوضع</string>
+    <string name="manual_clock_in_out">دخول / خروج</string>
+    <string name="manual_total_hours">إجمالي الساعات</string>
+    <string name="manual_hours">ساعات</string>
+    <string name="manual_hours_format">%1$s ساعة</string>
+    <string name="edit_times">الأوقات</string>
+    <string name="edit_clock_in">تسجيل دخول</string>
+    <string name="edit_clock_out">تسجيل خروج</string>
+    <string name="session_night_shift">وردية ليلية</string>
+    <string name="session_break_minutes">استراحة (دقائق)</string>
+    <string name="edit_notes">ملاحظات</string>
+    <string name="edit_notes_placeholder">أضف ملاحظات (اختياري)</string>
+    <string name="edit_save">حفظ</string>
+    <string name="manual_error_zero_duration">مدة الوردية يجب أن تكون أكبر من صفر.</string>
+    <string name="manual_error_break_exceeds_shift">الاستراحة لا يمكن أن تكون أطول من مدة الوردية.</string>
+    <string name="manual_holiday_auto_filled_title">ساعات العطلة</string>
+    <string name="manual_holiday_auto_filled_hint">بتتعبى تلقائيًا حسب ساعات دوامك المعتادة — يوم العطلة ما بيحتاج تسجّله يدوي.</string>
+    <string name="manual_sick_preview">اليوم %1$d من تسلسل المرضي — %2$d%% من الأجر</string>
+    <string name="manual_sick_hint">اليوم الأول بلا أجر، يوم 2-3 نص أجر، من اليوم الرابع أجر كامل. الأجر بيتحسب أوتوماتيك — بدون ساعات دخول/خروج.</string>
+    <string name="sick_day_cap_reached">وصلت إلى الحد السنوي لأيام المرض (18 يوم). تحقق من صاحب العمل قبل تسجيل المزيد هذا العام.</string>
+    <string name="error_ok">حسناً</string>
+    <string name="error_title">خطأ</string>
+    <string name="feedback_session_saved">تم حفظ الوردية</string>
+</resources>

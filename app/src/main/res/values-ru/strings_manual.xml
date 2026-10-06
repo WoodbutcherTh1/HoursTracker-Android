@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manual_title">Ввод вручную</string>
+    <string name="manual_date">Дата</string>
+    <string name="manual_work_day">Рабочий день</string>
+    <string name="session_day_type">Тип дня</string>
+    <string name="day_type_regular">Обычный день</string>
+    <string name="day_type_rest_day">Выходной (день отдыха)</string>
+    <string name="day_type_holiday">Праздник</string>
+    <string name="day_type_sick">Больничный</string>
+    <string name="manual_entry_mode">Способ ввода</string>
+    <string name="manual_mode">Режим</string>
+    <string name="manual_clock_in_out">Начало / конец</string>
+    <string name="manual_total_hours">Всего часов</string>
+    <string name="manual_hours">Часы</string>
+    <string name="manual_hours_format">%1$s ч</string>
+    <string name="edit_times">Время</string>
+    <string name="edit_clock_in">Начало</string>
+    <string name="edit_clock_out">Конец</string>
+    <string name="session_night_shift">Ночная смена</string>
+    <string name="session_break_minutes">Перерыв (минуты)</string>
+    <string name="edit_notes">Заметки</string>
+    <string name="edit_notes_placeholder">Добавить заметку (необязательно)</string>
+    <string name="edit_save">Сохранить</string>
+    <string name="manual_error_zero_duration">Длительность смены должна быть больше нуля.</string>
+    <string name="manual_error_break_exceeds_shift">Перерыв не может быть длиннее смены.</string>
+    <string name="manual_holiday_auto_filled_title">Часы праздничного дня</string>
+    <string name="manual_holiday_auto_filled_hint">Заполнено автоматически по вашему обычному графику — в праздники время вручную не отмечают.</string>
+    <string name="manual_sick_preview">День %1$d этого больничного — %2$d%% оплаты</string>
+    <string name="manual_sick_hint">1-й день не оплачивается, 2–3-й — половина оплаты, с 4-го — полная оплата. Оплата считается автоматически — отмечать начало и конец не нужно.</string>
+    <string name="sick_day_cap_reached">Годовой лимит больничных исчерпан (18 дней). Уточните у работодателя, прежде чем записывать новые больничные в этом году.</string>
+    <string name="error_ok">ОК</string>
+    <string name="error_title">Ошибка</string>
+    <string name="feedback_session_saved">Смена сохранена</string>
+</resources>

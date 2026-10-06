@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="history_title">היסטוריה</string>
+    <string name="history_col_date">תאריך</string>
+    <string name="history_col_in">כניסה</string>
+    <string name="history_col_out">יציאה</string>
+    <string name="history_col_hours">שעות</string>
+    <string name="history_col_amount">סכום</string>
+    <string name="history_pay_gross">ברוטו</string>
+    <string name="history_pay_net">נטו</string>
+    <string name="history_empty">אין רשומות עדיין</string>
+    <string name="history_empty_description">היסטוריית העבודה שלך תופיע כאן לאחר שתבצע כניסה.</string>
+    <string name="history_empty_period">אין משמרות ביום זה</string>
+    <string name="history_empty_period_hint">בחרו יום אחר או הוסיפו משמרת.</string>
+    <string name="history_total_hours_value">שעות: %1$s</string>
+    <string name="history_total_pay_value">סה״כ: %1$s</string>
+</resources>

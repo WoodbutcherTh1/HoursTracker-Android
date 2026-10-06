@@ -35,13 +35,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             HoursTrackerTheme {
-                AppGate(
+                androidx.compose.runtime.CompositionLocalProvider(LocalAppContainer provides container) {
+                    AppGate(
                     container = container,
                     onLanguageChange = { chosen: AppLanguage ->
                         container.flags.language = chosen
                         recreate()
                     },
-                )
+                    )
+                }
             }
         }
     }

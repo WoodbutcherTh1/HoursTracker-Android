@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="history_title">السجل</string>
+    <string name="history_col_date">التاريخ</string>
+    <string name="history_col_in">دخول</string>
+    <string name="history_col_out">خروج</string>
+    <string name="history_col_hours">ساعات</string>
+    <string name="history_col_amount">المبلغ</string>
+    <string name="history_pay_gross">إجمالي</string>
+    <string name="history_pay_net">صافي</string>
+    <string name="history_empty">لا توجد سجلات</string>
+    <string name="history_empty_description">سيظهر سجل عملك هنا بعد تسجيل الدخول.</string>
+    <string name="history_empty_period">لا ورديات في هذا اليوم</string>
+    <string name="history_empty_period_hint">اختر يومًا آخر أو أضف وردية.</string>
+    <string name="history_total_hours_value">ساعات: %1$s</string>
+    <string name="history_total_pay_value">الإجمالي: %1$s</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manual_title">הזנה ידנית</string>
+    <string name="manual_date">תאריך</string>
+    <string name="manual_work_day">יום עבודה</string>
+    <string name="session_day_type">סוג יום</string>
+    <string name="day_type_regular">יום רגיל</string>
+    <string name="day_type_rest_day">יום מנוחה</string>
+    <string name="day_type_holiday">חג</string>
+    <string name="day_type_sick">יום מחלה</string>
+    <string name="manual_entry_mode">אופן הזנה</string>
+    <string name="manual_mode">מצב</string>
+    <string name="manual_clock_in_out">כניסה / יציאה</string>
+    <string name="manual_total_hours">סה״כ שעות</string>
+    <string name="manual_hours">שעות</string>
+    <string name="manual_hours_format">%1$s שעות</string>
+    <string name="edit_times">שעות</string>
+    <string name="edit_clock_in">כניסה</string>
+    <string name="edit_clock_out">יציאה</string>
+    <string name="session_night_shift">משמרת לילה</string>
+    <string name="session_break_minutes">הפסקה (דקות)</string>
+    <string name="edit_notes">הערות</string>
+    <string name="edit_notes_placeholder">הוסף הערות (אופציונלי)</string>
+    <string name="edit_save">שמור</string>
+    <string name="manual_error_zero_duration">משך המשמרת חייב להיות גדול מאפס.</string>
+    <string name="manual_error_break_exceeds_shift">ההפסקה לא יכולה להיות ארוכה ממשך המשמרת.</string>
+    <string name="manual_holiday_auto_filled_title">שעות חג</string>
+    <string name="manual_holiday_auto_filled_hint">מתמלא אוטומטית לפי שעות העבודה הרגילות שלך — לא מחתימים יום חג ידנית.</string>
+    <string name="manual_sick_preview">יום %1$d ברצף המחלה — %2$d%% מהשכר</string>
+    <string name="manual_sick_hint">יום 1 ללא תשלום, ימים 2–3 בחצי שכר, מהיום הרביעי שכר מלא. השכר מחושב אוטומטית — בלי שעות כניסה/יציאה.</string>
+    <string name="sick_day_cap_reached">הגעת למכסת ימי המחלה השנתית (18 ימים). בדוק עם המעסיק לפני רישום ימי מחלה נוספים השנה.</string>
+    <string name="error_ok">אישור</string>
+    <string name="error_title">שגיאה</string>
+    <string name="feedback_session_saved">המשמרת נשמרה</string>
+</resources>

@@ -16,3 +16,6 @@ inline fun <reified VM : ViewModel> viewModelFactory(crossinline create: (AppCon
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T = create(container) as T
     }
 }
+
+/** The app's manual dependency container, available to every screen. */
+val LocalAppContainer = androidx.compose.runtime.staticCompositionLocalOf<AppContainer> { error("AppContainer not provided") }
