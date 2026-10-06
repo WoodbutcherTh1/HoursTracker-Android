@@ -75,6 +75,23 @@ object ManualEntry {
         return !alreadySick && sickDaysUsedInYear(date, existing, calendar) >= SICK_DAYS_PER_YEAR_CAP
     }
 
+    /** The form values of a stored shift, so it can be edited. Times are wall clock in the device zone. */
+    fun toInput(record: ShiftRecord, calendar: IosCalendar): ManualEntryInput {
+        val s = record.session
+        fun minutes(instant: Instant) = instant.atZone(calendar.zone).let { it.hour * 60 + it.minute }
+        return ManualEntryInput(
+            date = calendar.localDate(s.date),
+            dayType = s.dayType,
+            useDirectHours = false,
+            directHours = 8.6,
+            clockInMinutes = minutes(s.clockIn),
+            clockOutMinutes = minutes(s.clockOut ?: s.clockIn),
+            breakMinutes = s.breakMinutes,
+            isNightShift = s.isNightShift,
+            notes = record.notes.orEmpty(),
+        )
+    }
+
     /** The stored shift for a valid [input]. [now] stamps `modifiedAt`. */
     fun build(input: ManualEntryInput, settings: WorkplaceSettings, calendar: IosCalendar, now: Instant, id: UUID = UUID.randomUUID()): ShiftRecord {
         val day = input.date.atStartOfDay(calendar.zone).toInstant()

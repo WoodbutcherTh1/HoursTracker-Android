@@ -43,7 +43,7 @@ import java.util.Locale
 
 /** The shifts of a payroll period as a table, with the period total in a bar that stays above the tab bar. */
 @Composable
-fun HistoryScreen(onAdd: () -> Unit) {
+fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     val container = com.hourstracker.app.LocalAppContainer.current
     val vm: HistoryViewModel = viewModel(factory = viewModelFactory { HistoryViewModel(it.deviceCalendar()) })
     val records by container.shifts.shifts.collectAsState(initial = emptyList())
@@ -117,7 +117,7 @@ fun HistoryScreen(onAdd: () -> Unit) {
                 )
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(state.rows, key = { it.id }) { row ->
-                        RowItem(row, vm.showNet, locale, state.currencyCode, ::day, timeFormat, cal.zone)
+                        RowItem(row, vm.showNet, locale, state.currencyCode, ::day, timeFormat, cal.zone, onClick = { onEdit(row.id) })
                     }
                 }
             }
@@ -187,9 +187,10 @@ private fun RowItem(
     day: (java.time.Instant) -> String,
     timeFormat: DateTimeFormatter,
     zone: java.time.ZoneId,
+    onClick: () -> Unit,
 ) {
     val amount = if (showNet) row.net else row.gross
-    Box {
+    Box(modifier = Modifier.clickable(onClick = onClick)) {
         TableRow(
             listOf(
                 day(row.day),

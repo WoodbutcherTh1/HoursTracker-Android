@@ -28,6 +28,7 @@ import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Space
 
 private const val MANUAL_ENTRY_ROUTE = "history/new"
+private const val EDIT_ROUTE = "history/edit"
 
 /** The signed-in shell: five tabs with a back stack each, and the floating tab bar over the content. */
 @Composable
@@ -45,13 +46,19 @@ fun AppRoot(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
             modifier = Modifier.fillMaxSize().statusBarsPadding(),
         ) {
             composable(TopLevelTab.Home.route) { HomeScreen() }
-            composable(TopLevelTab.History.route) { HistoryScreen(onAdd = { navController.navigate(MANUAL_ENTRY_ROUTE) }) }
-            composable(MANUAL_ENTRY_ROUTE) { ManualEntryScreen(LocalAppContainer.current, onClose = { navController.popBackStack() }) }
+            composable(TopLevelTab.History.route) {
+                HistoryScreen(onAdd = { navController.navigate(MANUAL_ENTRY_ROUTE) }, onEdit = { navController.navigate("$EDIT_ROUTE/$it") })
+            }
+            composable(MANUAL_ENTRY_ROUTE) { ManualEntryScreen(LocalAppContainer.current, editId = null, onClose = { navController.popBackStack() }) }
+            composable("$EDIT_ROUTE/{id}") { entry ->
+                val id = entry.arguments?.getString("id")?.let { runCatching { java.util.UUID.fromString(it) }.getOrNull() }
+                ManualEntryScreen(LocalAppContainer.current, editId = id, onClose = { navController.popBackStack() })
+            }
             composable(TopLevelTab.Payslips.route) { PayslipsScreen() }
             composable(TopLevelTab.Export.route) { ExportScreen() }
             composable(TopLevelTab.Settings.route) { SettingsScreen(language, onLanguageChange) }
         }
-        if (backStackEntry?.destination?.route != MANUAL_ENTRY_ROUTE) FloatingTabBar(
+        if (backStackEntry?.destination?.route.let { it != MANUAL_ENTRY_ROUTE && it?.startsWith(EDIT_ROUTE) != true }) FloatingTabBar(
             selected = currentTab,
             onSelect = { tab ->
                 navController.navigate(tab.route) {

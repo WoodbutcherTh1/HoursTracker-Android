@@ -25,7 +25,9 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +44,7 @@ import com.hourstracker.app.R
 import com.hourstracker.app.data.AppContainer
 import com.hourstracker.app.domain.ManualEntry
 import com.hourstracker.app.domain.ManualEntryInput
+import com.hourstracker.data.ShiftRecord
 import com.hourstracker.app.ui.components.FormCard
 import com.hourstracker.app.ui.components.FormRow
 import com.hourstracker.app.ui.components.PickerRow
@@ -59,33 +62,56 @@ import java.time.Instant
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneOffset
+import java.util.UUID
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
-/** Add a shift by hand: a day, its type, clock times or a total, a break, and notes. */
+/**
+ * Add a shift by hand, or edit one when [editId] is given: a day, its type, clock times or a total, a break, and notes.
+ * An edited shift keeps its id (so it replaces itself) and the flags the form does not show.
+ */
 @Composable
-fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
+fun ManualEntryScreen(container: AppContainer, editId: UUID?, onClose: () -> Unit) {
+    if (editId == null) {
+        ManualEntryForm(container, existing = null, onClose = onClose)
+        return
+    }
+    // The shifts arrive asynchronously; the form is built once the one being edited is known.
+    val loaded by produceState<List<ShiftRecord>?>(initialValue = null) { container.shifts.shifts.collect { value = it } }
+    val all = loaded ?: return
+    val record = all.firstOrNull { it.id == editId }
+    if (record == null) {
+        LaunchedEffect(Unit) { onClose() }
+        return
+    }
+    ManualEntryForm(container, existing = record, onClose = onClose)
+}
+
+@Composable
+private fun ManualEntryForm(container: AppContainer, existing: ShiftRecord?, onClose: () -> Unit) {
     val calendar = remember { container.deviceCalendar() }
+    val seed = remember(existing?.id) { existing?.let { ManualEntry.toInput(it, calendar) } }
     val settings by container.settings.settings.collectAsState()
     val shifts by container.shifts.shifts.collectAsState(initial = emptyList())
-    val existing = remember(shifts) { shifts.map { it.session } }
+    val otherSessions = remember(shifts) { shifts.map { it.session } }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
     val savedToast = stringResource(R.string.feedback_session_saved)
 
-    var dateEpochDay by rememberSaveable { mutableStateOf(calendar.localDate(calendar.now()).toEpochDay()) }
+    var dateEpochDay by rememberSaveable { mutableStateOf((seed?.date ?: calendar.localDate(calendar.now())).toEpochDay()) }
     val date = LocalDate.ofEpochDay(dateEpochDay)
-    var dayTypeName by rememberSaveable { mutableStateOf(ManualEntry.automaticDayType(date, settings, existing, calendar).name) }
+    var dayTypeName by rememberSaveable { mutableStateOf((seed?.dayType ?: ManualEntry.automaticDayType(date, settings, otherSessions, calendar)).name) }
     val dayType = DayType.valueOf(dayTypeName)
     var useDirect by rememberSaveable { mutableStateOf(false) }
     var directTenths by rememberSaveable { mutableIntStateOf(86) }
-    var clockIn by rememberSaveable { mutableIntStateOf(8 * 60) }
-    var clockOut by rememberSaveable { mutableIntStateOf(8 * 60 + 516) }
-    var breakMinutes by rememberSaveable { mutableIntStateOf(if (settings.breaksArePaid) 0 else settings.defaultBreakMinutes) }
-    var night by rememberSaveable { mutableStateOf(false) }
-    var notes by rememberSaveable { mutableStateOf("") }
+    var clockIn by rememberSaveable { mutableIntStateOf(seed?.clockInMinutes ?: (8 * 60)) }
+    var clockOut by rememberSaveable { mutableIntStateOf(seed?.clockOutMinutes ?: (8 * 60 + 516)) }
+    var breakMinutes by rememberSaveable { mutableIntStateOf(seed?.breakMinutes ?: if (settings.breaksArePaid) 0 else settings.defaultBreakMinutes) }
+    var night by rememberSaveable { mutableStateOf(seed?.isNightShift ?: false) }
+    var notes by rememberSaveable { mutableStateOf(seed?.notes ?: "") }
+    var confirmDelete by remember { mutableStateOf(false) }
     var pickDate by remember { mutableStateOf(false) }
     var pickTime by remember { mutableStateOf<String?>(null) }
     var showSickCap by remember { mutableStateOf(false) }
@@ -95,15 +121,16 @@ fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
 
     fun setDay(newDate: LocalDate) {
         dateEpochDay = newDate.toEpochDay()
-        dayTypeName = ManualEntry.automaticDayType(newDate, settings, existing, calendar).name
+        dayTypeName = ManualEntry.automaticDayType(newDate, settings, otherSessions, calendar).name
     }
 
     fun save() {
-        if (dayType == DayType.Sick && ManualEntry.sickCapReached(date, existing, calendar)) {
+        if (dayType == DayType.Sick && ManualEntry.sickCapReached(date, otherSessions.filter { it.id != existing?.id }, calendar)) {
             showSickCap = true
             return
         }
-        val record = ManualEntry.build(input, settings, calendar, calendar.now())
+        val built = ManualEntry.build(input, settings, calendar, calendar.now(), id = existing?.id ?: UUID.randomUUID())
+        val record = if (existing == null) built else built.copy(isManualEntry = existing.isManualEntry, isAIImported = existing.isAIImported, workplaceId = existing.workplaceId)
         scope.launch {
             container.shifts.upsert(record)
             Toast.makeText(context, savedToast, Toast.LENGTH_SHORT).show()
@@ -118,7 +145,7 @@ fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = "✕", style = DsText.titleSection, color = Palette.textSecondary, modifier = Modifier.clickable(onClick = onClose).padding(Space.xs))
-            Text(text = stringResource(R.string.manual_title), style = DsText.titleSection, color = Palette.textPrimary)
+            Text(text = stringResource(if (existing == null) R.string.manual_title else R.string.edit_title), style = DsText.titleSection, color = Palette.textPrimary)
             Text(
                 text = stringResource(R.string.edit_save),
                 style = DsText.headline,
@@ -167,7 +194,7 @@ fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
                 DayType.Sick -> {
                     SectionHeader(stringResource(R.string.day_type_sick))
                     FormCard {
-                        val (number, share) = ManualEntry.sickStreakPreview(date, existing, calendar)
+                        val (number, share) = ManualEntry.sickStreakPreview(date, otherSessions.filter { it.id != existing?.id }, calendar)
                         Text(
                             stringResource(R.string.manual_sick_preview, number, (share * 100).toInt()),
                             style = DsText.sub,
@@ -245,6 +272,14 @@ fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
             SectionHeader(stringResource(R.string.edit_notes))
             FormCard { TextRow(notes, { notes = it }, stringResource(R.string.edit_notes_placeholder)) }
 
+            if (existing != null) {
+                Text(
+                    text = stringResource(R.string.edit_delete),
+                    style = DsText.headline,
+                    color = Palette.overdue,
+                    modifier = Modifier.fillMaxWidth().clickable { confirmDelete = true }.padding(vertical = Space.lg),
+                )
+            }
             androidx.compose.foundation.layout.Spacer(Modifier.padding(bottom = Space.xl))
         }
         Column(modifier = Modifier.padding(horizontal = Space.md, vertical = Space.sm)) {
@@ -264,6 +299,22 @@ fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
             if (which == "in") clockIn = h * 60 + m else clockOut = h * 60 + m
             pickTime = null
         })
+    }
+    if (confirmDelete && existing != null) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text(stringResource(R.string.edit_delete_confirm)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmDelete = false
+                    scope.launch {
+                        container.shifts.delete(existing.id)
+                        onClose()
+                    }
+                }) { Text(stringResource(R.string.edit_delete), color = Palette.overdue) }
+            },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.edit_cancel)) } },
+        )
     }
     if (showSickCap) {
         AlertDialog(
