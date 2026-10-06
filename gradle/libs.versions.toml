@@ -1,0 +1,18 @@
+# Single source of truth for dependency and plugin versions.
+# Versions were checked against Maven Central when written; Dependabot keeps them current.
+# JUnit is intentionally on the 5.x line (the approved major version).
+
+[versions]
+kotlin = "2.4.20"
+junit = "5.14.4"
+kotlinx-serialization = "1.11.0"
+
+[libraries]
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
