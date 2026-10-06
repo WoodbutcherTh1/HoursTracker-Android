@@ -1,6 +1,6 @@
 # HoursTracker for Android — project rules
 
-Android port of the iOS app HoursTracker (a separate, private repository). The goal is a 1:1 port in behavior and design, targeting Google Play.
+Android port of the iOS app HoursTracker (a separate repository). The goal is a 1:1 port in behavior and design, targeting Google Play.
 
 ## Hard rules
 
