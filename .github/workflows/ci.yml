@@ -90,3 +90,22 @@ jobs:
 
       - name: Build, lint and unit-test the app
         run: ./gradlew :app:assembleDebug :app:lintDebug :app:testDebugUnitTest --no-daemon --console=plain
+
+      - name: Name the debug APK after the branch and commit
+        if: startsWith(github.ref, 'refs/heads/android/')
+        run: |
+          set -euo pipefail
+          branch="${GITHUB_REF_NAME//\//-}"
+          name="HoursTracker-${branch}-${GITHUB_SHA::7}.apk"
+          cp app/build/outputs/apk/debug/app-debug.apk "$name"
+          echo "APK_NAME=$name" >> "$GITHUB_ENV"
+
+      # actions/upload-artifact@v4.6.2
+      - name: Upload the debug APK
+        if: startsWith(github.ref, 'refs/heads/android/')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ${{ env.APK_NAME }}
+          path: ${{ env.APK_NAME }}
+          retention-days: 30
+          if-no-files-found: error
