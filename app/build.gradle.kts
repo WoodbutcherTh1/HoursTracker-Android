@@ -46,6 +46,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     lint {
         warningsAsErrors = true
         abortOnError = true
@@ -83,6 +87,16 @@ dependencies {
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)
+
+    // Test-only (dev): Compose UI tests on the JVM with Robolectric. Robolectric and Compose's test rule are JUnit 4,
+    // so the Vintage engine runs them next to the JUnit 5 tests.
+    testImplementation(libs.junit4)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(platform(libs.compose.bom))
+    testImplementation(libs.compose.ui.test.junit4)
+    testRuntimeOnly(libs.junit.vintage.engine)
+    debugImplementation(libs.compose.ui.test.manifest)
 }
 
 tasks.withType<Test>().configureEach {

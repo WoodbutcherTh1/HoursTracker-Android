@@ -16,6 +16,10 @@ core-ktx = "1.17.0"
 # Room needs KSP. KSP 2.x versions are independent of the Kotlin version; KSP1 ended before Kotlin 2.4, so Room 2.6 is not usable here.
 ksp = "2.3.12"
 room = "2.8.5"
+# Test-only (dev): Robolectric runs Android code on the JVM and needs JUnit 4.
+junit4 = "4.13.2"
+robolectric = "4.17"
+androidx-test-core = "1.7.0"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -39,6 +43,14 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+junit4 = { module = "junit:junit", version.ref = "junit4" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test-core" }
+
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

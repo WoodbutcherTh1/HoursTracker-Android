@@ -21,6 +21,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     lint {
         warningsAsErrors = true
         abortOnError = true
@@ -44,4 +48,8 @@ dependencies {
     api(project(":core-model"))
     api(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+
+    testImplementation(libs.junit4)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
 }
