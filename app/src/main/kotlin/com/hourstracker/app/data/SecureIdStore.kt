@@ -10,21 +10,22 @@ import javax.crypto.SecretKey
 
 /**
  * Keeps the worker's ID number encrypted with an Android Keystore key (AES-GCM, see [IdCipher]). The key
- * never leaves the Keystore; the ciphertext lives in a private preferences file excluded from every backup.
+ * never leaves the Keystore (tests pass their own [cipher]); the ciphertext lives in a private preferences file excluded from every backup.
  */
-class SecureIdStore(context: Context) {
+class SecureIdStore(context: Context, private val cipher: IdCipher? = null) {
     private val prefs = context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
-    private val cipher = IdCipher(::keystoreKey)
+    private val keystoreCipher by lazy { IdCipher(::keystoreKey) }
+    private val activeCipher: IdCipher get() = cipher ?: keystoreCipher
 
     fun hasValue(): Boolean = prefs.contains(KEY_VALUE)
 
-    fun read(): String? = prefs.getString(KEY_VALUE, null)?.let(cipher::decrypt)
+    fun read(): String? = prefs.getString(KEY_VALUE, null)?.let { activeCipher.decrypt(it) }
 
     fun write(value: String) {
         if (value.isEmpty()) {
             prefs.edit { remove(KEY_VALUE) }
         } else {
-            prefs.edit { putString(KEY_VALUE, cipher.encrypt(value)) }
+            prefs.edit { putString(KEY_VALUE, activeCipher.encrypt(value)) }
         }
     }
 
