@@ -10,6 +10,11 @@ import java.time.ZoneId
 import java.time.temporal.WeekFields
 
 /**
+ * Not an iOS type: a re-implementation, on `java.time`, of the part of Foundation's `Calendar` that the iOS
+ * pay code calls, including how Foundation resolves wall-clock times in daylight-saving gaps (see [resolve]).
+ * Where iOS uses `Calendar.current` or `Date()`, the Kotlin code receives an [IosCalendar] instead
+ * ([device] builds the equivalent of `Calendar.current`), which keeps the pay code free of hidden globals.
+ *
  * The slice of Foundation's `Calendar` (Gregorian) that the pay code relies on, with the same
  * three device-dependent settings: time zone, first weekday and minimal days in the first week.
  * It also carries the clock, because iOS reads "now" from `Date()` next to `Calendar.current`.
