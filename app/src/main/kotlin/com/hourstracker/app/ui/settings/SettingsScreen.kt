@@ -47,6 +47,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hourstracker.app.BuildConfig
 import com.hourstracker.app.R
 import com.hourstracker.app.data.AppLanguage
 import com.hourstracker.app.ui.components.FormCard
@@ -72,6 +73,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Currency
 import java.util.Locale
+import kotlinx.coroutines.launch
 
 private val CURRENCIES = listOf("ILS", "USD", "EUR", "GBP")
 
@@ -368,8 +370,32 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
                 modifier = Modifier.padding(horizontal = Space.xs, vertical = Space.xs),
             )
 
+            if (BuildConfig.DEBUG) DebugSection()
+
             // Room for the floating tab bar.
             androidx.compose.foundation.layout.Spacer(Modifier.size(120.dp))
+        }
+    }
+}
+
+/** Debug builds only (plain English on purpose: it is not part of the product). */
+@Composable
+private fun DebugSection() {
+    val container = com.hourstracker.app.LocalAppContainer.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var loaded by remember { mutableStateOf(false) }
+    SectionHeader("Debug")
+    FormCard {
+        FormRow(
+            label = "Load overtime week (54h)",
+            modifier = Modifier.clickable {
+                scope.launch {
+                    container.loadOvertimeWeek()
+                    loaded = true
+                }
+            },
+        ) {
+            Text(if (loaded) "✓ last week replaced" else "▶", style = DsText.body, color = Palette.accent)
         }
     }
 }
