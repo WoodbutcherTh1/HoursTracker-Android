@@ -2,6 +2,8 @@ package com.hourstracker.app.data
 
 import android.content.Context
 import com.hourstracker.app.BuildConfig
+import com.hourstracker.app.service.ServiceNotifier
+import com.hourstracker.app.service.ShiftController
 import com.hourstracker.data.RoomShiftRepository
 import com.hourstracker.data.ShiftRepository
 import com.hourstracker.data.db.AppDatabase
@@ -19,6 +21,8 @@ class AppContainer(context: Context) {
     val settings: SettingsRepository = PrefsSettingsRepository(context, SecureIdStore(context))
     private val database = AppDatabase.open(context)
     val shifts: ShiftRepository = RoomShiftRepository(database.workSessions())
+
+    val controller = ShiftController(shifts, settings, ::deviceCalendar, ServiceNotifier(context))
 
     init {
         if (BuildConfig.DEBUG) seedMockShiftsOnce()

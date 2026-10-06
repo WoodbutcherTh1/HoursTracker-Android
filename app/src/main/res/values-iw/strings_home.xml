@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_clock_in">כניסה</string>
+    <string name="home_clock_out">יציאה</string>
+    <string name="home_break_start">יצאתי להפסקה</string>
+    <string name="home_break_end">חזרתי</string>
+    <string name="home_break_on_break">בהפסקה</string>
+    <string name="home_break_paid">הפסקה בתשלום</string>
+    <string name="home_break_unpaid">ללא תשלום — יורד מהשכר</string>
+    <string name="home_status_working">בעבודה מאז %1$s</string>
+    <string name="home_status_break">בהפסקה מאז %1$s</string>
+    <string name="home_timer_paused">מושהה · בהפסקה</string>
+    <string name="home_live_pay">שכר עד כה</string>
+    <string name="home_stat_month">החודש</string>
+    <string name="home_stat_week">השבוע</string>
+    <string name="home_stat_today">היום</string>
+    <string name="home_stat_month_short">חודש</string>
+    <string name="home_stat_week_short">שבוע</string>
+    <string name="home_stat_today_short">היום</string>
+    <string name="home_night_started_yesterday">התחילה אתמול</string>
+    <string name="home_rate_missing">הגדירו שכר שעתי כדי לראות כמה אתם מרוויחים</string>
+    <string name="home_greeting_morning">בוקר טוב</string>
+    <string name="home_greeting_afternoon">צהריים טובים</string>
+    <string name="home_greeting_evening">ערב טוב</string>
+    <string name="home_greeting_night">לילה טוב</string>
+    <string name="home_greeting_morning_name">בוקר טוב, %1$s</string>
+    <string name="home_greeting_afternoon_name">צהריים טובים, %1$s</string>
+    <string name="home_greeting_evening_name">ערב טוב, %1$s</string>
+    <string name="home_greeting_night_name">לילה טוב, %1$s</string>
+    <string name="sum_title">המשמרת הסתיימה</string>
+    <string name="sum_note_net">הערכה בלבד · אחרי מס</string>
+    <string name="sum_note_gross">הערכה בלבד · לפני מס</string>
+    <string name="sum_row_regular">רגילות 100%</string>
+    <string name="sum_row_breaks">הפסקות</string>
+    <string name="sum_row_overtime">נוספות %1$s%%</string>
+    <string name="sum_deductions">ניכויים −%1$s</string>
+    <string name="summary_done">סיום</string>
+    <string name="shift_gas">נסיעות</string>
+    <string name="pay_gross">ברוטו</string>
+    <string name="pay_net">נטו</string>
+    <string name="tax_income_tax">מס הכנסה</string>
+    <string name="tax_national_insurance">ביטוח לאומי</string>
+    <string name="tax_health_tax">מס בריאות</string>
+    <string name="settings_notifications_minutes">%1$s דק׳</string>
+</resources>

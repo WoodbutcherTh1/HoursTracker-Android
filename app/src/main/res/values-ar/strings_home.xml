@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_clock_in">تسجيل دخول</string>
+    <string name="home_clock_out">تسجيل خروج</string>
+    <string name="home_break_start">طالع استراحة</string>
+    <string name="home_break_end">رجعت</string>
+    <string name="home_break_on_break">في استراحة</string>
+    <string name="home_break_paid">استراحة مدفوعة</string>
+    <string name="home_break_unpaid">غير مدفوعة — بتنخصم من الراتب</string>
+    <string name="home_status_working">في العمل منذ %1$s</string>
+    <string name="home_status_break">في استراحة منذ %1$s</string>
+    <string name="home_timer_paused">متوقف · في استراحة</string>
+    <string name="home_live_pay">الأجر حتى الآن</string>
+    <string name="home_stat_month">هذا الشهر</string>
+    <string name="home_stat_week">هذا الأسبوع</string>
+    <string name="home_stat_today">اليوم</string>
+    <string name="home_stat_month_short">الشهر</string>
+    <string name="home_stat_week_short">الأسبوع</string>
+    <string name="home_stat_today_short">اليوم</string>
+    <string name="home_night_started_yesterday">بدأت أمس</string>
+    <string name="home_rate_missing">حدّد أجرك بالساعة لتعرف كم تكسب</string>
+    <string name="home_greeting_morning">صباح الخير</string>
+    <string name="home_greeting_afternoon">مساء النور</string>
+    <string name="home_greeting_evening">مساء الخير</string>
+    <string name="home_greeting_night">تصبح على خير</string>
+    <string name="home_greeting_morning_name">صباح الخير، %1$s</string>
+    <string name="home_greeting_afternoon_name">مساء النور، %1$s</string>
+    <string name="home_greeting_evening_name">مساء الخير، %1$s</string>
+    <string name="home_greeting_night_name">تصبح على خير، %1$s</string>
+    <string name="sum_title">خلصت الوردية</string>
+    <string name="sum_note_net">تقدير فقط · بعد الضريبة</string>
+    <string name="sum_note_gross">تقدير فقط · قبل الضريبة</string>
+    <string name="sum_row_regular">عادي 100%</string>
+    <string name="sum_row_breaks">الاستراحات</string>
+    <string name="sum_row_overtime">إضافي %1$s%%</string>
+    <string name="sum_deductions">الاقتطاعات −%1$s</string>
+    <string name="summary_done">تم</string>
+    <string name="shift_gas">بدل مواصلات</string>
+    <string name="pay_gross">إجمالي</string>
+    <string name="pay_net">صافي</string>
+    <string name="tax_income_tax">ضريبة الدخل</string>
+    <string name="tax_national_insurance">التأمين الوطني</string>
+    <string name="tax_health_tax">ضريبة الصحة</string>
+    <string name="settings_notifications_minutes">%1$s د</string>
+</resources>

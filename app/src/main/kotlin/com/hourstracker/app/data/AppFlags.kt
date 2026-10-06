@@ -32,10 +32,19 @@ class AppFlags(context: Context) {
 
     private val consentFlow = MutableStateFlow(prefs.getInt(KEY_CONSENT, 0))
     private val onboardingFlow = MutableStateFlow(prefs.getBoolean(KEY_ONBOARDING, false))
+    private val showNetFlow = MutableStateFlow(prefs.getBoolean(KEY_SHOW_NET, true))
 
     /** The accepted version of the terms and privacy policy; 0 when nothing was accepted yet. */
     val acceptedLegalVersion: StateFlow<Int> = consentFlow.asStateFlow()
     val onboardingDone: StateFlow<Boolean> = onboardingFlow.asStateFlow()
+
+    /** Gross or net: the choice shared by the live pay on Home and the day summary. */
+    val showNet: StateFlow<Boolean> = showNetFlow.asStateFlow()
+
+    fun setShowNet(value: Boolean) {
+        prefs.edit { putBoolean(KEY_SHOW_NET, value) }
+        showNetFlow.value = value
+    }
 
     fun acceptLegal() {
         prefs.edit { putInt(KEY_CONSENT, CURRENT_LEGAL_VERSION) }
@@ -74,6 +83,7 @@ class AppFlags(context: Context) {
         private const val KEY_CONSENT = "legalVersion"
         private const val KEY_ONBOARDING = "onboardingDone"
         private const val KEY_LANGUAGE = "language"
+        private const val KEY_SHOW_NET = "showNet"
         private const val KEY_MOCK_SEEDED = "mockSeeded"
         private const val KEY_WEEK_PATTERN = "weekPattern"
         private const val KEY_CUSTOM_DAYS = "customWorkdays"

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_clock_in">Начать смену</string>
+    <string name="home_clock_out">Закончить смену</string>
+    <string name="home_break_start">Ухожу на перерыв</string>
+    <string name="home_break_end">Продолжить работу</string>
+    <string name="home_break_on_break">На перерыве</string>
+    <string name="home_break_paid">оплачиваемый перерыв</string>
+    <string name="home_break_unpaid">неоплачиваемый — вычитается из зарплаты</string>
+    <string name="home_status_working">На работе с %1$s</string>
+    <string name="home_status_break">На перерыве с %1$s</string>
+    <string name="home_timer_paused">Пауза · перерыв</string>
+    <string name="home_live_pay">Заработано</string>
+    <string name="home_stat_month">Этот месяц</string>
+    <string name="home_stat_week">Эта неделя</string>
+    <string name="home_stat_today">Сегодня</string>
+    <string name="home_stat_month_short">Месяц</string>
+    <string name="home_stat_week_short">Неделя</string>
+    <string name="home_stat_today_short">Сегодня</string>
+    <string name="home_night_started_yesterday">началась вчера</string>
+    <string name="home_rate_missing">Укажите почасовую ставку, чтобы видеть свой заработок</string>
+    <string name="home_greeting_morning">Доброе утро</string>
+    <string name="home_greeting_afternoon">Добрый день</string>
+    <string name="home_greeting_evening">Добрый вечер</string>
+    <string name="home_greeting_night">Доброй ночи</string>
+    <string name="home_greeting_morning_name">Доброе утро, %1$s</string>
+    <string name="home_greeting_afternoon_name">Добрый день, %1$s</string>
+    <string name="home_greeting_evening_name">Добрый вечер, %1$s</string>
+    <string name="home_greeting_night_name">Доброй ночи, %1$s</string>
+    <string name="sum_title">Смена завершена</string>
+    <string name="sum_note_net">только оценка · после налогов</string>
+    <string name="sum_note_gross">только оценка · до налогов</string>
+    <string name="sum_row_regular">Обычные 100%</string>
+    <string name="sum_row_breaks">Перерывы</string>
+    <string name="sum_row_overtime">Сверхурочные %1$s%%</string>
+    <string name="sum_deductions">Удержания −%1$s</string>
+    <string name="summary_done">Готово</string>
+    <string name="shift_gas">Компенсация за проезд</string>
+    <string name="pay_gross">Брутто</string>
+    <string name="pay_net">Нетто</string>
+    <string name="tax_income_tax">Подоходный налог</string>
+    <string name="tax_national_insurance">Битуах леуми</string>
+    <string name="tax_health_tax">Налог на здравоохранение</string>
+    <string name="settings_notifications_minutes">%1$s мин</string>
+</resources>

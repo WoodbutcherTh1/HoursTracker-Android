@@ -69,8 +69,8 @@ class NavigationUiTest {
         tab("Export").performClick()
         tab("Home").performClick()
         tab("Home").assertIsSelected()
-        // The tab label and the Home screen title both read "Home".
-        assertEquals(2, compose.onAllNodesWithText("Home").fetchSemanticsNodes().size)
+        // Home has no title of its own, so the only "Home" is the tab.
+        assertEquals(1, compose.onAllNodesWithText("Home").fetchSemanticsNodes().size)
     }
 
     @Test

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_clock_in">Clock In</string>
+    <string name="home_clock_out">Clock Out</string>
+    <string name="home_break_start">Going on break</string>
+    <string name="home_break_end">I\'m back</string>
+    <string name="home_break_on_break">On break</string>
+    <string name="home_break_paid">paid break</string>
+    <string name="home_break_unpaid">unpaid — deducted from pay</string>
+    <string name="home_status_working">Working since %1$s</string>
+    <string name="home_status_break">On break since %1$s</string>
+    <string name="home_timer_paused">Paused · on break</string>
+    <string name="home_live_pay">Pay so far</string>
+    <string name="home_stat_month">This month</string>
+    <string name="home_stat_week">This week</string>
+    <string name="home_stat_today">Today</string>
+    <string name="home_stat_month_short">Month</string>
+    <string name="home_stat_week_short">Week</string>
+    <string name="home_stat_today_short">Today</string>
+    <string name="home_night_started_yesterday">started yesterday</string>
+    <string name="home_rate_missing">Set your hourly rate to see what you earn</string>
+    <string name="home_greeting_morning">Good morning</string>
+    <string name="home_greeting_afternoon">Good afternoon</string>
+    <string name="home_greeting_evening">Good evening</string>
+    <string name="home_greeting_night">Good night</string>
+    <string name="home_greeting_morning_name">Good morning, %1$s</string>
+    <string name="home_greeting_afternoon_name">Good afternoon, %1$s</string>
+    <string name="home_greeting_evening_name">Good evening, %1$s</string>
+    <string name="home_greeting_night_name">Good night, %1$s</string>
+    <string name="sum_title">Shift complete</string>
+    <string name="sum_note_net">estimate only · after tax</string>
+    <string name="sum_note_gross">estimate only · before tax</string>
+    <string name="sum_row_regular">Regular 100%</string>
+    <string name="sum_row_breaks">Breaks</string>
+    <string name="sum_row_overtime">Overtime %1$s%%</string>
+    <string name="sum_deductions">Deductions −%1$s</string>
+    <string name="summary_done">Done</string>
+    <string name="shift_gas">Travel allowance</string>
+    <string name="pay_gross">Gross</string>
+    <string name="pay_net">Net</string>
+    <string name="tax_income_tax">Income Tax</string>
+    <string name="tax_national_insurance">National Insurance</string>
+    <string name="tax_health_tax">Health Tax</string>
+    <string name="settings_notifications_minutes">%1$s min</string>
+</resources>
