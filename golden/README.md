@@ -58,6 +58,7 @@ At startup the harness checks that `Calendar.current` really has the pinned time
 ## Data format
 
 - A `Double` is stored as an object with its raw IEEE-754 bits and a readable value: `{"bits": "4021333333333333", "value": 8.6}`. Tests compare the bits.
+- An optional value that is `nil` in Swift is **omitted** from the JSON, not written as `null`. Readers treat a missing key as "no value".
 - Dates are stored as an ISO-8601 instant plus the explicit time zone identifier used.
 - Money strings are compared after removing bidirectional marks and special spaces; digits, currency, and rounding must match exactly. Exact text equality is not required because Apple and Android ship different locale data.
 - Cases whose result depends on summation order (weekly overtime) use hours that are multiples of 0.25 for bit-for-bit checks; other inputs are compared with a tolerance of 1e-9.

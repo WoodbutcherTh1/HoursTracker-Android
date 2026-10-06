@@ -23,7 +23,11 @@ struct GoldenGroup {
 let goldenGroups: [GoldenGroup] = [
     GoldenGroup("breakdown_simple", environments: ["il"], run: writeBreakdownSimple),
     GoldenGroup("breakdown_day", run: writeBreakdownDay),
-    GoldenGroup("day_types", run: writeDayTypes)
+    GoldenGroup("day_types", run: writeDayTypes),
+    GoldenGroup("tax_monthly", environments: ["il"], run: writeTaxMonthly),
+    GoldenGroup("tax_daily", environments: ["il"], run: writeTaxDaily),
+    GoldenGroup("tax_credit", environments: ["il"], run: writeTaxCredit),
+    GoldenGroup("settings_normalization", environments: ["il"], run: writeSettingsNormalization)
 ]
 
 /// The result of `OvertimeCalculator` for one session or day, with every number as raw bits.
