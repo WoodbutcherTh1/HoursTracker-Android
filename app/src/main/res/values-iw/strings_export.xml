@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">ייצוא</string>
+    <string name="export_date_range">טווח תאריכים</string>
+    <string name="export_range">טווח</string>
+    <string name="export_this_month">החודש</string>
+    <string name="export_specific_month">חודש ספציפי</string>
+    <string name="export_this_year">השנה</string>
+    <string name="export_custom_range">טווח מותאם</string>
+    <string name="export_month">חודש</string>
+    <string name="export_from">מ-</string>
+    <string name="export_to">עד</string>
+    <string name="export_format">פורמט</string>
+    <string name="export_format_pdf">PDF</string>
+    <string name="export_format_csv">CSV</string>
+    <string name="export_day_type">סוג יום</string>
+    <string name="export_day_type_all">כל הימים</string>
+    <string name="export_language">שפת הדוח</string>
+    <string name="export_language_phone">שפת הטלפון (%1$s)</string>
+    <string name="export_language_english">English</string>
+    <string name="export_language_hebrew">עברית</string>
+    <string name="export_language_arabic">العربية</string>
+    <string name="export_language_russian">Русский</string>
+    <string name="export_include_notes">לצרף הערות</string>
+    <string name="export_include_notes_hint">ההערות שכתבתם במשמרות יתווספו לקובץ.</string>
+    <string name="export_preview_title">תצוגה מקדימה לייצוא</string>
+    <string name="export_preview_days">ימים</string>
+    <string name="export_preview_hours">שעות</string>
+    <string name="export_preview_gross">ברוטו</string>
+    <string name="export_preview_net">נטו</string>
+    <string name="export_preview_empty">אין משמרות שהסתיימו תואמות לטווח זה.</string>
+    <string name="export_report">ייצוא דוח</string>
+    <string name="edit_title">עריכת רשומה</string>
+    <string name="edit_delete">מחק רשומה</string>
+    <string name="edit_delete_confirm">למחוק את המשמרת?</string>
+    <string name="edit_cancel">ביטול</string>
+</resources>

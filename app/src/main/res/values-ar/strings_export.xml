@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">تصدير</string>
+    <string name="export_date_range">نطاق التاريخ</string>
+    <string name="export_range">النطاق</string>
+    <string name="export_this_month">هذا الشهر</string>
+    <string name="export_specific_month">شهر محدد</string>
+    <string name="export_this_year">هذه السنة</string>
+    <string name="export_custom_range">نطاق مخصص</string>
+    <string name="export_month">الشهر</string>
+    <string name="export_from">من</string>
+    <string name="export_to">إلى</string>
+    <string name="export_format">التنسيق</string>
+    <string name="export_format_pdf">PDF</string>
+    <string name="export_format_csv">CSV</string>
+    <string name="export_day_type">نوع اليوم</string>
+    <string name="export_day_type_all">كل الأيام</string>
+    <string name="export_language">لغة التقرير</string>
+    <string name="export_language_phone">لغة الهاتف (%1$s)</string>
+    <string name="export_language_english">English</string>
+    <string name="export_language_hebrew">עברית</string>
+    <string name="export_language_arabic">العربية</string>
+    <string name="export_language_russian">Русский</string>
+    <string name="export_include_notes">إرفاق الملاحظات</string>
+    <string name="export_include_notes_hint">تُضاف الملاحظات التي كتبتها على الورديات إلى الملف.</string>
+    <string name="export_preview_title">معاينة التصدير</string>
+    <string name="export_preview_days">أيام</string>
+    <string name="export_preview_hours">ساعات</string>
+    <string name="export_preview_gross">إجمالي</string>
+    <string name="export_preview_net">صافي</string>
+    <string name="export_preview_empty">لا توجد دوامات مكتملة ضمن هذا النطاق.</string>
+    <string name="export_report">تصدير التقرير</string>
+    <string name="edit_title">تعديل السجل</string>
+    <string name="edit_delete">حذف السجل</string>
+    <string name="edit_delete_confirm">حذف هذه الوردية؟</string>
+    <string name="edit_cancel">إلغاء</string>
+</resources>

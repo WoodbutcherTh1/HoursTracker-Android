@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_title">Экспорт</string>
+    <string name="export_date_range">Период</string>
+    <string name="export_range">Период</string>
+    <string name="export_this_month">Этот месяц</string>
+    <string name="export_specific_month">Конкретный месяц</string>
+    <string name="export_this_year">Этот год</string>
+    <string name="export_custom_range">Свой период</string>
+    <string name="export_month">Месяц</string>
+    <string name="export_from">С</string>
+    <string name="export_to">По</string>
+    <string name="export_format">Формат</string>
+    <string name="export_format_pdf">PDF</string>
+    <string name="export_format_csv">CSV</string>
+    <string name="export_day_type">Тип дня</string>
+    <string name="export_day_type_all">Все дни</string>
+    <string name="export_language">Язык отчёта</string>
+    <string name="export_language_phone">Язык телефона (%1$s)</string>
+    <string name="export_language_english">Английский</string>
+    <string name="export_language_hebrew">Иврит</string>
+    <string name="export_language_arabic">Арабский</string>
+    <string name="export_language_russian">Русский</string>
+    <string name="export_include_notes">Добавить заметки</string>
+    <string name="export_include_notes_hint">Заметки, которые вы оставили к сменам, попадут в файл.</string>
+    <string name="export_preview_title">Предпросмотр экспорта</string>
+    <string name="export_preview_days">Дни</string>
+    <string name="export_preview_hours">Часы</string>
+    <string name="export_preview_gross">Брутто</string>
+    <string name="export_preview_net">Нетто</string>
+    <string name="export_preview_empty">За этот период нет завершённых смен.</string>
+    <string name="export_report">Экспортировать отчёт</string>
+    <string name="edit_title">Изменить запись</string>
+    <string name="edit_delete">Удалить запись</string>
+    <string name="edit_delete_confirm">Удалить эту смену?</string>
+    <string name="edit_cancel">Отмена</string>
+</resources>
