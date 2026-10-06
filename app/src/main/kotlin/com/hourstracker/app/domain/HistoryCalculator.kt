@@ -1,6 +1,6 @@
 package com.hourstracker.app.domain
 
-import com.hourstracker.app.data.ShiftRecord
+import com.hourstracker.data.ShiftRecord
 import com.hourstracker.model.DayType
 import com.hourstracker.model.HistoryPeriodHelper
 import com.hourstracker.model.IosCalendar

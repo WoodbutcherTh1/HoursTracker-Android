@@ -11,7 +11,20 @@ enum class AppLanguage(val tag: String?, val label: String?) {
     System(null, null),
     English("en", "English"),
     Hebrew("iw", "עברית"),
+    ;
+
+    /** Whether text runs right to left in this language; null for [System], which depends on the device. */
+    val isRtl: Boolean? get() = tag?.let(::isRtlLanguage)
+
+    companion object {
+        private val RTL_LANGUAGES = setOf("he", "iw", "ar", "fa", "ur")
+
+        /** True for right-to-left languages. Accepts a bare language code or a full tag such as "he-IL". */
+        fun isRtlLanguage(tag: String): Boolean = tag.substringBefore('-').substringBefore('_').lowercase() in RTL_LANGUAGES
+    }
 }
+
+private fun isRtlLanguage(tag: String): Boolean = AppLanguage.isRtlLanguage(tag)
 
 /** First-run state: legal consent, onboarding, and the language chosen inside the app. */
 class AppFlags(context: Context) {
@@ -47,6 +60,11 @@ class AppFlags(context: Context) {
         get() = if (prefs.contains(KEY_WEEKLY_GOAL)) prefs.getInt(KEY_WEEKLY_GOAL, 0) else null
         set(value) = prefs.edit { if (value == null) remove(KEY_WEEKLY_GOAL) else putInt(KEY_WEEKLY_GOAL, value) }
 
+    /** Debug builds fill History with mock shifts once; this remembers that it happened. */
+    var mockSeeded: Boolean
+        get() = prefs.getBoolean(KEY_MOCK_SEEDED, false)
+        set(value) = prefs.edit { putBoolean(KEY_MOCK_SEEDED, value) }
+
     var language: AppLanguage
         get() = AppLanguage.entries.firstOrNull { it.name == prefs.getString(KEY_LANGUAGE, null) } ?: AppLanguage.System
         set(value) = prefs.edit { putString(KEY_LANGUAGE, value.name) }
@@ -56,6 +74,7 @@ class AppFlags(context: Context) {
         private const val KEY_CONSENT = "legalVersion"
         private const val KEY_ONBOARDING = "onboardingDone"
         private const val KEY_LANGUAGE = "language"
+        private const val KEY_MOCK_SEEDED = "mockSeeded"
         private const val KEY_WEEK_PATTERN = "weekPattern"
         private const val KEY_CUSTOM_DAYS = "customWorkdays"
         private const val KEY_WEEKLY_GOAL = "weeklyGoalHoursDisplayOnly"

@@ -46,7 +46,7 @@ import java.util.Locale
 fun HistoryScreen(onAdd: () -> Unit) {
     val container = com.hourstracker.app.LocalAppContainer.current
     val vm: HistoryViewModel = viewModel(factory = viewModelFactory { HistoryViewModel(it.deviceCalendar()) })
-    val records by container.shifts.shifts.collectAsState()
+    val records by container.shifts.shifts.collectAsState(initial = emptyList())
     val settings by container.settings.settings.collectAsState()
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
     val state = remember(records, settings, vm.monthOffset) { HistoryCalculator.build(records, settings, vm.calendar, vm.monthOffset) }

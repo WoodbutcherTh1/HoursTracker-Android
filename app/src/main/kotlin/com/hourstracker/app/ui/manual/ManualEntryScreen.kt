@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,6 +56,7 @@ import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Space
 import com.hourstracker.model.DayType
 import java.time.Instant
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -66,9 +68,10 @@ import java.util.Locale
 fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
     val calendar = remember { container.deviceCalendar() }
     val settings by container.settings.settings.collectAsState()
-    val shifts by container.shifts.shifts.collectAsState()
+    val shifts by container.shifts.shifts.collectAsState(initial = emptyList())
     val existing = remember(shifts) { shifts.map { it.session } }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
     val savedToast = stringResource(R.string.feedback_session_saved)
 
@@ -100,9 +103,12 @@ fun ManualEntryScreen(container: AppContainer, onClose: () -> Unit) {
             showSickCap = true
             return
         }
-        container.shifts.upsert(ManualEntry.build(input, settings, calendar, calendar.now()))
-        Toast.makeText(context, savedToast, Toast.LENGTH_SHORT).show()
-        onClose()
+        val record = ManualEntry.build(input, settings, calendar, calendar.now())
+        scope.launch {
+            container.shifts.upsert(record)
+            Toast.makeText(context, savedToast, Toast.LENGTH_SHORT).show()
+            onClose()
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize().background(Palette.background).statusBarsPadding().navigationBarsPadding().imePadding()) {

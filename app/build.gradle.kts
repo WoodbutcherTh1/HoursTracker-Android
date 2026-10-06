@@ -31,6 +31,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     // First closed test ships Hebrew and English; Arabic and Russian follow in M2c.
@@ -63,6 +64,7 @@ kotlin {
 
 dependencies {
     implementation(project(":core-model"))
+    implementation(project(":core-data"))
 
     implementation(platform(libs.compose.bom))
     implementation(libs.androidx.core.ktx)
