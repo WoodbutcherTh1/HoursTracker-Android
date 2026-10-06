@@ -60,6 +60,10 @@ Foundation on Linux and on macOS are not the same implementation. The clearest k
 - **"Could not pin the environment"** — the harness could not make this Mac behave like the Israeli, Russian, or UTC environment and refuses to write data that would depend on the Mac's settings. Copy the full message and send it over. Changing System Settings > General > Language & Region > First day of week to "Default" and running again may also help.
 - **A Swift build error** — copy the full message and send it over. Do not edit the iOS repository to work around it.
 
+## Known limit: the order of the weekly excess sum
+
+`aggregate` sums the weekly excess hours over a Swift `Dictionary`, whose order is random per process, while the Kotlin port sums in order of first appearance. Floating-point addition is not associative, so the last bits only agree when the weekly totals add exactly. That is why every `aggregate` case uses hours that are multiples of 0.25. Cases with other hours must be compared with a tolerance (1e-9), never bit for bit.
+
 ## Data format
 
 - A `Double` is stored as an object with its raw IEEE-754 bits and a readable value: `{"bits": "4021333333333333", "value": 8.6}`. Tests compare the bits.

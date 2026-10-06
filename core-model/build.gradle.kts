@@ -30,6 +30,8 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // The golden JSON files generated on a Mac from the iOS code.
+    systemProperty("golden.dir", rootProject.file("golden/data").absolutePath)
     testLogging {
         events("passed", "failed", "skipped")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
