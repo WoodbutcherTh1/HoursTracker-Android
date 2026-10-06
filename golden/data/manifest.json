@@ -3,6 +3,21 @@
   "files" : [
     {
       "environment" : "il",
+      "group" : "aggregate",
+      "name" : "aggregate.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "aggregate",
+      "name" : "aggregate.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "aggregate",
+      "name" : "aggregate.utc.json"
+    },
+    {
+      "environment" : "il",
       "group" : "break_rounding",
       "name" : "break_rounding.il.json"
     },
@@ -208,7 +223,7 @@
     }
   ],
   "formatVersion" : 1,
-  "generatedAt" : "2026-10-06T16:56:07Z",
+  "generatedAt" : "2026-10-06T17:22:52Z",
   "iosCommit" : "5a4f72c986de3e1be6ca68e55d27ab32f0fee223",
   "osVersion" : "Version 26.6 (Build 25G5057c)",
   "platform" : "darwin"
