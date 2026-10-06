@@ -49,7 +49,8 @@ android {
         warningsAsErrors = true
         abortOnError = true
         // Typography style hints only; the strings come from the iOS catalog and are not rewritten here.
-        disable += listOf("TypographyDashes", "TypographyQuotes", "TypographyEllipsis", "TypographyFractions", "TypographyOther")
+        // targetSdk stays at 36: AGP 8.13 supports at most compileSdk 36, and the newest platform is not installed everywhere.
+        disable += listOf("OldTargetApi", "TypographyDashes", "TypographyQuotes", "TypographyEllipsis", "TypographyFractions", "TypographyOther")
     }
 }
 
