@@ -37,7 +37,11 @@ let goldenGroups: [GoldenGroup] = [
     GoldenGroup("period_payroll", run: writePeriodPayroll),
     GoldenGroup("period_weeks", run: writePeriodWeeks),
     GoldenGroup("period_misc", run: writePeriodMisc),
-    GoldenGroup("daily_hours_week", run: writeDailyHoursWeek)
+    GoldenGroup("daily_hours_week", run: writeDailyHoursWeek),
+    GoldenGroup("live_pay_curve", environments: ["il"], run: writeLivePayCurve),
+    GoldenGroup("live_pay_curve_eval", environments: ["il"], run: writeLivePayCurveEval),
+    GoldenGroup("money_locale", environments: ["il"], run: writeMoneyLocale),
+    GoldenGroup("money_env", run: writeMoneyEnv)
 ]
 
 /// The result of `OvertimeCalculator` for one session or day, with every number as raw bits.

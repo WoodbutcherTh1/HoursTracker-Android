@@ -57,6 +57,7 @@ Foundation on Linux and on macOS are not the same implementation. The clearest k
 
 - **"run this on a Mac"** — `Foundation` on Linux differs from Apple's (notably `Calendar`), so golden data must come from macOS.
 - **"uncommitted changes"** — commit or stash the changes in the iOS checkout and run again.
+- **"Could not pin the environment"** — the harness could not make this Mac behave like the Israeli, Russian, or UTC environment and refuses to write data that would depend on the Mac's settings. Copy the full message and send it over. Changing System Settings > General > Language & Region > First day of week to "Default" and running again may also help.
 - **A Swift build error** — copy the full message and send it over. Do not edit the iOS repository to work around it.
 
 ## Data format

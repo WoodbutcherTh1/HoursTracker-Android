@@ -97,14 +97,17 @@ find "$OUT_DIR" -maxdepth 1 -name '*.json' -delete
 # One process per environment. The locale reaches the process the way each OS expects.
 for env in il ru utc; do
   case "$env" in
-    il)  LOCALE_ID=he_IL ;;
-    ru)  LOCALE_ID=ru_RU ;;
-    utc) LOCALE_ID=en_GB ;;
+    il)  LOCALE_ID=he_IL; FIRST_WEEKDAY=1 ;;
+    ru)  LOCALE_ID=ru_RU; FIRST_WEEKDAY=2 ;;
+    utc) LOCALE_ID=en_GB; FIRST_WEEKDAY=2 ;;
   esac
   echo
   echo "== environment: $env ($LOCALE_ID)"
   if [ "$OS" = "Darwin" ]; then
-    "$BIN" --env "$env" --out "$OUT_DIR" -AppleLocale "$LOCALE_ID"
+    # The first weekday is passed explicitly so a customized "First day of week" setting
+    # on this Mac cannot leak into the data.
+    "$BIN" --env "$env" --out "$OUT_DIR" \
+      -AppleLocale "$LOCALE_ID" -AppleFirstWeekday "{gregorian = $FIRST_WEEKDAY;}"
   else
     # The locale cannot be pinned outside macOS, so only the time zone is enforced here.
     LANG="$LOCALE_ID.UTF-8" LC_ALL="$LOCALE_ID.UTF-8" "$BIN" --env "$env" --out "$OUT_DIR" --lenient
