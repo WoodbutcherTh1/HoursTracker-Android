@@ -1,0 +1,27 @@
+{
+"formatVersion": 1,
+"group": "clock_pair",
+"environment": {"firstWeekday":2,"id":"utc","minimumDaysInFirstWeek":4,"platform":"darwin","requestedLocale":"en_GB","systemLocale":"en_GB","timeZone":"UTC"},
+"cases": [
+  {"clockIn":"2026-06-10T07:22:00Z","clockOut":"2026-06-10T17:02:00Z","id":"normal-day-shift","note":"07:22 to 17:02: unchanged","resolvedClockIn":"2026-06-10T07:22:00Z","resolvedClockOut":"2026-06-10T17:02:00Z"},
+  {"clockIn":"2026-06-10T17:02:00Z","clockOut":"2026-06-10T07:22:00Z","id":"swapped-same-day","note":"17:02 to 07:22 on one date: the OCR swap is undone","resolvedClockIn":"2026-06-10T07:22:00Z","resolvedClockOut":"2026-06-10T17:02:00Z"},
+  {"clockIn":"2026-06-10T22:00:00Z","clockOut":"2026-06-10T06:00:00Z","id":"real-overnight","note":"22:00 to 06:00: a genuine overnight shift","resolvedClockIn":"2026-06-10T22:00:00Z","resolvedClockOut":"2026-06-11T06:00:00Z"},
+  {"clockIn":"2026-06-10T17:02:00Z","clockOut":"2026-06-11T07:22:00Z","id":"swapped-plus-a-day","note":"17:02 to 07:22 the next day (14h20): swapped and shifted, so it is corrected","resolvedClockIn":"2026-06-10T07:22:00Z","resolvedClockOut":"2026-06-10T17:02:00Z"},
+  {"clockIn":"2026-06-10T07:22:00Z","clockOut":"2026-06-12T17:02:00Z","id":"long-span-not-swapped","note":"07:22 to 17:02 two days later: unchanged","resolvedClockIn":"2026-06-10T07:22:00Z","resolvedClockOut":"2026-06-12T17:02:00Z"},
+  {"clockIn":"2026-06-10T18:00:00Z","clockOut":"2026-06-10T06:00:00Z","id":"overnight-exactly-12h","note":"18:00 to 06:00 (12.0h overnight): not greater than 12, so a real overnight","resolvedClockIn":"2026-06-10T18:00:00Z","resolvedClockOut":"2026-06-11T06:00:00Z"},
+  {"clockIn":"2026-06-10T18:01:00Z","clockOut":"2026-06-10T06:00:00Z","id":"overnight-just-under-12h","note":"18:01 to 06:00","resolvedClockIn":"2026-06-10T18:01:00Z","resolvedClockOut":"2026-06-11T06:00:00Z"},
+  {"clockIn":"2026-06-10T10:00:00Z","clockOut":"2026-06-10T07:00:00Z","id":"swapped-exactly-3h","note":"10:00 to 07:00: the swapped gap is exactly 3.0h, which is allowed","resolvedClockIn":"2026-06-10T07:00:00Z","resolvedClockOut":"2026-06-10T10:00:00Z"},
+  {"clockIn":"2026-06-10T10:00:00Z","clockOut":"2026-06-10T07:01:00Z","id":"swapped-just-under-3h","note":"10:00 to 07:01: 2h59, so it is a (very long) overnight","resolvedClockIn":"2026-06-10T10:00:00Z","resolvedClockOut":"2026-06-11T07:01:00Z"},
+  {"clockIn":"2026-06-10T19:59:00Z","clockOut":"2026-06-11T08:00:00Z","id":"swapped-just-under-12h","note":"19:59 to 08:00 the next day: 12h01 span, gap 11h59, corrected","resolvedClockIn":"2026-06-10T08:00:00Z","resolvedClockOut":"2026-06-10T19:59:00Z"},
+  {"clockIn":"2026-06-10T08:00:00Z","clockOut":"2026-06-10T20:00:00Z","id":"span-exactly-12h","note":"08:00 to 20:00: exactly 12.0h, not greater, unchanged","resolvedClockIn":"2026-06-10T08:00:00Z","resolvedClockOut":"2026-06-10T20:00:00Z"},
+  {"clockIn":"2026-06-10T08:00:00Z","clockOut":"2026-06-10T20:01:00Z","id":"span-just-over-12h","note":"08:00 to 20:01: over 12h but the times are not swapped","resolvedClockIn":"2026-06-10T08:00:00Z","resolvedClockOut":"2026-06-10T20:01:00Z"},
+  {"clockIn":"2026-06-10T08:00:00Z","clockOut":"2026-06-10T08:00:00Z","id":"equal-times","note":"identical in and out","resolvedClockIn":"2026-06-10T08:00:00Z","resolvedClockOut":"2026-06-11T08:00:00Z"},
+  {"clockIn":"2026-06-10T10:00:00Z","clockOut":"2026-06-11T07:00:00Z","id":"gap-3h-boundary-next-day","note":"10:00 to 07:00 the next day (21h): swapped gap exactly 3h","resolvedClockIn":"2026-06-10T07:00:00Z","resolvedClockOut":"2026-06-10T10:00:00Z"},
+  {"clockIn":"2026-06-10T10:00:00Z","clockOut":"2026-06-11T07:01:00Z","id":"gap-just-under-3h-next-day","note":"10:00 to 07:01 the next day","resolvedClockIn":"2026-06-10T10:00:00Z","resolvedClockOut":"2026-06-11T07:01:00Z"},
+  {"clockIn":"2026-03-26T22:00:00Z","clockOut":"2026-03-27T06:00:00Z","id":"dst-spring-overnight","note":"22:00 to 06:00 across the spring change","resolvedClockIn":"2026-03-26T22:00:00Z","resolvedClockOut":"2026-03-27T06:00:00Z"},
+  {"clockIn":"2026-03-27T17:02:00Z","clockOut":"2026-03-27T07:22:00Z","id":"dst-spring-swapped","note":"17:02 to 07:22 on the change day","resolvedClockIn":"2026-03-27T07:22:00Z","resolvedClockOut":"2026-03-27T17:02:00Z"},
+  {"clockIn":"2026-10-25T17:02:00Z","clockOut":"2026-10-25T07:22:00Z","id":"dst-autumn-swapped","note":"17:02 to 07:22 on the 25 hour day","resolvedClockIn":"2026-10-25T07:22:00Z","resolvedClockOut":"2026-10-25T17:02:00Z"},
+  {"clockIn":"2026-10-24T22:00:00Z","clockOut":"2026-10-25T06:00:00Z","id":"dst-autumn-overnight","note":"22:00 to 06:00 across the autumn change","resolvedClockIn":"2026-10-24T22:00:00Z","resolvedClockOut":"2026-10-25T06:00:00Z"},
+  {"clockIn":"2026-03-27T17:02:00Z","clockOut":"2026-03-28T07:22:00Z","id":"dst-spring-swapped-plus-a-day","note":"17:02 on the change day to 07:22 the next day","resolvedClockIn":"2026-03-27T07:22:00Z","resolvedClockOut":"2026-03-27T17:02:00Z"}
+]
+}

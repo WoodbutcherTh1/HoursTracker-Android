@@ -1,0 +1,215 @@
+{
+  "authoritative" : true,
+  "files" : [
+    {
+      "environment" : "il",
+      "group" : "break_rounding",
+      "name" : "break_rounding.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "breakdown_day",
+      "name" : "breakdown_day.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "breakdown_day",
+      "name" : "breakdown_day.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "breakdown_day",
+      "name" : "breakdown_day.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "breakdown_simple",
+      "name" : "breakdown_simple.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "calendar_ops",
+      "name" : "calendar_ops.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "calendar_ops",
+      "name" : "calendar_ops.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "calendar_ops",
+      "name" : "calendar_ops.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "clock_pair",
+      "name" : "clock_pair.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "clock_pair",
+      "name" : "clock_pair.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "clock_pair",
+      "name" : "clock_pair.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "daily_hours_week",
+      "name" : "daily_hours_week.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "daily_hours_week",
+      "name" : "daily_hours_week.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "daily_hours_week",
+      "name" : "daily_hours_week.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "day_types",
+      "name" : "day_types.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "day_types",
+      "name" : "day_types.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "day_types",
+      "name" : "day_types.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "default_break",
+      "name" : "default_break.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "live_pay_curve",
+      "name" : "live_pay_curve.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "live_pay_curve_eval",
+      "name" : "live_pay_curve_eval.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "money_env",
+      "name" : "money_env.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "money_env",
+      "name" : "money_env.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "money_env",
+      "name" : "money_env.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "money_locale",
+      "name" : "money_locale.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "night_shift",
+      "name" : "night_shift.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "night_shift",
+      "name" : "night_shift.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "night_shift",
+      "name" : "night_shift.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "paid_elapsed",
+      "name" : "paid_elapsed.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "period_misc",
+      "name" : "period_misc.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "period_misc",
+      "name" : "period_misc.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "period_misc",
+      "name" : "period_misc.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "period_payroll",
+      "name" : "period_payroll.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "period_payroll",
+      "name" : "period_payroll.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "period_payroll",
+      "name" : "period_payroll.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "period_weeks",
+      "name" : "period_weeks.il.json"
+    },
+    {
+      "environment" : "ru",
+      "group" : "period_weeks",
+      "name" : "period_weeks.ru.json"
+    },
+    {
+      "environment" : "utc",
+      "group" : "period_weeks",
+      "name" : "period_weeks.utc.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "settings_normalization",
+      "name" : "settings_normalization.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "tax_credit",
+      "name" : "tax_credit.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "tax_daily",
+      "name" : "tax_daily.il.json"
+    },
+    {
+      "environment" : "il",
+      "group" : "tax_monthly",
+      "name" : "tax_monthly.il.json"
+    }
+  ],
+  "formatVersion" : 1,
+  "generatedAt" : "2026-10-06T16:56:07Z",
+  "iosCommit" : "5a4f72c986de3e1be6ca68e55d27ab32f0fee223",
+  "osVersion" : "Version 26.6 (Build 25G5057c)",
+  "platform" : "darwin"
+}
