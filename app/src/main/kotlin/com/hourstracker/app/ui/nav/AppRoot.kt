@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hourstracker.app.data.AppLanguage
 import com.hourstracker.app.ui.export.ExportScreen
 import com.hourstracker.app.ui.history.HistoryScreen
 import com.hourstracker.app.ui.home.HomeScreen
@@ -26,7 +27,7 @@ import com.hourstracker.app.ui.theme.Space
 
 /** The signed-in shell: five tabs with a back stack each, and the floating tab bar over the content. */
 @Composable
-fun AppRoot() {
+fun AppRoot(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentTab = TopLevelTab.entries.firstOrNull { tab ->
@@ -43,7 +44,7 @@ fun AppRoot() {
             composable(TopLevelTab.History.route) { HistoryScreen() }
             composable(TopLevelTab.Payslips.route) { PayslipsScreen() }
             composable(TopLevelTab.Export.route) { ExportScreen() }
-            composable(TopLevelTab.Settings.route) { SettingsScreen() }
+            composable(TopLevelTab.Settings.route) { SettingsScreen(language, onLanguageChange) }
         }
         FloatingTabBar(
             selected = currentTab,

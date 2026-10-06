@@ -38,6 +38,13 @@ android {
         localeFilters += listOf("en", "he", "iw")
     }
 
+    // The language is switchable inside the app, so every language must ship in the base APK/bundle.
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     lint {
         warningsAsErrors = true
         abortOnError = true
