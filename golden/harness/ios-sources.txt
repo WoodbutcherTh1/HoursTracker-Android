@@ -1,5 +1,20 @@
 # iOS source files the harness needs, one path per line, relative to the iOS repository root.
-# run.sh links them temporarily into golden/harness/Sources/iOSSources (ignored by git) and
+# run.sh links them temporarily into golden/harness/Sources/GoldenGen/iOS (ignored by git) and
 # removes the links when it finishes. iOS source code is never copied into this repository.
 #
-# Empty for now: the list is decided in milestone M1 together with the test cases.
+# Every file here is compiled unchanged. Anything they refer to that cannot be linked
+# (UI strings, the app view model, a SwiftUI-only model) is replaced by a small stand-in in
+# Sources/GoldenGen/Stubs.swift.
+
+HoursTracker/Models/OvertimeCalculator.swift
+HoursTracker/Models/IsraeliTaxEstimator.swift
+HoursTracker/Models/TaxCreditPointsCalculator.swift
+HoursTracker/Models/MaritalStatus.swift
+HoursTracker/Models/WorkplaceSettings.swift
+HoursTracker/Models/WorkSession.swift
+HoursTracker/Models/LeaveDay.swift
+HoursTracker/Models/IsraeliHolidays.swift
+HoursTracker/Utilities/PayFormatter.swift
+HoursTracker/Utilities/HistoryPeriodHelper.swift
+HoursTracker/Shared/LivePayCurve.swift
+HoursTracker/ViewModels/AppViewModel+LivePay.swift

@@ -30,6 +30,8 @@ captures/
 .DS_Store
 *.log
 
-# Golden harness (Swift): build output and temporary links to iOS sources
+# Golden harness (Swift): build output, temporary links to iOS sources, and provisional
+# (non-authoritative) output that must never be committed
 golden/harness/.build/
-golden/harness/Sources/iOSSources/
+golden/harness/Sources/GoldenGen/iOS/
+golden/provisional/
