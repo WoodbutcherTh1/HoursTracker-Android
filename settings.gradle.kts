@@ -30,4 +30,5 @@ dependencyResolutionManagement {
 rootProject.name = "HoursTracker-Android"
 
 include(":core-model")
+include(":core-data")
 include(":app")
