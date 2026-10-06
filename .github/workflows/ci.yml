@@ -1,0 +1,64 @@
+name: CI
+
+# Every push (any branch) and every pull request.
+on:
+  push:
+  pull_request:
+
+# Least privilege: the jobs only read the repository.
+permissions:
+  contents: read
+
+# A newer run on the same ref makes the older one pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-24.04
+    # Fail fast: a stuck scan must not hold up the pipeline.
+    timeout-minutes: 5
+    steps:
+      # actions/checkout@v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+
+      # gitleaks/gitleaks-action@v2.3.9 (same pinned SHA as the iOS repository's CI)
+      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Keep the token read-only: no PR comments, no artifact upload.
+          GITLEAKS_ENABLE_COMMENTS: "false"
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
+
+  test:
+    name: core-model tests
+    # Nothing builds until the secret scan has passed.
+    needs: secret-scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      # actions/checkout@v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Verify the Gradle wrapper
+        run: |
+          set -euo pipefail
+          props=gradle/wrapper/gradle-wrapper.properties
+          grep -q '^distributionSha256Sum=' "$props" || { echo "distributionSha256Sum is missing"; exit 1; }
+          version=$(sed -n 's#.*gradle-\(.*\)-bin\.zip#\1#p' "$props")
+          expected=$(curl -fsSL "https://services.gradle.org/distributions/gradle-${version}-wrapper.jar.sha256")
+          actual=$(sha256sum gradle/wrapper/gradle-wrapper.jar | cut -d' ' -f1)
+          echo "version=$version expected=$expected actual=$actual"
+          [ "$expected" = "$actual" ] || { echo "gradle-wrapper.jar does not match the official checksum"; exit 1; }
+
+      - name: Use the runner's JDK 21
+        run: |
+          test -n "${JAVA_HOME_21_X64:-}" || { echo "JDK 21 not found on the runner"; exit 1; }
+          echo "JAVA_HOME=$JAVA_HOME_21_X64" >> "$GITHUB_ENV"
+
+      - name: Test
+        run: ./gradlew :core-model:test --no-daemon --console=plain
