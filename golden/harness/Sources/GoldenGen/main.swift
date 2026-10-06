@@ -53,12 +53,10 @@ do {
         let context = environment.pinAndVerify(outDirectory: outDirectory, lenient: lenient)
         print("Environment \(context.info.id): \(context.info.timeZone), first weekday \(context.info.firstWeekday), "
             + "minimal days \(context.info.minimumDaysInFirstWeek), system locale \(context.info.systemLocale)")
-        // Case groups are registered here as they are added.
-        let groups: [(name: String, run: (GoldenContext) throws -> Void)] = []
-        for group in groups {
+        // Case groups are registered in Groups.swift.
+        for group in goldenGroups where group.applies(to: environment) {
             try group.run(context)
         }
-        if groups.isEmpty { print("  (no case groups yet)") }
     }
 } catch {
     fail("GoldenGen failed: \(error)", code: 1)
