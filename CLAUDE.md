@@ -16,11 +16,11 @@ Android port of the iOS app HoursTracker (a separate repository). The goal is a 
 
 - The pay engine is a literal port. Do not "improve" it. If anything is ambiguous, stop and ask.
 - **No UI work until every golden test passes** (milestone M1 gate). Golden files are generated from iOS and compared bit for bit.
-- Overtime is **per day only**. `weeklyStandardHours` and `weeklyOvertimeCapHours` are stored and displayed but never affect pay.
+- Per-session breakdowns (`breakdowns(forDay:)`) apply overtime **per day**. `aggregate`, which feeds every period total (Home, History, Export, Watch, widgets), additionally re-prices hours above `weeklyStandardHours` (default 42) at 125% and then 150% (cap `weeklyOvertimeCapHours`, default 12), grouping sessions by the week of their clock-in. Port both literally.
 - Night shifts change only the standard day (8.6 h to 7.0 h). There is no night premium rate.
-- The engine does not round. Rounding happens only when formatting money.
+- Per-session breakdowns do not round. `aggregate` rounds its monetary totals to 2 decimals **half away from zero** (Swift `.rounded()`). Do not use `kotlin.math.round`, which rounds half to even.
 - Rest days change the pay premium. **Never bind `WeekPattern` to rest days**; it is display-only.
-- Week start and time zone follow the device (`WeekFields.of(locale)`, `ZoneId.systemDefault()`), as `Calendar.current` does on iOS. Tests pass both explicitly.
+- Week start, minimal days in the first week, and time zone follow the device (`WeekFields.of(locale)`, `ZoneId.systemDefault()`), as `Calendar.current` does on iOS. Tests pass all three explicitly.
 
 ## Privacy
 

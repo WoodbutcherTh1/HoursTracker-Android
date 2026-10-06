@@ -19,10 +19,10 @@ docs/         This file, TAX_BRACKETS.md, proposed server files
 
 ## Decisions that define behavior
 
-- **Week start and time zone follow the device** (`WeekFields.of(locale)`, `ZoneId.systemDefault()`), exactly as `Calendar.current` does on iOS. Tests pass both explicitly.
-- **Overtime is per day only.** Weekly standard hours and the weekly overtime cap are stored and displayed, never used in pay.
+- **Week start, minimal days in the first week, and time zone follow the device** (`WeekFields.of(locale)`, `ZoneId.systemDefault()`), exactly as `Calendar.current` does on iOS. Tests pass all three explicitly.
+- **Overtime exists at two levels.** Per-session breakdowns price overtime per day. `aggregate`, which produces every period total, then re-prices hours above the weekly standard (default 42 h) at 125% and 150% (weekly cap default 12 h), grouped by the week of each session's clock-in. Row figures and totals can therefore differ when a week exceeds the weekly standard.
 - **Night shifts** change only the standard day (8.6 h to 7.0 h). There is no night premium.
-- **The engine does not round.** Rounding happens when money is formatted.
+- **Rounding:** per-session breakdowns do not round; `aggregate` rounds its monetary totals to 2 decimals, half away from zero. Money is also rounded when formatted.
 - **Rest days** change the pay premium. The work-week pattern is display-only and is never bound to rest days.
 - **Tabs** (same order as iOS): Home, History, Payslips, Export, Settings.
 
@@ -36,6 +36,17 @@ The pay math is ported literally and proven against iOS:
 4. **No UI work starts until every golden test passes (milestone M1).**
 
 No iOS source code is ever copied into this public repository, only the generated data.
+
+## iOS behaviors that need care when porting
+
+Facts found in the iOS code; how to handle each is decided with the owner before the golden cases are written.
+
+- `aggregate` takes a `calendar` parameter but groups days (and sick streaks) with `Calendar.current`; only the weekly grouping uses the parameter.
+- The night window ends 8 **elapsed** hours after 22:00, not at 06:00 wall-clock, so it differs on daylight-saving days.
+- A day's sessions share one consumed-hours counter, but each session uses its own standard day (8.6 h or 7.0 h) for its tier boundaries.
+- The weekly excess is summed in Swift `Dictionary` order, which is randomized per process, so the last bits of that sum are not reproducible unless the inputs add exactly.
+- Money formatting follows the device locale, and Apple's and Android's locale data can differ in symbol placement and bidi marks.
+- Retirement age is computed from today's date, so golden cases must stay away from the 67th birthday.
 
 ## Milestones
 
