@@ -29,7 +29,7 @@ The repository is public for review, and all rights are reserved (see `LICENSE`)
 
 ## Pull requests
 
-1. Branch from `main` as `android/<topic>`. **Push only to `android/*` branches**; pushing to `main` needs the owner's explicit approval every time.
+1. Branch from `main` as `feature/<topic>` or `android/<topic>`. **Only `main` is protected**; pushing to `main` needs the owner's explicit approval every time.
 2. Keep the pull request to one topic. Say what changed, why, and how you checked it. Include screenshots for UI changes.
 3. All CI jobs must pass: secret scan, core-model tests, app build and lint, screenshot comparison.
 4. Never skip, disable or loosen a test to get green. If a test is wrong, fix it in its own commit and explain.

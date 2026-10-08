@@ -7,7 +7,7 @@ Android port of the iOS app HoursTracker (a separate repository). The goal is a 
 - **No secrets in the repo.** Never commit `local.properties`, `google-services.json`, keystores (`*.jks`, `*.keystore`), `.env*`, push keys, or API keys. Configuration comes from untracked local files and CI secrets.
 - **Never copy iOS source code into this repo.** This repository is public. Only data derived from it (golden JSON files) belongs here.
 - **Never touch the iOS repository or the production Supabase project.** Server changes are delivered as proposed files under `docs/server/` for the owner to review and apply.
-- **Push only to `android/*` branches.** Pushing to `main` needs explicit approval from the owner each time.
+- **Push only to `feature/*` and `android/*` branches.** Only `main` is protected: pushing to `main` needs explicit approval from the owner each time.
 - **One commit per logical change.** CI must be green. Never skip, disable, or weaken a test to get green.
 - **Warnings are errors** (`allWarningsAsErrors`).
 - **Third-party libraries need the owner's approval.** Approved so far: JUnit 5 and kotlinx-serialization-json (tests), plus the Jetpack set (Compose, Room, WorkManager, Glance), Supabase-kt, Firebase Messaging, and Roborazzi (dev-only) for later milestones. No Hilt: dependency injection is manual.
