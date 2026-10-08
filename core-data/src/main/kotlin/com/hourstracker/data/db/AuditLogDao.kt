@@ -20,7 +20,10 @@ interface AuditLogDao {
     @Query("SELECT COUNT(*) FROM audit_log")
     suspend fun count(): Int
 
-    /** Returns how many lines were removed. */
-    @Query("DELETE FROM audit_log WHERE timestamp < :cutoffMillis")
+    /**
+     * Returns how many lines were removed. Consent and erasure lines are kept however old they are: they hold no personal
+     * data, and they are the proof that a person agreed to a version of the terms or that their data was deleted.
+     */
+    @Query("DELETE FROM audit_log WHERE timestamp < :cutoffMillis AND action NOT LIKE 'consent.%' AND action NOT LIKE 'erasure.%'")
     suspend fun deleteOlderThan(cutoffMillis: Long): Int
 }

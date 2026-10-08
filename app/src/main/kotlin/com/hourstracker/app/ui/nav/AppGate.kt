@@ -11,17 +11,17 @@ import com.hourstracker.app.ui.onboarding.OnboardingScreen
 
 /** What the app shows first: legal consent, then onboarding, then the five tabs. Nothing is usable behind consent. */
 @Composable
-fun AppGate(container: AppContainer, onLanguageChange: (AppLanguage) -> Unit) {
+fun AppGate(container: AppContainer, onLanguageChange: (AppLanguage) -> Unit, currentLegalVersion: Int = AppFlags.CURRENT_LEGAL_VERSION) {
     val acceptedVersion by container.flags.acceptedLegalVersion.collectAsState()
     val onboardingDone by container.flags.onboardingDone.collectAsState()
     val language = container.flags.language
 
     when {
-        acceptedVersion < AppFlags.CURRENT_LEGAL_VERSION -> LegalConsentScreen(
+        AppFlags.needsConsent(acceptedVersion, currentLegalVersion) -> LegalConsentScreen(
             isReconsent = acceptedVersion > 0,
             language = language,
             onLanguageChange = onLanguageChange,
-            onAccept = container.flags::acceptLegal,
+            onAccept = { container.acceptLegal(currentLegalVersion) },
         )
 
         !onboardingDone -> {

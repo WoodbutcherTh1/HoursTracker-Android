@@ -2,6 +2,8 @@ package com.hourstracker.app.data
 
 import android.content.Context
 import androidx.core.content.edit
+import com.hourstracker.app.BuildConfig
+import java.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +30,9 @@ enum class AppLanguage(val tag: String?, val label: String?) {
 
 private fun isRtlLanguage(tag: String): Boolean = AppLanguage.isRtlLanguage(tag)
 
+/** One acceptance of the terms and privacy policy. */
+data class ConsentRecord(val version: Int, val acceptedAt: Instant?, val appVersion: String?)
+
 /** First-run state: legal consent, onboarding, and the language chosen inside the app. */
 class AppFlags(context: Context) {
     private val prefs = context.getSharedPreferences("flags", Context.MODE_PRIVATE)
@@ -48,9 +53,25 @@ class AppFlags(context: Context) {
         showNetFlow.value = value
     }
 
-    fun acceptLegal() {
-        prefs.edit { putInt(KEY_CONSENT, CURRENT_LEGAL_VERSION) }
-        consentFlow.value = CURRENT_LEGAL_VERSION
+    /**
+     * Records that the terms and privacy policy [version] were accepted, with the time and the app version. No IP address
+     * or device identifier is stored: the app has no server and must not collect what it does not need.
+     */
+    fun acceptLegal(version: Int = CURRENT_LEGAL_VERSION, at: Instant = Instant.now(), appVersion: String = BuildConfig.VERSION_NAME) {
+        prefs.edit {
+            putInt(KEY_CONSENT, version)
+            putLong(KEY_CONSENT_AT, at.toEpochMilli())
+            putString(KEY_CONSENT_APP_VERSION, appVersion)
+        }
+        consentFlow.value = version
+    }
+
+    /** The latest acceptance, or null when none was recorded (never accepted, or accepted before the time was kept). */
+    fun consentRecord(): ConsentRecord? {
+        val version = prefs.getInt(KEY_CONSENT, 0)
+        if (version == 0) return null
+        val at = prefs.getLong(KEY_CONSENT_AT, 0L).takeIf { it > 0 }?.let(Instant::ofEpochMilli)
+        return ConsentRecord(version, at, prefs.getString(KEY_CONSENT_APP_VERSION, null))
     }
 
     fun finishOnboarding() {
@@ -81,7 +102,14 @@ class AppFlags(context: Context) {
         set(value) = prefs.edit { putString(KEY_LANGUAGE, value.name) }
 
     companion object {
+        /** Raise this whenever the terms or the privacy policy change in a way that needs a new agreement. */
         const val CURRENT_LEGAL_VERSION = 1
+
+        /** True when [accepted] is older than [current]: the consent screen must show again. */
+        fun needsConsent(accepted: Int, current: Int = CURRENT_LEGAL_VERSION): Boolean = accepted < current
+
+        private const val KEY_CONSENT_AT = "legalAcceptedAt"
+        private const val KEY_CONSENT_APP_VERSION = "legalAcceptedAppVersion"
         private const val KEY_CONSENT = "legalVersion"
         private const val KEY_ONBOARDING = "onboardingDone"
         private const val KEY_LANGUAGE = "language"

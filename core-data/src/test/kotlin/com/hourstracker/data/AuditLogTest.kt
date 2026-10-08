@@ -115,4 +115,16 @@ class AuditLogTest {
         assertTrue(AuditAction.Category.Privacy.matches("retention.cleanup"))
         assertFalse(AuditAction.Category.Shifts.matches("settings.update"))
     }
+
+    @Test
+    fun `consent and erasure lines survive a purge however old they are`() = runBlocking {
+        log.log(AuditAction.CONSENT_ACCEPTED, metadata = mapOf("version" to 1))
+        log.log(AuditAction.ERASURE_COMPLETED)
+        log.log(AuditAction.SHIFT_CREATE, targetId = "old")
+        log.awaitIdle()
+        now = now.plusSeconds(3000 * 86_400L)
+        assertEquals(1, log.purgeOlderThan(365))
+        log.awaitIdle()
+        assertEquals(setOf("audit.purge", "consent.accepted", "erasure.completed"), log.entries().map { it.action }.toSet())
+    }
 }

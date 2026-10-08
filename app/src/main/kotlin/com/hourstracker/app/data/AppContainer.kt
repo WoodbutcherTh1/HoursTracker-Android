@@ -65,6 +65,16 @@ class AppContainer(
         }
     }
 
+    /** The person agreed to the current terms. Stored with the time, and logged (consent lines are never purged). */
+    fun acceptLegal(version: Int = AppFlags.CURRENT_LEGAL_VERSION) {
+        val previous = flags.acceptedLegalVersion.value
+        flags.acceptLegal(version = version, at = deviceCalendar().now())
+        audit.log(
+            AuditAction.CONSENT_ACCEPTED,
+            metadata = mapOf("version" to version, "appVersion" to BuildConfig.VERSION_NAME, "reconsent" to (previous > 0)),
+        )
+    }
+
     /** Deletes everything the app keeps on the phone ("Delete all my data"). Returns the steps that failed; empty means all done. */
     suspend fun eraseAllData(): List<String> =
         DataEraser(appContext, database, audit, idStore) {
