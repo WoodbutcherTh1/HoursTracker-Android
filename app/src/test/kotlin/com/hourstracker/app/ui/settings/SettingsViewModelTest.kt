@@ -1,6 +1,8 @@
 package com.hourstracker.app.ui.settings
 
 import com.hourstracker.app.data.SettingsRepository
+import com.hourstracker.app.domain.StatType
+import com.hourstracker.app.ui.theme.ThemeMode
 import com.hourstracker.app.data.UserProfile
 import com.hourstracker.model.IosCalendar
 import com.hourstracker.model.MaritalStatus
@@ -24,6 +26,21 @@ private class FakeSettingsRepository(initial: WorkplaceSettings = WorkplaceSetti
 
     override val settings: StateFlow<WorkplaceSettings> = settingsFlow
     override val profile: StateFlow<UserProfile> = profileFlow
+
+    private val statOrderFlow = MutableStateFlow(listOf(StatType.TODAY, StatType.WEEK, StatType.MONTH))
+    private val themeFlow = MutableStateFlow(ThemeMode.AUTO)
+    private val breakEnabledFlow = MutableStateFlow(true)
+    private val breakMinutesFlow = MutableStateFlow(5)
+
+    override val statCardOrder: StateFlow<List<StatType>> = statOrderFlow
+    override val themeMode: StateFlow<ThemeMode> = themeFlow
+    override val breakRemindersEnabled: StateFlow<Boolean> = breakEnabledFlow
+    override val breakReminderMinutesBefore: StateFlow<Int> = breakMinutesFlow
+
+    override fun saveStatCardOrder(order: List<StatType>) { statOrderFlow.value = order }
+    override fun saveThemeMode(mode: ThemeMode) { themeFlow.value = mode }
+    override fun saveBreakRemindersEnabled(enabled: Boolean) { breakEnabledFlow.value = enabled }
+    override fun saveBreakReminderMinutesBefore(minutes: Int) { breakMinutesFlow.value = minutes }
 
     override fun readIdNumber(): String = idNumber
 

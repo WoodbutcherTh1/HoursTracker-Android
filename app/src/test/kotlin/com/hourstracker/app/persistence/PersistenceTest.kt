@@ -36,7 +36,7 @@ class PersistenceTest {
     @Test
     fun `changed settings are still there after a restart`() {
         val first = PrefsSettingsRepository(app, idStore())
-        first.save(first.settings.value.copy(hourlyRate = 44.0, standardDayHours = 8.6), UserProfile(fullName = "Alex"))
+        first.save(first.settings.value.copy(hourlyRate = 44.0, standardDayHours = 8.6), UserProfile(fullName = "Alex"), idNumber = null)
 
         val second = PrefsSettingsRepository(app, idStore()) // a new process reads the same file
         assertEquals(44.0, second.settings.value.hourlyRate, 0.0)
@@ -47,7 +47,7 @@ class PersistenceTest {
     @Test
     fun `out of range values are clamped before they are stored`() {
         val repository = PrefsSettingsRepository(app, idStore())
-        repository.save(WorkplaceSettings(hourlyRate = 50.0, standardDayHours = 99.0, payrollStartDay = 40), UserProfile())
+        repository.save(WorkplaceSettings(hourlyRate = 50.0, standardDayHours = 99.0, payrollStartDay = 40), UserProfile(), idNumber = null)
         val reloaded = PrefsSettingsRepository(app, idStore()).settings.value
         assertEquals(24.0, reloaded.standardDayHours, 0.0)
         assertEquals(28, reloaded.payrollStartDay)

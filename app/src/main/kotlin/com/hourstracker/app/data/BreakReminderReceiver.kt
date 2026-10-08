@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.hourstracker.app.R
 import java.time.Instant
@@ -28,7 +27,7 @@ class BreakReminderReceiver : BroadcastReceiver() {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Create notification channel for break reminders
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        run {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 context.getString(R.string.notification_channel_break_reminders),

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_shift_timer">Таймер смены</string>
+    <string name="notification_channel_shift_timer_description">Показывает таймер текущей смены</string>
+    <string name="notification_channel_break_reminders">Напоминания о перерыве</string>
+    <string name="notification_channel_break_reminders_description">Уведомления перед окончанием перерыва</string>
+    <string name="notification_channel_shift_summary">Итоги смены</string>
+    <string name="notification_channel_shift_summary_description">Итоги завершённых смен</string>
+    <string name="notification_channel_shift_reminders">Напоминания о смене</string>
+    <string name="notification_channel_shift_reminders_description">Напоминания перед началом смены</string>
+
+    <string name="break_reminder_title">Перерыв скоро закончится</string>
+    <plurals name="break_reminder_message">
+        <item quantity="one">Перерыв закончится через %d минуту</item>
+        <item quantity="few">Перерыв закончится через %d минуты</item>
+        <item quantity="many">Перерыв закончится через %d минут</item>
+        <item quantity="other">Перерыв закончится через %d минуты</item>
+    </plurals>
+</resources>

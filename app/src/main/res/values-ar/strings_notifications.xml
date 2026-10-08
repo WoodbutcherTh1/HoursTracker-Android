@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_shift_timer">مؤقّت الوردية</string>
+    <string name="notification_channel_shift_timer_description">يعرض مؤقّت الوردية الجارية</string>
+    <string name="notification_channel_break_reminders">تذكيرات الاستراحة</string>
+    <string name="notification_channel_break_reminders_description">إشعارات قبل انتهاء استراحتك</string>
+    <string name="notification_channel_shift_summary">ملخّص الوردية</string>
+    <string name="notification_channel_shift_summary_description">ملخّص الورديات المنتهية</string>
+    <string name="notification_channel_shift_reminders">تذكيرات الوردية</string>
+    <string name="notification_channel_shift_reminders_description">تذكيرات قبل بدء ورديتك</string>
+
+    <string name="break_reminder_title">استراحتك على وشك الانتهاء</string>
+    <plurals name="break_reminder_message">
+        <item quantity="zero">تنتهي استراحتك بعد %d دقيقة</item>
+        <item quantity="one">تنتهي استراحتك بعد دقيقة واحدة</item>
+        <item quantity="two">تنتهي استراحتك بعد دقيقتين</item>
+        <item quantity="few">تنتهي استراحتك بعد %d دقائق</item>
+        <item quantity="many">تنتهي استراحتك بعد %d دقيقة</item>
+        <item quantity="other">تنتهي استراحتك بعد %d دقيقة</item>
+    </plurals>
+</resources>

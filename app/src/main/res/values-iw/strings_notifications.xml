@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_shift_timer">שעון משמרת</string>
+    <string name="notification_channel_shift_timer_description">מציג את שעון המשמרת הפעילה</string>
+    <string name="notification_channel_break_reminders">תזכורות הפסקה</string>
+    <string name="notification_channel_break_reminders_description">התראות לפני סיום ההפסקה</string>
+    <string name="notification_channel_shift_summary">סיכום משמרת</string>
+    <string name="notification_channel_shift_summary_description">סיכום של משמרות שהסתיימו</string>
+    <string name="notification_channel_shift_reminders">תזכורות משמרת</string>
+    <string name="notification_channel_shift_reminders_description">תזכורות לפני תחילת המשמרת</string>
+
+    <string name="break_reminder_title">ההפסקה עומדת להסתיים</string>
+    <plurals name="break_reminder_message">
+        <item quantity="one">ההפסקה מסתיימת בעוד דקה</item>
+        <item quantity="two">ההפסקה מסתיימת בעוד %d דקות</item>
+        <item quantity="other">ההפסקה מסתיימת בעוד %d דקות</item>
+    </plurals>
+</resources>

@@ -60,9 +60,9 @@ class DataTest {
     }
 
     @Test
-    fun `the language tags map to the two shipped resource folders`() {
+    fun `the language tags map to the shipped resource folders`() {
         assertEquals("iw", AppLanguage.Hebrew.tag)
         assertEquals("en", AppLanguage.English.tag)
-        assertEquals(listOf("System", "English", "Hebrew"), AppLanguage.entries.map { it.name })
+        assertEquals(listOf("System", "English", "Hebrew", "Arabic", "Russian"), AppLanguage.entries.map { it.name })
     }
 }

@@ -91,8 +91,8 @@ class HomeUiTest {
         awaitUntil { running()?.session?.isOnBreak == true }
         compose.waitForIdle()
         assertNotNull(running()!!.session.activeBreak)
-        awaitText("End break")
-        compose.onNodeWithText("End break").performScrollTo().performClick()
+        awaitText("I'm back")
+        compose.onNodeWithText("I'm back").performScrollTo().performClick()
         awaitUntil { running()?.session?.isOnBreak == false }
         compose.waitForIdle()
         assertNull(running()!!.session.activeBreak)
@@ -104,9 +104,9 @@ class HomeUiTest {
         compose.onNodeWithText("Clock In").performClick()
         awaitUntil { running() != null }
         awaitText("Clock Out")
-        compose.onNodeWithText("Clock Out").performClick()
+        compose.onNodeWithText("Clock Out").performScrollTo().performClick()
         awaitUntil { running() == null }
-        awaitText("Summary")
-        compose.onNodeWithText("Summary").assertIsDisplayed()
+        awaitText("Shift complete")
+        compose.onNodeWithText("Shift complete").assertIsDisplayed()
     }
 }

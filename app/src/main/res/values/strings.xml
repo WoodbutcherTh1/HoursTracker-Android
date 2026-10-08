@@ -2,25 +2,4 @@
 <resources>
     <string name="app_name" translatable="false">HoursTracker</string>
 
-    <!-- Notification channels -->
-    <string name="notification_channel_shift_timer">Shift Timer</string>
-    <string name="notification_channel_shift_timer_description">Shows your ongoing shift timer</string>
-    <string name="notification_channel_break_reminders">Break Reminders</string>
-    <string name="notification_channel_break_reminders_description">Notifications before your break ends</string>
-    <string name="notification_channel_shift_summary">Shift Summary</string>
-    <string name="notification_channel_shift_summary_description">Summary of completed shifts</string>
-    <string name="notification_channel_shift_reminders">Shift Reminders</string>
-    <string name="notification_channel_shift_reminders_description">Reminders before your shift starts</string>
-
-    <!-- Break reminders -->
-    <string name="break_reminder_title">Break ending soon</string>
-    <plurals name="break_reminder_message">
-        <item quantity="one">Your break ends in %d minute</item>
-        <item quantity="other">Your break ends in %d minutes</item>
-    </plurals>
-
-    <!-- Shift summary -->
-    <string name="shift_summary_title">Shift complete</string>
-    <string name="shift_summary_hours">Worked %s</string>
-    <string name="shift_summary_pay">Earned %s</string>
 </resources>

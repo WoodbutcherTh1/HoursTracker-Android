@@ -3,7 +3,6 @@ package com.hourstracker.app.data
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import com.hourstracker.app.R
 
 /**
@@ -17,7 +16,7 @@ object NotificationChannels {
     const val SHIFT_REMINDERS = "shift_reminders"
 
     fun createAll(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        run {
             val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             // Shift timer (ongoing notification while clocked in)
