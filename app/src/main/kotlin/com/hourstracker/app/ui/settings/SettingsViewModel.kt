@@ -82,6 +82,12 @@ class SettingsViewModel(
         justSaved = true
     }
 
+    /** Throws the edits away and shows what is stored. */
+    fun discard() {
+        draft = saved
+        justSaved = false
+    }
+
     /** The settings this draft means, with unparsable numbers left at the stored value. */
     private fun toSettings(d: SettingsDraft): WorkplaceSettings {
         val current = repository.settings.value

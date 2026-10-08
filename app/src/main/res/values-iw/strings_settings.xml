@@ -50,4 +50,6 @@
     <string name="settings_app_language">שפת האפליקציה</string>
     <string name="settings_app_language_hint">חל מיד על כל המסכים. «מערכת» עוקב אחרי שפת המכשיר.</string>
     <string name="settings_language_system">מערכת</string>
+    <string name="settings_unsaved_message">יש שינויים שלא נשמרו. לשמור?</string>
+    <string name="settings_discard">בטל</string>
 </resources>

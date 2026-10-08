@@ -11,7 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import com.hourstracker.app.R
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,11 +48,42 @@ private const val EDIT_ROUTE = "history/edit"
 @Composable
 fun AppRoot(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
     val navController = rememberNavController()
+    val unsavedGuard = remember { UnsavedGuard() }
+    var pendingTab by remember { mutableStateOf<TopLevelTab?>(null) }
+    fun goTo(tab: TopLevelTab) {
+        navController.navigate(tab.route) {
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentTab = TopLevelTab.entries.firstOrNull { tab ->
         backStackEntry?.destination?.hierarchy?.any { it.route == tab.route } == true
     } ?: TopLevelTab.Home
 
+    pendingTab?.let { target ->
+        AlertDialog(
+            onDismissRequest = { pendingTab = null },
+            text = { Text(stringResource(R.string.settings_unsaved_message)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    unsavedGuard.save()
+                    pendingTab = null
+                    goTo(target)
+                }) { Text(stringResource(R.string.settings_save)) }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    unsavedGuard.discard()
+                    pendingTab = null
+                    goTo(target)
+                }) { Text(stringResource(R.string.settings_discard)) }
+            },
+        )
+    }
+
+    CompositionLocalProvider(LocalUnsavedGuard provides unsavedGuard) {
     Box(modifier = Modifier.fillMaxSize().background(Palette.background)) {
         NavHost(
             navController = navController,
@@ -71,16 +111,14 @@ fun AppRoot(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
         if (backStackEntry?.destination?.route.let { it != MANUAL_ENTRY_ROUTE && it?.startsWith(EDIT_ROUTE) != true }) FloatingTabBar(
             selected = currentTab,
             onSelect = { tab ->
-                navController.navigate(tab.route) {
-                    popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                    launchSingleTop = true
-                    restoreState = true
-                }
+                // Leaving Settings with edits that were not saved: ask first.
+                if (tab != currentTab && unsavedGuard.hasUnsavedChanges()) pendingTab = tab else goTo(tab)
             },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .navigationBarsPadding()
                 .padding(horizontal = Space.md, vertical = Space.xs),
         )
+    }
     }
 }

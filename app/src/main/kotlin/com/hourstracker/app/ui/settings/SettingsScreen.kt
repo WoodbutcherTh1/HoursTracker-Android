@@ -32,6 +32,8 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import com.hourstracker.app.ui.nav.LocalUnsavedGuard
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,6 +85,11 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
         SettingsViewModel(container.settings, container.deviceCalendar())
     })
     val d = vm.draft
+    val guard = LocalUnsavedGuard.current
+    DisposableEffect(vm, guard) {
+        guard.register(hasUnsaved = { vm.hasUnsavedChanges }, save = vm::save, discard = vm::discard)
+        onDispose { guard.unregister() }
+    }
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
     val currencySymbol = Currency.getInstance(d.currencyCode).getSymbol(locale)
 

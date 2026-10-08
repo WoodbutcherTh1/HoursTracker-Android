@@ -50,4 +50,6 @@
     <string name="settings_app_language">Язык приложения</string>
     <string name="settings_app_language_hint">Применяется сразу во всём приложении. «Системный» — как на устройстве.</string>
     <string name="settings_language_system">Системный</string>
+    <string name="settings_unsaved_message">Есть несохранённые изменения. Сохранить?</string>
+    <string name="settings_discard">Отменить</string>
 </resources>

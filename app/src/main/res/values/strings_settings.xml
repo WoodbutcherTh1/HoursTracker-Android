@@ -50,4 +50,6 @@
     <string name="settings_app_language">App Language</string>
     <string name="settings_app_language_hint">Applies immediately across the app. System follows your device language.</string>
     <string name="settings_language_system">System</string>
+    <string name="settings_unsaved_message">You have unsaved changes. Save them?</string>
+    <string name="settings_discard">Discard</string>
 </resources>

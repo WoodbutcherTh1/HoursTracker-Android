@@ -50,4 +50,6 @@
     <string name="settings_app_language">لغة التطبيق</string>
     <string name="settings_app_language_hint">تُطبَّق فوراً على كل الشاشات. «النظام» يتبع لغة الجهاز.</string>
     <string name="settings_language_system">النظام</string>
+    <string name="settings_unsaved_message">لديك تغييرات غير محفوظة. هل تريد حفظها؟</string>
+    <string name="settings_discard">تجاهل</string>
 </resources>
