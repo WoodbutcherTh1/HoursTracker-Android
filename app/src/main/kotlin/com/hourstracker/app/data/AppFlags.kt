@@ -11,6 +11,8 @@ enum class AppLanguage(val tag: String?, val label: String?) {
     System(null, null),
     English("en", "English"),
     Hebrew("iw", "עברית"),
+    Arabic("ar", "العربية"),
+    Russian("ru", "Русский"),
     ;
 
     /** Whether text runs right to left in this language; null for [System], which depends on the device. */
