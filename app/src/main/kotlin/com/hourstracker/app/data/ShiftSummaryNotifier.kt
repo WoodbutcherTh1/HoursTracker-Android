@@ -37,10 +37,17 @@ class ShiftSummaryNotifier(
             context.getString(R.string.shift_summary_text_hours, hours)
         }
         val open = PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
+        // Hours and pay are private: on a locked screen only the title shows (the lock-screen setting decides which version is used).
+        val lockScreenVersion = NotificationCompat.Builder(context, NotificationChannels.SHIFT_SUMMARY)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(context.getString(R.string.shift_summary_title))
+            .build()
         val notification = NotificationCompat.Builder(context, NotificationChannels.SHIFT_SUMMARY)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(context.getString(R.string.shift_summary_title))
             .setContentText(text)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .setPublicVersion(lockScreenVersion)
             .setContentIntent(open)
             .setAutoCancel(true)
             .build()

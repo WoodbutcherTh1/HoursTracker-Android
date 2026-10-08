@@ -150,6 +150,23 @@ Shifts, settings and profile stayed until the user deleted them, cleared the app
 | FIX 7 | Admin MFA | SOC 2 CC6.1, ISO A.5.17 | `docs/ADMIN_SECURITY.md` (requirements for the future dashboard) | 2 hours | Document only |
 | FIX 8 | security.txt | ISO A.5.5, coordinated disclosure | `docs/security.txt` (RFC 9116) plus a section in `SECURITY.md` | 1 hour | Document only |
 
+## E.2 Privacy by default (FIX 6): each default, and what enforces it
+
+| Default | State | Enforced by |
+|---|---|---|
+| Location | Off: no permission, no code. The two unused database columns for a future workplace location are never written | `PrivacyByDefaultTest` (permission list) |
+| Cloud backup | Off and impossible: no `INTERNET`; Android backup and device transfer excluded | `PrivacyByDefaultTest` (manifest flag, extraction rules, permissions) |
+| Analytics, advertising, crash reporting | None, no SDK, no crash handler | `PrivacyByDefaultTest` (dependency and source scan) |
+| Network access | None | `PrivacyByDefaultTest` (no `INTERNET`, no networking library, no `HttpURLConnection`, `Socket`, `WebView`) |
+| Shift start reminder | Off until the person turns it on | `PrivacyByDefaultTest` |
+| Automatic deletion of shifts | Off (never); a choice that deletes data asks first | `PrivacyByDefaultTest`, `RetentionUiTest` |
+| Notifications | The Android 13+ permission is the opt-in. Break reminders and the shift summary are on **but show nothing until that permission is granted**; the summary hides hours and pay on a locked screen (public version) | `PrivacyByDefaultTest` |
+| ID number | Optional, empty until typed, Keystore-encrypted | `PersistenceTest`, `PrivacyByDefaultTest` |
+| Share files | The only content provider is not exported and grants per file | `PrivacyByDefaultTest` |
+| Consent | Required before any use; versioned and logged | `ConsentUiTest` |
+
+If a future change needs one of these to differ (for example `INTERNET` for backup), the test fails on purpose: update section A and B, the privacy policy and `store/DATA_SAFETY.md`, then change the test in the same pull request.
+
 ## F. Control mapping (for a future audit)
 
 This table says where evidence for each family would come from. "Gap" means no evidence yet.
