@@ -4,5 +4,5 @@ First closed-test release (1.0.0-alpha1).
 • Overtime, rest-day and tax estimates for Israel
 • PDF and CSV export
 • Hebrew, English, Arabic and Russian
-• Light, dark and automatic themes
+• Light and dark themes (follows your phone)
 Please tell us what is missing or confusing: info.hourstracker@gmail.com
