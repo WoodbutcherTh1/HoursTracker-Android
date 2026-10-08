@@ -9,9 +9,11 @@ State of the Android app at the end of Missions 6 to 9 (8 October 2026). Branch 
 - **Play Store material:** everything is in `store/` (listing in four languages, graphics, privacy policy, terms, data safety, checklist). What still needs the Play Console account is listed in `store/PLAY_CONSOLE_CHECKLIST.md`.
 - **Coverage** of `app` is about 68% of instructions and 49% of branches (`createDebugUnitTestCoverageReport`).
 
-## Not verified on a device
+## Checked on an emulator, and what was not
 
-All checks ran on the JVM (Robolectric). The icon, the Android 12 splash, haptics, the foreground-service notification and the signed bundle have **not** been run on a real phone or emulator in this session. Before inviting testers: install the release bundle (with `bundletool`) or `assembleDebug` on a phone, clock in, background the app, pull down the shade, clock out, and rotate to Hebrew.
+Smoke-tested the **debug build** on the Pixel_7a emulator (Android 17 preview, Hebrew system language): consent, onboarding, Home, the notification permission prompt, clock in (the foreground notification appeared with two actions), clock out; no crash in logcat; layout mirrored correctly.
+
+**Not** checked on a device: the signed release bundle itself, the Android 12 splash and launcher icon on a real launcher, haptics, break reminders firing, the notification buttons, and Play's special-use foreground-service review. Do those before inviting testers (install the bundle with `bundletool`).
 
 ## Decisions made while working (change them if you disagree)
 
@@ -42,7 +44,7 @@ All checks ran on the JVM (Robolectric). The icon, the Android 12 splash, haptic
 
 ## Next session, in this order
 
-1. Run the app on an emulator or phone and fix whatever the checks above turn up.
+1. Run the release bundle on a phone and tick off the "not checked" list above.
 2. Upload the bundle to a closed-testing track; fill the declarations (special-use foreground service needs a short video).
 3. Settings: theme picker and break reminders (small, and the listing already works without them).
 4. History: filter chips and search; edit sheet.
