@@ -2,6 +2,10 @@ package com.hourstracker.app.ui.history
 
 import android.icu.text.DateFormat
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.ui.semantics.selected
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.AlertDialog
@@ -51,6 +55,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import com.hourstracker.app.R
 import com.hourstracker.app.domain.HistoryCalculator
+import com.hourstracker.app.domain.HistoryFilter
 import com.hourstracker.app.domain.HistoryRow
 import com.hourstracker.app.ui.components.EmptyState
 import com.hourstracker.app.ui.components.HistorySkeleton
@@ -79,9 +84,14 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     val records = loadedRecords ?: emptyList()
     val settings by container.settings.settings.collectAsState()
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
-    val state = remember(records, settings, vm.monthOffset) { HistoryCalculator.build(records, settings, vm.calendar, vm.monthOffset) }
+    val state = remember(records, settings, vm.monthOffset, vm.filter) { HistoryCalculator.build(records, settings, vm.calendar, vm.monthOffset, vm.filter) }
     val cal = vm.calendar
-    val monthTitle = DateTimeFormatter.ofPattern("LLLL yyyy", locale).format(cal.localDate(state.period.labelMonth))
+    val monthTitle = when (vm.filter) {
+        HistoryFilter.All -> stringResource(R.string.history_filter_all_title)
+        HistoryFilter.Year -> DateTimeFormatter.ofPattern("yyyy", locale).format(cal.localDate(state.period.labelMonth))
+        HistoryFilter.Week -> stringResource(R.string.history_filter_week)
+        else -> DateTimeFormatter.ofPattern("LLLL yyyy", locale).format(cal.localDate(state.period.labelMonth))
+    }
     val shortDay = remember(locale) { DateFormat.getInstanceForSkeleton("MMdd", locale) }
     fun day(instant: java.time.Instant) = shortDay.format(Date.from(instant))
     val timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
@@ -147,12 +157,20 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
             }
         }
         Row(
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = Space.md, vertical = Space.xs),
+            horizontalArrangement = Arrangement.spacedBy(Space.xs),
+        ) {
+            HistoryFilter.entries.forEach { option ->
+                Toggle(stringResource(filterLabel(option)), vm.filter == option, horizontalPadding = Space.sm) { vm.selectFilter(option) }
+            }
+        }
+        Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = Space.md),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             // Arrows follow the reading direction: "previous" points to the start side.
-            Text(
+            if (vm.filter == HistoryFilter.All) Spacer(Modifier.size(48.dp)) else Text(
                 "‹",
                 style = DsText.titleScreen,
                 color = Palette.textPrimary,
@@ -163,13 +181,15 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(monthTitle, style = DsText.titleSection, color = Palette.textPrimary)
-                Text(
-                    "${day(cal.startOfDay(state.period.start))} – ${day(cal.startOfDay(state.period.end))}",
-                    style = DsText.meta,
-                    color = Palette.textSecondary,
-                )
+                if (vm.filter != HistoryFilter.All) {
+                    Text(
+                        "${day(cal.startOfDay(state.period.start))} – ${day(cal.startOfDay(state.period.end))}",
+                        style = DsText.meta,
+                        color = Palette.textSecondary,
+                    )
+                }
             }
-            Text(
+            if (vm.filter == HistoryFilter.All) Spacer(Modifier.size(48.dp)) else Text(
                 "›",
                 style = DsText.titleScreen,
                 color = Palette.textPrimary,
@@ -366,8 +386,16 @@ private fun SwipeableRowItem(
     )
 }
 
+private fun filterLabel(filter: HistoryFilter): Int = when (filter) {
+    HistoryFilter.Week -> R.string.history_filter_week
+    HistoryFilter.Month -> R.string.history_filter_month
+    HistoryFilter.Payroll -> R.string.history_filter_payroll
+    HistoryFilter.Year -> R.string.history_filter_year
+    HistoryFilter.All -> R.string.history_filter_all
+}
+
 @Composable
-private fun Toggle(label: String, selected: Boolean, onClick: () -> Unit) {
+private fun Toggle(label: String, selected: Boolean, horizontalPadding: androidx.compose.ui.unit.Dp = Space.md, onClick: () -> Unit) {
     Text(
         text = label,
         style = DsText.sub,
@@ -375,7 +403,7 @@ private fun Toggle(label: String, selected: Boolean, onClick: () -> Unit) {
         modifier = Modifier
             .background(if (selected) Palette.accent else Palette.raised, CircleShape)
             .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
-            .padding(horizontal = Space.md, vertical = Space.xs),
+            .padding(horizontal = horizontalPadding, vertical = Space.xs),
     )
 }
 

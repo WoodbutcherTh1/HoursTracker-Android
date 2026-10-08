@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.hourstracker.app.domain.HistoryFilter
 import com.hourstracker.model.IosCalendar
 import java.util.UUID
 
@@ -12,6 +13,16 @@ import java.util.UUID
 class HistoryViewModel(val calendar: IosCalendar) : ViewModel() {
     var monthOffset: Int by mutableIntStateOf(0)
         private set
+
+    /** Which stretch of time is listed; [monthOffset] counts in units of this filter. */
+    var filter: HistoryFilter by mutableStateOf(HistoryFilter.Payroll)
+        private set
+
+    fun selectFilter(newFilter: HistoryFilter) {
+        filter = newFilter
+        monthOffset = 0
+        clearSelection()
+    }
 
     var showNet: Boolean by mutableStateOf(true)
 

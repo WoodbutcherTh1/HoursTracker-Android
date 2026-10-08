@@ -25,4 +25,10 @@
     <string name="history_delete_selected_confirm">هل تريد حذف الورديات المحددة (%1$d)؟</string>
     <string name="history_bulk_deleted">الورديات المحذوفة: %1$d</string>
     <string name="history_cancel_selection">إلغاء التحديد</string>
+    <string name="history_filter_week">أسبوع</string>
+    <string name="history_filter_month">شهر</string>
+    <string name="history_filter_payroll">فترة الراتب</string>
+    <string name="history_filter_year">سنة</string>
+    <string name="history_filter_all">الكل</string>
+    <string name="history_filter_all_title">كل الورديات</string>
 </resources>

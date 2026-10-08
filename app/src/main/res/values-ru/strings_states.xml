@@ -25,4 +25,10 @@
     <string name="history_delete_selected_confirm">Удалить выбранные смены (%1$d)?</string>
     <string name="history_bulk_deleted">Удалено смен: %1$d</string>
     <string name="history_cancel_selection">Отменить выбор</string>
+    <string name="history_filter_week">Неделя</string>
+    <string name="history_filter_month">Месяц</string>
+    <string name="history_filter_payroll">Расчётный период</string>
+    <string name="history_filter_year">Год</string>
+    <string name="history_filter_all">Все</string>
+    <string name="history_filter_all_title">Все смены</string>
 </resources>

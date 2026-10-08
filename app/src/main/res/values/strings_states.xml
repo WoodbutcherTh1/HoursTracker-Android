@@ -25,4 +25,10 @@
     <string name="history_delete_selected_confirm">Delete the selected shifts (%1$d)?</string>
     <string name="history_bulk_deleted">Deleted shifts: %1$d</string>
     <string name="history_cancel_selection">Cancel selection</string>
+    <string name="history_filter_week">Week</string>
+    <string name="history_filter_month">Month</string>
+    <string name="history_filter_payroll">Payroll</string>
+    <string name="history_filter_year">Year</string>
+    <string name="history_filter_all">All</string>
+    <string name="history_filter_all_title">All shifts</string>
 </resources>

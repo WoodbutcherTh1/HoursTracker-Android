@@ -21,6 +21,9 @@ class HistoryRow(
     val dayType: DayType,
 )
 
+/** Which stretch of time History lists. [Payroll] is the default and matches the iOS table. */
+enum class HistoryFilter { Week, Month, Payroll, Year, All }
+
 class HistoryState(
     val period: PayrollPeriod,
     val rows: List<HistoryRow>,
@@ -39,8 +42,40 @@ object HistoryCalculator {
         return HistoryPeriodHelper.payrollPeriodForMonthAnchor(anchor, settings.payrollStartDay, calendar)
     }
 
-    fun build(records: List<ShiftRecord>, settings: WorkplaceSettings, calendar: IosCalendar, monthOffset: Int): HistoryState {
-        val period = periodFor(settings, calendar, monthOffset)
+    /**
+     * The window for [filter], moved by [offset] of its own unit (weeks, months, payroll periods or years; 0 is the one
+     * containing now). [HistoryFilter.All] has no window to move: it spans every date.
+     */
+    fun windowFor(filter: HistoryFilter, settings: WorkplaceSettings, calendar: IosCalendar, offset: Int): PayrollPeriod {
+        val now = calendar.now()
+        return when (filter) {
+            HistoryFilter.Payroll -> periodFor(settings, calendar, offset)
+            HistoryFilter.Week -> {
+                val start = calendar.addDays(calendar.startOfWeekOfYear(now), 7 * offset)
+                PayrollPeriod(start, calendar.addDays(start, 6), start)
+            }
+            HistoryFilter.Month -> {
+                val shifted = calendar.addMonths(now, offset)
+                val start = calendar.startOfDay(calendar.dateFrom(calendar.year(shifted), calendar.month(shifted), 1))
+                PayrollPeriod(start, calendar.addDays(calendar.addMonths(start, 1), -1), start)
+            }
+            HistoryFilter.Year -> {
+                val year = calendar.year(now) + offset
+                val start = calendar.startOfDay(calendar.dateFrom(year, 1, 1))
+                PayrollPeriod(start, calendar.startOfDay(calendar.dateFrom(year, 12, 31)), start)
+            }
+            HistoryFilter.All -> PayrollPeriod(Instant.EPOCH, Instant.parse("2200-01-01T00:00:00Z"), calendar.startOfDay(now))
+        }
+    }
+
+    fun build(
+        records: List<ShiftRecord>,
+        settings: WorkplaceSettings,
+        calendar: IosCalendar,
+        monthOffset: Int,
+        filter: HistoryFilter = HistoryFilter.Payroll,
+    ): HistoryState {
+        val period = windowFor(filter, settings, calendar, monthOffset)
         val all = records.map { it.session }
         val inPeriod = records
             .map { it.session }

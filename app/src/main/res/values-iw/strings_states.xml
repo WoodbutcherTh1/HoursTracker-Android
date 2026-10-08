@@ -25,4 +25,10 @@
     <string name="history_delete_selected_confirm">למחוק את המשמרות שנבחרו (%1$d)?</string>
     <string name="history_bulk_deleted">משמרות שנמחקו: %1$d</string>
     <string name="history_cancel_selection">ביטול הבחירה</string>
+    <string name="history_filter_week">שבוע</string>
+    <string name="history_filter_month">חודש</string>
+    <string name="history_filter_payroll">תקופת שכר</string>
+    <string name="history_filter_year">שנה</string>
+    <string name="history_filter_all">הכול</string>
+    <string name="history_filter_all_title">כל המשמרות</string>
 </resources>
