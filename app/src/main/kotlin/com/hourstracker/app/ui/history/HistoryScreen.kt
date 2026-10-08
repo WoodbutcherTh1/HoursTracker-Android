@@ -13,18 +13,34 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import com.hourstracker.app.R
 import com.hourstracker.app.domain.HistoryCalculator
 import com.hourstracker.app.domain.HistoryRow
@@ -42,6 +58,7 @@ import java.util.Date
 import java.util.Locale
 
 /** The shifts of a payroll period as a table, with the period total in a bar that stays above the tab bar. */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     val container = com.hourstracker.app.LocalAppContainer.current
@@ -56,7 +73,12 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     fun day(instant: java.time.Instant) = shortDay.format(Date.from(instant))
     val timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    var pendingDelete by remember { mutableStateOf<Pair<java.util.UUID, com.hourstracker.data.ShiftRecord>?>(null) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = Space.md, vertical = Space.sm),
             verticalAlignment = Alignment.CenterVertically,
@@ -117,7 +139,34 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                 )
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(state.rows, key = { it.id }) { row ->
-                        RowItem(row, vm.showNet, locale, state.currencyCode, ::day, timeFormat, cal.zone, onClick = { onEdit(row.id) })
+                        SwipeableRowItem(
+                            row = row,
+                            showNet = vm.showNet,
+                            locale = locale,
+                            currencyCode = state.currencyCode,
+                            day = ::day,
+                            timeFormat = timeFormat,
+                            zone = cal.zone,
+                            onClick = { onEdit(row.id) },
+                            onDelete = { deletedRow ->
+                                val record = records.find { it.id == deletedRow.id }
+                                if (record != null) {
+                                    pendingDelete = deletedRow.id to record
+                                    scope.launch {
+                                        container.shifts.delete(deletedRow.id)
+                                        val result = snackbarHostState.showSnackbar(
+                                            message = "Shift deleted",
+                                            actionLabel = "Undo",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                        if (result == SnackbarResult.ActionPerformed) {
+                                            pendingDelete?.second?.let { container.shifts.upsert(it) }
+                                        }
+                                        pendingDelete = null
+                                    }
+                                }
+                            }
+                        )
                     }
                 }
             }
@@ -146,7 +195,58 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                 )
             }
         }
+        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp)
+        )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SwipeableRowItem(
+    row: HistoryRow,
+    showNet: Boolean,
+    locale: Locale,
+    currencyCode: String,
+    day: (java.time.Instant) -> String,
+    timeFormat: DateTimeFormatter,
+    zone: java.time.ZoneId,
+    onClick: () -> Unit,
+    onDelete: (HistoryRow) -> Unit,
+) {
+    var dismissed by remember { mutableStateOf(false) }
+    @Suppress("DEPRECATION")
+    val dismissState = rememberSwipeToDismissBoxState(
+        confirmValueChange = { dismissValue ->
+            if (dismissValue != SwipeToDismissBoxValue.Settled && !dismissed) {
+                dismissed = true
+                onDelete(row)
+                true
+            } else {
+                false
+            }
+        }
+    )
+
+    SwipeToDismissBox(
+        state = dismissState,
+        backgroundContent = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Red)
+                    .padding(horizontal = Space.md),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Text("Delete", color = Color.White, style = DsText.headline)
+            }
+        },
+        content = {
+            RowItem(row, showNet, locale, currencyCode, day, timeFormat, zone, onClick)
+        }
+    )
 }
 
 @Composable
