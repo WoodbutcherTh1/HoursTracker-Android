@@ -179,7 +179,8 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                             day = ::day,
                             timeFormat = timeFormat,
                             zone = cal.zone,
-                            onClick = { onEdit(row.id) },
+                            // A running shift is changed from Home (clock out, breaks); editing it here would close it by accident.
+                            onClick = { if (row.clockOut != null) onEdit(row.id) },
                             onDelete = { deletedRow ->
                                 val record = records.find { it.id == deletedRow.id }
                                 if (record != null) {

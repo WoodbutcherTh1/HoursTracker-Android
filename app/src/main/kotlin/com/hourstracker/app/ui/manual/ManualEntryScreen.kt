@@ -59,7 +59,9 @@ import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Space
 import com.hourstracker.model.DayType
 import java.time.Instant
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.UUID
@@ -130,11 +132,24 @@ private fun ManualEntryForm(container: AppContainer, existing: ShiftRecord?, onC
             return
         }
         val built = ManualEntry.build(input, settings, calendar, calendar.now(), id = existing?.id ?: UUID.randomUUID())
-        val record = if (existing == null) built else built.copy(isManualEntry = existing.isManualEntry, isAIImported = existing.isAIImported, workplaceId = existing.workplaceId)
+        // An edit keeps what the form does not show: where the shift came from and the breaks as they were recorded.
+        val record = if (existing == null) {
+            built
+        } else {
+            built.copy(
+                session = built.session.copy(breaks = existing.session.breaks),
+                isManualEntry = existing.isManualEntry,
+                isAIImported = existing.isAIImported,
+                workplaceId = existing.workplaceId,
+            )
+        }
         scope.launch {
             container.shifts.upsert(record)
-            Toast.makeText(context, savedToast, Toast.LENGTH_SHORT).show()
-            onClose()
+            // The database call may resume on another thread; the toast and the navigation need the main one.
+            withContext(Dispatchers.Main.immediate) {
+                Toast.makeText(context, savedToast, Toast.LENGTH_SHORT).show()
+                onClose()
+            }
         }
     }
 
