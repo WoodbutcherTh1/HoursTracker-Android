@@ -17,4 +17,8 @@ class RoomShiftRepository(private val dao: WorkSessionDao) : ShiftRepository {
     override suspend fun delete(id: UUID) = dao.delete(id.toString())
 
     override suspend fun count(): Int = dao.count()
+
+    override suspend fun countDatedBefore(date: java.time.Instant): Int = dao.countFinishedBefore(date.toEpochMilli())
+
+    override suspend fun deleteDatedBefore(date: java.time.Instant): Int = dao.deleteFinishedBefore(date.toEpochMilli())
 }

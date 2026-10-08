@@ -37,6 +37,13 @@ abstract class WorkSessionDao {
     @Query("DELETE FROM break_interval WHERE sessionId = :sessionId")
     protected abstract suspend fun deleteBreaks(sessionId: String)
 
+    @Query("SELECT COUNT(*) FROM work_session WHERE clockOut IS NOT NULL AND date < :cutoffMillis")
+    abstract suspend fun countFinishedBefore(cutoffMillis: Long): Int
+
+    /** The breaks go with their shift (foreign key cascade). A running shift (no clock-out) is never removed. */
+    @Query("DELETE FROM work_session WHERE clockOut IS NOT NULL AND date < :cutoffMillis")
+    abstract suspend fun deleteFinishedBefore(cutoffMillis: Long): Int
+
     @Query("DELETE FROM work_session WHERE id = :id")
     abstract suspend fun delete(id: String)
 

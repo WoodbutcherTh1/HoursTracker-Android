@@ -31,4 +31,9 @@
     <string name="action_audit_purge">Old log entries removed</string>
     <string name="action_erasure_completed">All data deleted</string>
     <string name="action_unknown">Other</string>
+    <string name="settings_shift_retention">Auto-delete shifts older than</string>
+    <string name="retention_never">Never</string>
+    <string name="retention_10_years">10 years</string>
+    <string name="retention_confirm_title">Delete shifts older than %1$s (%2$d)?</string>
+    <string name="retention_confirm_body">They are removed now and cannot be restored. Choose Never to keep everything.</string>
 </resources>

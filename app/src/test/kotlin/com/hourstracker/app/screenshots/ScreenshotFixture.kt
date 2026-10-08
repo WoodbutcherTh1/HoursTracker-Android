@@ -50,7 +50,7 @@ class ScreenshotFixture(private val compose: ComposeContentTestRule) {
         val FIXED_CALENDAR = IosCalendar(ZONE, 1, 1, Clock.fixed(Instant.parse("2026-06-17T10:30:00Z"), ZONE))
     }
 
-    private val app get() = ApplicationProvider.getApplicationContext<Application>() as ScreenshotApp
+    val app get() = ApplicationProvider.getApplicationContext<Application>() as ScreenshotApp
     val container: AppContainer get() = app.container
 
     fun start() {

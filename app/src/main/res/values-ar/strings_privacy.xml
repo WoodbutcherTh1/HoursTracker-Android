@@ -31,4 +31,9 @@
     <string name="action_audit_purge">أُزيلت مدخلات قديمة من السجل</string>
     <string name="action_erasure_completed">حُذفت كل البيانات</string>
     <string name="action_unknown">أخرى</string>
+    <string name="settings_shift_retention">حذف الورديات الأقدم من (تلقائيًا)</string>
+    <string name="retention_never">أبدًا</string>
+    <string name="retention_10_years">10 سنوات</string>
+    <string name="retention_confirm_title">هل تريد حذف الورديات الأقدم من %1$s (%2$d)؟</string>
+    <string name="retention_confirm_body">ستُحذف الآن ولا يمكن استعادتها. اختر «أبدًا» للاحتفاظ بكل شيء.</string>
 </resources>

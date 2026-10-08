@@ -31,4 +31,9 @@
     <string name="action_audit_purge">Старые записи журнала удалены</string>
     <string name="action_erasure_completed">Все данные удалены</string>
     <string name="action_unknown">Другое</string>
+    <string name="settings_shift_retention">Автоудаление смен старше</string>
+    <string name="retention_never">Никогда</string>
+    <string name="retention_10_years">10 лет</string>
+    <string name="retention_confirm_title">Удалить смены старше %1$s (%2$d)?</string>
+    <string name="retention_confirm_body">Они будут удалены сейчас без возможности восстановления. Выберите «Никогда», чтобы сохранить всё.</string>
 </resources>

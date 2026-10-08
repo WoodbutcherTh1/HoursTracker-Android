@@ -15,6 +15,12 @@ interface ShiftRepository {
     suspend fun delete(id: UUID)
 
     suspend fun count(): Int
+
+    /** How many finished shifts are dated before [date]. A shift that is still running is never counted. */
+    suspend fun countDatedBefore(date: java.time.Instant): Int
+
+    /** Deletes the finished shifts dated before [date], with their breaks, and returns how many went. */
+    suspend fun deleteDatedBefore(date: java.time.Instant): Int
 }
 
 /** Keeps shifts in memory. Used by tests and previews. */
@@ -32,4 +38,12 @@ class InMemoryShiftRepository(initial: List<ShiftRecord> = emptyList()) : ShiftR
     }
 
     override suspend fun count(): Int = flow.value.size
+
+    override suspend fun countDatedBefore(date: java.time.Instant): Int = flow.value.count { it.session.clockOut != null && it.session.date < date }
+
+    override suspend fun deleteDatedBefore(date: java.time.Instant): Int {
+        val doomed = flow.value.count { it.session.clockOut != null && it.session.date < date }
+        flow.value = flow.value.filterNot { it.session.clockOut != null && it.session.date < date }
+        return doomed
+    }
 }

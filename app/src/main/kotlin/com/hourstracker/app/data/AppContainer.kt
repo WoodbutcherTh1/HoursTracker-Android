@@ -5,6 +5,8 @@ import com.hourstracker.app.BuildConfig
 import com.hourstracker.app.domain.ShiftReminderSchedule
 import com.hourstracker.app.service.ServiceNotifier
 import com.hourstracker.app.service.ShiftController
+import com.hourstracker.data.AuditAction
+import com.hourstracker.data.AuditActor
 import com.hourstracker.data.AuditLog
 import com.hourstracker.data.AuditedShiftRepository
 import com.hourstracker.data.RoomShiftRepository
@@ -50,6 +52,8 @@ class AppContainer(
 
     init {
         if (seedMockShifts) seedMockShiftsOnce()
+        // The owner's retention choice for shifts runs at every start. Off (0) by default.
+        appScope.launch { applyShiftRetention() }
         // Keep the activity log to the length the owner of the data chose.
         appScope.launch { audit.purgeOlderThan(settings.auditRetentionDays.value) }
         // Re-arm the shift reminder whenever it, the usual start time or the rest days change (and at every app start).
@@ -57,6 +61,25 @@ class AppContainer(
             combine(settings.settings, settings.shiftReminderEnabled, settings.shiftReminderMinutesBefore) { _, _, _ -> }
                 .collect { rescheduleShiftReminder() }
         }
+    }
+
+    /** The day before which shifts count as too old for [years], or null when nothing is ever too old. */
+    fun retentionCutoff(years: Int): java.time.Instant? {
+        if (years <= 0) return null
+        val calendar = deviceCalendar()
+        return calendar.addMonths(calendar.startOfDay(calendar.now()), -12 * years)
+    }
+
+    /** How many finished shifts the retention choice [years] would delete right now. */
+    suspend fun shiftsOlderThan(years: Int): Int = retentionCutoff(years)?.let { plainShifts.countDatedBefore(it) } ?: 0
+
+    /** Deletes the shifts older than the chosen retention and records one line in the activity log. Returns how many went. */
+    suspend fun applyShiftRetention(): Int {
+        val years = settings.shiftRetentionYears.value
+        val cutoff = retentionCutoff(years) ?: return 0
+        val removed = plainShifts.deleteDatedBefore(cutoff)
+        if (removed > 0) audit.log(AuditAction.RETENTION_CLEANUP, metadata = mapOf("removed" to removed, "olderThanYears" to years), actor = AuditActor.SYSTEM)
+        return removed
     }
 
     /** Arms the alarm for the next shift reminder, or clears it when the reminder is off. */

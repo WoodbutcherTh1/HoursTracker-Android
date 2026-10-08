@@ -31,4 +31,9 @@
     <string name="action_audit_purge">רשומות יומן ישנות הוסרו</string>
     <string name="action_erasure_completed">כל הנתונים נמחקו</string>
     <string name="action_unknown">אחר</string>
+    <string name="settings_shift_retention">מחיקה אוטומטית של משמרות ישנות מ־</string>
+    <string name="retention_never">אף פעם</string>
+    <string name="retention_10_years">10 שנים</string>
+    <string name="retention_confirm_title">למחוק משמרות ישנות מ־%1$s (%2$d)?</string>
+    <string name="retention_confirm_body">הן יימחקו עכשיו ואי אפשר לשחזר אותן. בחרו ״אף פעם״ כדי לשמור הכול.</string>
 </resources>

@@ -175,4 +175,28 @@ class RoomShiftRepositoryTest {
             it.moveToFirst()
             it.getInt(0)
         }
+
+    @Test
+    fun `old finished shifts are counted and deleted with their breaks, newer and running ones stay`() = runBlocking {
+        val breakA = BreakInterval(Instant.parse("2020-01-10T12:00:00Z"), Instant.parse("2020-01-10T12:30:00Z"))
+        val old = record(day = "2020-01-10", breaks = listOf(breakA))
+        val boundary = record(day = "2024-06-01")
+        val recent = record(day = "2026-06-10")
+        val stillRunning = record(day = "2019-05-05", open = true)
+        listOf(old, boundary, recent, stillRunning).forEach { repository.upsert(it) }
+        val cutoff = Instant.parse("2024-06-01T00:00:00Z")
+
+        assertEquals(1, repository.countDatedBefore(cutoff))
+        assertEquals(1, repository.deleteDatedBefore(cutoff))
+
+        assertEquals(setOf(boundary.id, recent.id, stillRunning.id), all().map { it.id }.toSet())
+        assertEquals(0, db.openHelper.readableDatabase.query("SELECT COUNT(*) FROM break_interval").use { it.moveToFirst(); it.getInt(0) })
+    }
+
+    @Test
+    fun `deleting before a date when nothing is that old removes nothing`() = runBlocking {
+        repository.upsert(record(day = "2026-06-10"))
+        assertEquals(0, repository.deleteDatedBefore(Instant.parse("2020-01-01T00:00:00Z")))
+        assertEquals(1, all().size)
+    }
 }
