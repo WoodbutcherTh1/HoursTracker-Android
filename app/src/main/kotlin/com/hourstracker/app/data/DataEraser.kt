@@ -3,6 +3,7 @@ package com.hourstracker.app.data
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import androidx.core.content.edit
 import com.hourstracker.app.service.ShiftService
 import com.hourstracker.data.AuditAction
 import com.hourstracker.data.AuditLog
@@ -50,11 +51,13 @@ class DataEraser(
             database.openHelper.writableDatabase.execSQL("VACUUM")
         }
         step("id number") { idStore.erase() }
+        // commit = true on purpose: the wipe must be on disk before the app process exits.
+        fun clearPreferences(name: String) {
+            context.getSharedPreferences(name, Context.MODE_PRIVATE).edit(commit = true) { clear() }
+            context.deleteSharedPreferences(name)
+        }
         step("preferences") {
-            PREFERENCE_FILES.forEach { name ->
-                context.getSharedPreferences(name, Context.MODE_PRIVATE).edit().clear().commit()
-                context.deleteSharedPreferences(name)
-            }
+            PREFERENCE_FILES.forEach(::clearPreferences)
         }
         step("files") {
             listOfNotNull(context.cacheDir, context.externalCacheDir, context.filesDir).forEach(::deleteChildren)
