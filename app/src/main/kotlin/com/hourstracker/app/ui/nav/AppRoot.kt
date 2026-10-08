@@ -37,12 +37,14 @@ import com.hourstracker.app.ui.history.HistoryScreen
 import com.hourstracker.app.ui.manual.ManualEntryScreen
 import com.hourstracker.app.ui.home.HomeScreen
 import com.hourstracker.app.ui.payslips.PayslipsScreen
+import com.hourstracker.app.ui.settings.ActivityLogScreen
 import com.hourstracker.app.ui.settings.SettingsScreen
 import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Space
 
 private const val MANUAL_ENTRY_ROUTE = "history/new"
 private const val EDIT_ROUTE = "history/edit"
+private const val ACTIVITY_LOG_ROUTE = "settings/activity-log"
 
 /** The signed-in shell: five tabs with a back stack each, and the floating tab bar over the content. */
 @Composable
@@ -106,9 +108,10 @@ fun AppRoot(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
             }
             composable(TopLevelTab.Payslips.route) { PayslipsScreen() }
             composable(TopLevelTab.Export.route) { ExportScreen() }
-            composable(TopLevelTab.Settings.route) { SettingsScreen(language, onLanguageChange) }
+            composable(TopLevelTab.Settings.route) { SettingsScreen(language, onLanguageChange, onOpenActivityLog = { navController.navigate(ACTIVITY_LOG_ROUTE) }) }
+            composable(ACTIVITY_LOG_ROUTE) { ActivityLogScreen(onClose = { navController.popBackStack() }) }
         }
-        if (backStackEntry?.destination?.route.let { it != MANUAL_ENTRY_ROUTE && it?.startsWith(EDIT_ROUTE) != true }) FloatingTabBar(
+        if (backStackEntry?.destination?.route.let { it != MANUAL_ENTRY_ROUTE && it != ACTIVITY_LOG_ROUTE && it?.startsWith(EDIT_ROUTE) != true }) FloatingTabBar(
             selected = currentTab,
             onSelect = { tab ->
                 // Leaving Settings with edits that were not saved: ask first.

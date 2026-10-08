@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_privacy_section">Конфиденциальность и данные</string>
+    <string name="settings_activity_log">Журнал действий</string>
+    <string name="settings_audit_retention">Хранить журнал действий</string>
+    <string name="settings_privacy_hint">Журнал действий записывает, что изменилось на этом телефоне, но никогда не суммы, время или заметки.</string>
+    <string name="retention_3_months">3 месяца</string>
+    <string name="retention_1_year">1 год</string>
+    <string name="retention_2_years">2 года</string>
+    <string name="retention_5_years">5 лет</string>
+    <string name="activity_title">Журнал действий</string>
+    <string name="activity_back">Назад</string>
+    <string name="activity_export_csv">Экспорт CSV</string>
+    <string name="activity_filter_all">Все</string>
+    <string name="activity_filter_settings">Настройки</string>
+    <string name="activity_filter_shifts">Смены</string>
+    <string name="activity_filter_exports">Экспорт</string>
+    <string name="activity_filter_privacy">Конфиденциальность</string>
+    <string name="activity_empty_title">Пока ничего не записано</string>
+    <string name="activity_empty_body">Изменения, сделанные на этом телефоне, появятся здесь.</string>
+    <string name="activity_fields">Изменено: %1$s</string>
+    <string name="activity_removed">Удалено: %1$d</string>
+    <string name="action_settings_update">Настройки изменены</string>
+    <string name="action_shift_create">Смена добавлена</string>
+    <string name="action_shift_update">Смена изменена</string>
+    <string name="action_shift_delete">Смена удалена</string>
+    <string name="action_export_report">Отчёт экспортирован</string>
+    <string name="action_export_personal_data">Личные данные скачаны</string>
+    <string name="action_consent_accepted">Условия приняты</string>
+    <string name="action_retention_cleanup">Старые смены удалены автоматически</string>
+    <string name="action_audit_purge">Старые записи журнала удалены</string>
+    <string name="action_erasure_completed">Все данные удалены</string>
+    <string name="action_unknown">Другое</string>
+</resources>

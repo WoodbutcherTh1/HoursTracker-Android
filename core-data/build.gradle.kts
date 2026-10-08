@@ -25,6 +25,9 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
 
+    // The exported schemas are test assets, so MigrationTest can open a database as an old version made it.
+    sourceSets.getByName("test").assets.directories.add("$projectDir/schemas")
+
     lint {
         warningsAsErrors = true
         abortOnError = true
@@ -52,4 +55,5 @@ dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.room.testing)
 }

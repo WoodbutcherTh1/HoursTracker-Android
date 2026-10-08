@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_privacy_section">פרטיות ונתונים</string>
+    <string name="settings_activity_log">יומן פעילות</string>
+    <string name="settings_audit_retention">שמירת יומן הפעילות למשך</string>
+    <string name="settings_privacy_hint">יומן הפעילות מתעד מה השתנה בטלפון הזה, אף פעם לא סכומים, שעות או הערות.</string>
+    <string name="retention_3_months">3 חודשים</string>
+    <string name="retention_1_year">שנה</string>
+    <string name="retention_2_years">שנתיים</string>
+    <string name="retention_5_years">5 שנים</string>
+    <string name="activity_title">יומן פעילות</string>
+    <string name="activity_back">חזרה</string>
+    <string name="activity_export_csv">ייצוא CSV</string>
+    <string name="activity_filter_all">הכול</string>
+    <string name="activity_filter_settings">הגדרות</string>
+    <string name="activity_filter_shifts">משמרות</string>
+    <string name="activity_filter_exports">ייצוא</string>
+    <string name="activity_filter_privacy">פרטיות</string>
+    <string name="activity_empty_title">עדיין לא תועד דבר</string>
+    <string name="activity_empty_body">שינויים שתבצעו בטלפון הזה יופיעו כאן.</string>
+    <string name="activity_fields">השתנה: %1$s</string>
+    <string name="activity_removed">הוסרו: %1$d</string>
+    <string name="action_settings_update">ההגדרות שונו</string>
+    <string name="action_shift_create">משמרת נוספה</string>
+    <string name="action_shift_update">משמרת שונתה</string>
+    <string name="action_shift_delete">משמרת נמחקה</string>
+    <string name="action_export_report">דוח יוצא</string>
+    <string name="action_export_personal_data">הנתונים האישיים הורדו</string>
+    <string name="action_consent_accepted">התנאים אושרו</string>
+    <string name="action_retention_cleanup">משמרות ישנות נמחקו אוטומטית</string>
+    <string name="action_audit_purge">רשומות יומן ישנות הוסרו</string>
+    <string name="action_erasure_completed">כל הנתונים נמחקו</string>
+    <string name="action_unknown">אחר</string>
+</resources>

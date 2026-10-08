@@ -82,7 +82,7 @@ import kotlinx.coroutines.launch
 private val CURRENCIES = listOf("ILS", "USD", "EUR", "GBP")
 
 @Composable
-fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
+fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit, onOpenActivityLog: () -> Unit = {}) {
     val vm: SettingsViewModel = viewModel(factory = viewModelFactory { container ->
         SettingsViewModel(container.settings, container.deviceCalendar())
     })
@@ -384,6 +384,8 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
             }
 
             NotificationSettingsSection()
+
+            PrivacySettingsSection(onOpenActivityLog)
 
             // Language
             SectionHeader(stringResource(R.string.settings_app_language))

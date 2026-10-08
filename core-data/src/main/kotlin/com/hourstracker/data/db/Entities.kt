@@ -118,3 +118,27 @@ data class LeaveDayEntity(
     /** `vacation` or `recuperation`. */
     val kind: String,
 )
+
+/**
+ * One line of the activity log: who did what, to which record, and when. It exists so the owner of the data can see
+ * what changed on their phone and so a later audit has evidence.
+ *
+ * It never holds personal values. [targetId] is a record id, the hashes are SHA-256 of the record before and after
+ * (so a change can be told apart without keeping the content), and [metadata] is a small JSON object of field names,
+ * counts and formats.
+ */
+@Entity(tableName = "audit_log", indices = [Index(value = ["timestamp"], name = "index_audit_log_timestamp")])
+data class AuditLogEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    /** Epoch milliseconds (UTC). */
+    val timestamp: Long,
+    /** `user`, `system` or `admin`. */
+    val actor: String,
+    /** A dotted name such as `shift.update`; see [com.hourstracker.data.AuditAction]. */
+    val action: String,
+    val targetId: String?,
+    val beforeHash: String?,
+    val afterHash: String?,
+    /** A JSON object, or `null`. */
+    val metadata: String?,
+)

@@ -15,6 +15,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.hourstracker.app.HoursTrackerApp
 import com.hourstracker.app.LocalAppContainer
 import com.hourstracker.app.data.AppContainer
+import com.hourstracker.app.data.IdCipher
 import com.hourstracker.app.data.MockShifts
 import com.hourstracker.app.ui.theme.HoursTrackerTheme
 import com.hourstracker.app.ui.theme.Palette
@@ -35,13 +36,16 @@ import java.util.UUID
  */
 /** The app for screenshot tests: the container runs on [FIXED_CALENDAR] and never seeds mock shifts. */
 class ScreenshotApp : HoursTrackerApp() {
-    override fun createContainer() = AppContainer(this, calendarFactory = { ScreenshotFixture.FIXED_CALENDAR }, seedMockShifts = false)
+    override fun createContainer() = AppContainer(this, calendarFactory = { ScreenshotFixture.FIXED_CALENDAR }, seedMockShifts = false, idCipher = IdCipher { ScreenshotFixture.TEST_KEY })
 }
 
 class ScreenshotFixture(private val compose: ComposeContentTestRule) {
     val calendar = FIXED_CALENDAR
 
     companion object {
+        /** An ordinary AES key standing in for the Keystore key, which does not exist on the JVM. */
+        val TEST_KEY: javax.crypto.SecretKey = javax.crypto.KeyGenerator.getInstance("AES").apply { init(256) }.generateKey()
+
         private val ZONE: ZoneId = ZoneId.of("UTC")
         val FIXED_CALENDAR = IosCalendar(ZONE, 1, 1, Clock.fixed(Instant.parse("2026-06-17T10:30:00Z"), ZONE))
     }

@@ -5,6 +5,8 @@ import com.hourstracker.app.BuildConfig
 import com.hourstracker.app.domain.ShiftReminderSchedule
 import com.hourstracker.app.service.ServiceNotifier
 import com.hourstracker.app.service.ShiftController
+import com.hourstracker.data.AuditLog
+import com.hourstracker.data.AuditedShiftRepository
 import com.hourstracker.data.RoomShiftRepository
 import com.hourstracker.data.ShiftRepository
 import com.hourstracker.data.db.AppDatabase
@@ -23,13 +25,22 @@ class AppContainer(
     private val calendarFactory: () -> IosCalendar = { IosCalendar.device() },
     // Debug builds fill History with mock shifts; screenshot tests turn that off and bring their own.
     seedMockShifts: Boolean = BuildConfig.DEBUG,
+    // Tests pass an ordinary AES key: the Android Keystore does not exist on the JVM.
+    idCipher: IdCipher? = null,
 ) {
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     val flags = AppFlags(context)
-    val settings: SettingsRepository = PrefsSettingsRepository(context, SecureIdStore(context))
     private val database = AppDatabase.open(context)
-    val shifts: ShiftRepository = RoomShiftRepository(database.workSessions())
+
+    /** The activity log: what changed on this phone, without any personal values. */
+    val audit = AuditLog(database.auditLog(), appScope)
+
+    val settings: SettingsRepository = AuditedSettingsRepository(PrefsSettingsRepository(context, SecureIdStore(context, idCipher)), audit)
+
+    // Seeding and cleanup use the plain repository: only what a person does belongs in the activity log.
+    private val plainShifts: ShiftRepository = RoomShiftRepository(database.workSessions())
+    val shifts: ShiftRepository = AuditedShiftRepository(plainShifts, audit)
     private val breakReminderManager = BreakReminderManager(context)
 
     private val shiftReminders = ShiftReminderManager(context)
@@ -39,6 +50,8 @@ class AppContainer(
 
     init {
         if (seedMockShifts) seedMockShiftsOnce()
+        // Keep the activity log to the length the owner of the data chose.
+        appScope.launch { audit.purgeOlderThan(settings.auditRetentionDays.value) }
         // Re-arm the shift reminder whenever it, the usual start time or the rest days change (and at every app start).
         appScope.launch {
             combine(settings.settings, settings.shiftReminderEnabled, settings.shiftReminderMinutesBefore) { _, _, _ -> }
@@ -65,15 +78,15 @@ class AppContainer(
         val week = com.hourstracker.app.domain.DebugScenarios.overtimeWeek(deviceCalendar())
         shifts.shifts.first()
             .filter { it.session.date >= week.from && it.session.date < week.to }
-            .forEach { shifts.delete(it.id) }
-        week.shifts.forEach { shifts.upsert(it) }
+            .forEach { plainShifts.delete(it.id) }
+        week.shifts.forEach { plainShifts.upsert(it) }
     }
 
     /** Debug builds only, once: gives History something to show for design review. Release builds start empty. */
     private fun seedMockShiftsOnce() {
         appScope.launch {
             if (flags.mockSeeded || shifts.count() > 0) return@launch
-            MockShifts.build(deviceCalendar()).forEach { shifts.upsert(it) }
+            MockShifts.build(deviceCalendar()).forEach { plainShifts.upsert(it) }
             flags.mockSeeded = true
         }
     }

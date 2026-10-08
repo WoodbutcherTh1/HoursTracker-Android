@@ -45,6 +45,13 @@ private class FakeSettingsRepository(initial: WorkplaceSettings = WorkplaceSetti
     override val shiftReminderMinutesBefore: StateFlow<Int> = shiftReminderMinutesFlow
     override val shiftSummaryEnabled: StateFlow<Boolean> = shiftSummaryFlow
 
+    private val auditDaysFlow = MutableStateFlow(365)
+    private val shiftYearsFlow = MutableStateFlow(0)
+    override val auditRetentionDays: StateFlow<Int> = auditDaysFlow
+    override val shiftRetentionYears: StateFlow<Int> = shiftYearsFlow
+    override fun saveAuditRetentionDays(days: Int) { auditDaysFlow.value = days }
+    override fun saveShiftRetentionYears(years: Int) { shiftYearsFlow.value = years }
+
     override fun saveShiftReminderEnabled(enabled: Boolean) { shiftReminderFlow.value = enabled }
     override fun saveShiftReminderMinutesBefore(minutes: Int) { shiftReminderMinutesFlow.value = minutes }
     override fun saveShiftSummaryEnabled(enabled: Boolean) { shiftSummaryFlow.value = enabled }

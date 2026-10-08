@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_privacy_section">الخصوصية والبيانات</string>
+    <string name="settings_activity_log">سجل النشاط</string>
+    <string name="settings_audit_retention">مدة الاحتفاظ بسجل النشاط</string>
+    <string name="settings_privacy_hint">يسجّل سجل النشاط ما تغيّر على هذا الهاتف، ولا يسجّل المبالغ أو الأوقات أو الملاحظات أبدًا.</string>
+    <string name="retention_3_months">3 أشهر</string>
+    <string name="retention_1_year">سنة</string>
+    <string name="retention_2_years">سنتان</string>
+    <string name="retention_5_years">5 سنوات</string>
+    <string name="activity_title">سجل النشاط</string>
+    <string name="activity_back">رجوع</string>
+    <string name="activity_export_csv">تصدير CSV</string>
+    <string name="activity_filter_all">الكل</string>
+    <string name="activity_filter_settings">الإعدادات</string>
+    <string name="activity_filter_shifts">الورديات</string>
+    <string name="activity_filter_exports">التصدير</string>
+    <string name="activity_filter_privacy">الخصوصية</string>
+    <string name="activity_empty_title">لم يُسجَّل شيء بعد</string>
+    <string name="activity_empty_body">ستظهر هنا التغييرات التي تجريها على هذا الهاتف.</string>
+    <string name="activity_fields">تغيّر: %1$s</string>
+    <string name="activity_removed">أُزيل: %1$d</string>
+    <string name="action_settings_update">تم تغيير الإعدادات</string>
+    <string name="action_shift_create">أُضيفت وردية</string>
+    <string name="action_shift_update">تغيّرت وردية</string>
+    <string name="action_shift_delete">حُذفت وردية</string>
+    <string name="action_export_report">تم تصدير تقرير</string>
+    <string name="action_export_personal_data">تم تنزيل البيانات الشخصية</string>
+    <string name="action_consent_accepted">تمت الموافقة على الشروط</string>
+    <string name="action_retention_cleanup">حُذفت ورديات قديمة تلقائيًا</string>
+    <string name="action_audit_purge">أُزيلت مدخلات قديمة من السجل</string>
+    <string name="action_erasure_completed">حُذفت كل البيانات</string>
+    <string name="action_unknown">أخرى</string>
+</resources>

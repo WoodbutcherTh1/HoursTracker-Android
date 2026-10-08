@@ -62,6 +62,7 @@ import java.util.Locale
 import com.hourstracker.app.ui.components.EmptyState
 import com.hourstracker.app.ui.components.ErrorState
 import com.hourstracker.app.ui.nav.TabIcons
+import com.hourstracker.data.AuditAction
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -134,6 +135,10 @@ fun ExportScreen() {
                     .putExtra(Intent.EXTRA_STREAM, uri)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                container.audit.log(
+                    AuditAction.EXPORT_REPORT,
+                    metadata = mapOf("format" to format.extension, "rows" to report.rows.size, "language" to language.name, "includesNotes" to includeNotes),
+                )
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
