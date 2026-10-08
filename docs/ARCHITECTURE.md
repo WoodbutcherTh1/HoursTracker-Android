@@ -42,6 +42,8 @@ Tests replace the container without any framework: the constructor takes a `cale
 - **Single activity.** `MainActivity` shows `AppGate`: legal consent, then onboarding, then `AppRoot`.
 - **Navigation.** `AppRoot` is a Navigation Compose `NavHost` with the five tabs (Home, History, Payslips, Export, Settings) and two pushed screens (manual entry, edit shift). `FloatingTabBar` is drawn over the content, so screens leave room at the bottom. Tabs cross-fade; pushed screens slide in.
 - **Design system.** `ui/theme` holds the "Calm Neon" tokens (`Palette`, `Space`, `Radius`, `DsText`), light and dark colour sets chosen by `ThemeMode` (the app follows the system today), and `dsCard`. Screens use these tokens, never raw colours.
+- **History.** `HistoryCalculator.windowFor` turns a filter (Week, Month, Payroll, Year, All) and an offset into a date window; `HistorySearch` narrows rows (and totals) by date spelling or amount; selection mode lives in `HistoryViewModel`.
+- **Settings.** Pay settings use a draft with an explicit Save button, and `UnsavedGuard` makes `AppRoot` ask before the tab bar leaves Settings with edits. App preferences (language, theme, reminder switches) apply immediately.
 - **State.** View models expose `StateFlow`s built from the repositories; screens collect them with `collectAsState`. Screens that need to tell "still loading" from "empty" collect a nullable value (see History).
 - **Shared states.** `ui/components/States.kt` has `SkeletonBox`, `EmptyState`, `ErrorState`, `NoticeBanner`; `PrimaryButton` has a `loading` mode.
 - **Right to left.** Layout direction follows the language. Numbers are forced left to right inside Hebrew and Arabic text. The in-app language is applied in `MainActivity.attachBaseContext` and the activity is recreated when it changes.
@@ -59,7 +61,7 @@ Tests replace the container without any framework: the constructor takes a `cale
 
 `ShiftController` is the one place that clocks in, starts and ends breaks and clocks out. Each action reads the stored state, applies the rule from `ShiftClock`, saves, and refreshes the notification. Both Home and the notification buttons call it.
 
-`ShiftService` is a foreground service of type `specialUse` that keeps the ongoing notification visible while the app is in the background. The timer is the system chronometer, so it ticks without waking the app. The service stops when the shift is closed. `BreakReminderManager` schedules an inexact alarm shortly before a break ends (`BreakReminderReceiver` shows the notification).
+`ShiftService` is a foreground service of type `specialUse` that keeps the ongoing notification visible while the app is in the background. The timer is the system chronometer, so it ticks without waking the app. The service stops when the shift is closed. `BreakReminderManager` schedules an inexact alarm shortly before a break ends (`BreakReminderReceiver` shows the notification). `ShiftReminderManager` keeps one alarm for the optional shift start reminder: `ShiftReminderSchedule` (pure) computes the next time from the usual start time and the rest days, `AppContainer` re-arms it whenever the settings change, `ShiftReminderReceiver` shows it (unless a shift is running) and arms the next, and `BootReceiver` wakes the app after a restart. `ShiftSummaryNotifier` posts the after-clock-out summary for shifts closed from the notification.
 
 ### Release
 

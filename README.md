@@ -6,7 +6,7 @@ Android version of **HoursTracker**, a work-hours and pay tracker for hourly wor
 
 ## Status
 
-Version **1.0.0-alpha1**, ready for the Google Play closed test. Clocking in and out with live pay, breaks, History, manual entry, CSV and PDF export, and Hebrew, English, Arabic and Russian all work. Widgets, account and cloud backup, payslips, the scanner and Wear OS are still to come; see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (Milestones) and [`CHANGELOG.md`](CHANGELOG.md).
+Version **1.0.0-alpha1**, ready for the Google Play closed test. Clocking in and out with live pay, breaks, History (filters, search, multi-select), manual entry, CSV and PDF export, optional reminders, a theme picker, and Hebrew, English, Arabic and Russian all work. Widgets, account and cloud backup, payslips, the scanner and Wear OS are still to come; see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (Milestones) and [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Build requirements
 
@@ -38,7 +38,7 @@ Debug builds fill History with about three months of mock shifts the first time 
 
 ### Switching language
 
-The app follows the phone's language by default. To change it inside the app, open **Settings** and use the language row (Hebrew, English, Arabic, Russian, or System); the screen restarts and mirrors for right-to-left languages. The same picker is on the first onboarding screen.
+The app follows the phone's language by default. To change it inside the app, open **Settings** and use the language row (Hebrew, English, Arabic, Russian, or System); the screen restarts and mirrors for right-to-left languages. The row is a dropdown (Hebrew, English, Arabic, Russian, System). The same picker is on the first onboarding screen.
 
 ### Screenshots and coverage
 

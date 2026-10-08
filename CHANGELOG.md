@@ -2,6 +2,26 @@
 
 All notable changes to HoursTracker for Android. Versions follow `versionName` in `app/build.gradle.kts`.
 
+## [1.0.0-alpha1] - 2026-10-09 (second build)
+
+Same version, rebuilt after the first emulator tests. Replace the first bundle.
+
+### Added
+
+- **History:** filter chips (Week, Month, Payroll, Year, All), search by date or amount (rows and totals follow it), long-press to select several shifts and delete them with confirmation and undo.
+- **Settings > Appearance:** theme picker (Light, Dark, Auto). Status and navigation bar icons now follow the app theme.
+- **Settings > Notifications:** separate switches for break reminders (with minutes), a shift start reminder (opt-in, minutes before the usual start time, skips rest days, survives restarts) and a shift summary notification after clocking out from the notification.
+- **Settings:** asks to save or discard when you leave with unsaved changes. The language row shows a dropdown arrow, in the order Hebrew, English, Arabic, Russian, System.
+- **Home:** the sparkline counts the running shift, so the last point grows while you work.
+- **Release:** R8 minification and resource shrinking (bundle about 4 MB).
+
+### Fixed
+
+- **Arabic and Russian were missing from the build** (a locale filter still listed only English and Hebrew), so choosing them showed English. Both now ship.
+- **PDF export crashed in every language** (seven text keys carried an iOS `%@` suffix and were never found).
+- Editing a shift no longer drops its recorded breaks; a running shift cannot be opened for editing from History.
+- The History edit and save toast ran on the wrong thread after a database call.
+
 ## [1.0.0-alpha1] - 2026-10-08
 
 First build for the Google Play closed test.
@@ -35,7 +55,5 @@ First build for the Google Play closed test.
 - No account, cloud backup or restore yet (and no import of iOS backups in the UI, although the importer exists in `core-data`).
 - Payslips tab is an empty state: no payslip storage, timesheet scanner or assistant yet.
 - No widgets, Quick Settings tile, shortcuts, location reminders, app lock or activity log.
-- Settings has no controls yet for the theme or the break reminders (they use their defaults).
-- History has no search, filter chips or bulk delete; the edit screen does not yet cover every iOS option.
-- Release builds are not minified (R8 off) pending device testing.
+- The edit screen is the full-screen Manual Entry form, not a bottom sheet.
 - No Wear OS app.

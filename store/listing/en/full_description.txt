@@ -6,6 +6,7 @@ CLOCK IN AND OUT
 • One big button to start and end a shift
 • Live timer and live estimated pay while you work
 • Breaks that stop the clock (or stay paid, as you choose) with a gentle reminder before the break ends
+• Optional reminder before your shift starts, and a summary notification when you clock out
 • A clear summary when the shift is done: regular hours, overtime, deductions, net and gross
 
 BUILT FOR ISRAELI LABOR RULES
@@ -17,7 +18,8 @@ BUILT FOR ISRAELI LABOR RULES
 
 HISTORY YOU CAN TRUST
 • Every shift in a clean table, by payroll month
-• Add a missed shift by hand, edit it, or swipe to delete (with undo)
+• Add a missed shift by hand, edit it, or swipe to delete (with undo); select several to delete at once
+• Filter by week, month, payroll period or year, and search by date or amount
 • Totals for hours and pay, net or gross, always in view
 
 EXPORT IN ONE TAP
@@ -31,7 +33,7 @@ YOUR DATA STAYS YOURS
 
 FOR EVERYONE
 • Hebrew, English, Arabic and Russian, with full right-to-left layout
-• Light and dark themes that follow your phone
+• Light, dark or automatic theme
 • Screen-reader friendly, with large touch targets
 
 Important: HoursTracker gives estimates based on the details you enter and general rules. It is not legal, tax or accounting advice and does not replace your payslip.

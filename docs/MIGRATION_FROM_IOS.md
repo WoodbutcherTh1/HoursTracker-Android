@@ -12,10 +12,10 @@ For people who use HoursTracker on iPhone and for anyone comparing the two apps.
 | Pay engine: daily and weekly overtime, rest days, holidays, sick days, night shifts | Yes | **Yes**, same numbers (proven bit for bit with golden files) |
 | Tax estimate (income tax, National Insurance, health tax) | Yes | **Yes**, same brackets |
 | History by payroll month, net and gross | Yes | **Yes** |
-| Edit, delete (with undo) and add shifts by hand | Yes | **Yes** (swipe to delete); search, filter chips and bulk delete are not there yet |
+| Edit, delete (with undo) and add shifts by hand | Yes | **Yes**: swipe to delete, long-press to select several, filter chips (Week, Month, Payroll, Year, All), search by date or amount |
 | Export PDF and CSV | Yes | **Yes** |
 | Hebrew, English, Arabic, Russian, right-to-left | Yes | **Yes** |
-| Light and dark | Yes | **Yes**, follows the phone (no in-app switch yet) |
+| Light and dark | Yes | **Yes**: Light, Dark or Auto in Settings |
 | Onboarding and legal consent | Yes | **Yes** |
 | Reorder the Home stat cards | Yes | **Yes** (long-press and drag) |
 | Account (email sign-in) | Yes | Planned (M4) |
@@ -46,7 +46,7 @@ What is coming (M4): restore from your iOS account backup. The reading code alre
 - **Cloud backup is opt-in and off by default**, and when it ships it will store only what you choose, never the ID number. iOS also offers iCloud sync; Android has no equivalent. Android's own device backup is turned off for this app on purpose, so a new phone starts empty until you restore.
 - **Data on the phone stays on the phone.** Clearing the app's storage or uninstalling it deletes everything. Export before you do either.
 - **Notifications:** Android 13 and later asks for permission the first time you clock in. If you say no, the shift is still recorded, but the timer will not show in the status bar; Home shows a banner with a shortcut to the setting.
-- **Break reminders** are on by default and use an inexact alarm, so they can arrive a minute or two late. There is no switch for them in Settings yet.
+- **Reminders** (Settings > Notifications): break reminders are on by default, the shift start reminder and the summary after clocking out from the notification can be switched separately. They use inexact alarms, so a reminder can arrive a minute or two late.
 - **Navigation:** the five tabs are in the same order. Use the system back gesture to leave Add or Edit shift.
 - **Language:** change it inside the app (Settings) or let it follow the phone. Reports can use a different language from the app.
 - **Fonts and number formats** follow Android's locale data, so a currency symbol can sit slightly differently from iOS.
