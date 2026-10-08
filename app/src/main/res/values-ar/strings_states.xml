@@ -20,4 +20,9 @@
     <string name="a11y_clock_in_hint">يبدأ وردية جديدة</string>
     <string name="a11y_clock_out_hint">ينهي الوردية الجارية ويعرض ملخّصها</string>
     <string name="export_creating">جارٍ الإنشاء…</string>
+    <string name="history_selected_count">المحدد: %1$d</string>
+    <string name="history_delete_selected">حذف المحدد</string>
+    <string name="history_delete_selected_confirm">هل تريد حذف الورديات المحددة (%1$d)؟</string>
+    <string name="history_bulk_deleted">الورديات المحذوفة: %1$d</string>
+    <string name="history_cancel_selection">إلغاء التحديد</string>
 </resources>

@@ -20,4 +20,9 @@
     <string name="a11y_clock_in_hint">Starts a new shift</string>
     <string name="a11y_clock_out_hint">Ends the running shift and shows its summary</string>
     <string name="export_creating">Creating…</string>
+    <string name="history_selected_count">Selected: %1$d</string>
+    <string name="history_delete_selected">Delete selected</string>
+    <string name="history_delete_selected_confirm">Delete the selected shifts (%1$d)?</string>
+    <string name="history_bulk_deleted">Deleted shifts: %1$d</string>
+    <string name="history_cancel_selection">Cancel selection</string>
 </resources>

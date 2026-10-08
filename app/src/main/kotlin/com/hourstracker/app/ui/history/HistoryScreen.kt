@@ -2,6 +2,10 @@ package com.hourstracker.app.ui.history
 
 import android.icu.text.DateFormat
 import androidx.compose.foundation.background
+import androidx.compose.ui.semantics.selected
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -87,6 +91,11 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     val addLabel = stringResource(R.string.history_add_shift)
     val previousLabel = stringResource(R.string.history_previous_period)
     val nextLabel = stringResource(R.string.history_next_period)
+    val bulkDeletedFormat = stringResource(R.string.history_bulk_deleted)
+    fun bulkDeletedMessage(count: Int) = String.format(Locale.getDefault(), bulkDeletedFormat, count)
+    val cancelSelectionLabel = stringResource(R.string.history_cancel_selection)
+    var confirmBulkDelete by remember { mutableStateOf(false) }
+    androidx.activity.compose.BackHandler(enabled = vm.selecting, onBack = vm::clearSelection)
     val deletedMessage = stringResource(R.string.history_deleted)
     val undoLabel = stringResource(R.string.history_undo)
     var pendingDelete by remember { mutableStateOf<Pair<java.util.UUID, com.hourstracker.data.ShiftRecord>?>(null) }
@@ -98,6 +107,32 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
+            if (vm.selecting) {
+                Text(
+                    text = "✕",
+                    style = DsText.titleScreen,
+                    color = Palette.textSecondary,
+                    modifier = Modifier
+                        .clickable(role = Role.Button, onClick = vm::clearSelection)
+                        .semantics { contentDescription = cancelSelectionLabel }
+                        .padding(Space.xs),
+                )
+                Text(
+                    text = stringResource(R.string.history_selected_count, vm.selected.size),
+                    style = DsText.titleSection,
+                    color = Palette.textPrimary,
+                    modifier = Modifier.weight(1f).padding(horizontal = Space.sm),
+                )
+                Text(
+                    text = stringResource(R.string.history_delete_selected),
+                    style = DsText.headline,
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(Color(0xFFDC2626), CircleShape)
+                        .clickable(role = Role.Button) { confirmBulkDelete = true }
+                        .padding(horizontal = Space.md, vertical = Space.xs),
+                )
+            } else {
             Text(text = stringResource(R.string.history_title), style = DsText.titleScreen, color = Palette.textPrimary)
             Text(
                 text = "+",
@@ -109,6 +144,7 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                     .semantics { contentDescription = addLabel }
                     .padding(horizontal = Space.md),
             )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = Space.md),
@@ -180,7 +216,13 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                             timeFormat = timeFormat,
                             zone = cal.zone,
                             // A running shift is changed from Home (clock out, breaks); editing it here would close it by accident.
-                            onClick = { if (row.clockOut != null) onEdit(row.id) },
+                            selecting = vm.selecting,
+                            selected = row.id in vm.selected,
+                            onClick = {
+                                if (vm.selecting) vm.toggle(row.id) else if (row.clockOut != null) onEdit(row.id)
+                            },
+                            // A running shift cannot be deleted from here either.
+                            onLongClick = { if (row.clockOut != null) vm.toggle(row.id) },
                             onDelete = { deletedRow ->
                                 val record = records.find { it.id == deletedRow.id }
                                 if (record != null) {
@@ -229,6 +271,29 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
             }
         }
         }
+        if (confirmBulkDelete) {
+            AlertDialog(
+                onDismissRequest = { confirmBulkDelete = false },
+                title = { Text(stringResource(R.string.history_delete_selected_confirm, vm.selected.size)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        confirmBulkDelete = false
+                        val doomed = records.filter { it.id in vm.selected }
+                        vm.clearSelection()
+                        scope.launch {
+                            doomed.forEach { container.shifts.delete(it.id) }
+                            val result = snackbarHostState.showSnackbar(
+                                message = bulkDeletedMessage(doomed.size),
+                                actionLabel = undoLabel,
+                                duration = SnackbarDuration.Long,
+                            )
+                            if (result == SnackbarResult.ActionPerformed) doomed.forEach { container.shifts.upsert(it) }
+                        }
+                    }) { Text(stringResource(R.string.history_delete), color = Palette.overdue) }
+                },
+                dismissButton = { TextButton(onClick = { confirmBulkDelete = false }) { Text(stringResource(R.string.edit_cancel)) } },
+            )
+        }
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp)
@@ -251,9 +316,19 @@ private fun SwipeableRowItem(
     day: (java.time.Instant) -> String,
     timeFormat: DateTimeFormatter,
     zone: java.time.ZoneId,
+    selecting: Boolean,
+    selected: Boolean,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     onDelete: (HistoryRow) -> Unit,
 ) {
+    if (selecting) {
+        // No swipe while ticking rows: the gestures would fight each other.
+        Box(modifier = Modifier.background(Palette.card)) {
+            RowItem(row, showNet, locale, currencyCode, day, timeFormat, zone, selected, onClick, onLongClick)
+        }
+        return
+    }
     var dismissed by remember { mutableStateOf(false) }
     @Suppress("DEPRECATION")
     val dismissState = rememberSwipeToDismissBoxState(
@@ -285,7 +360,7 @@ private fun SwipeableRowItem(
         },
         content = {
             Box(modifier = Modifier.background(Palette.card)) {
-                RowItem(row, showNet, locale, currencyCode, day, timeFormat, zone, onClick)
+                RowItem(row, showNet, locale, currencyCode, day, timeFormat, zone, false, onClick, onLongClick)
             }
         }
     )
@@ -329,13 +404,20 @@ private fun RowItem(
     day: (java.time.Instant) -> String,
     timeFormat: DateTimeFormatter,
     zone: java.time.ZoneId,
+    selected: Boolean,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
 ) {
     val amount = if (showNet) row.net else row.gross
-    Box(modifier = Modifier.clickable(role = Role.Button, onClick = onClick).semantics(mergeDescendants = true) {}) {
+    Box(
+        modifier = Modifier
+            .background(if (selected) Palette.accent.copy(alpha = 0.16f) else Color.Transparent)
+            .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = onLongClick)
+            .semantics(mergeDescendants = true) { this.selected = selected },
+    ) {
         TableRow(
             listOf(
-                day(row.day),
+                (if (selected) "✓ " else "") + day(row.day),
                 timeFormat.format(row.clockIn.atZone(zone)),
                 row.clockOut?.let { timeFormat.format(it.atZone(zone)) } ?: "—",
                 HistoryPeriodHelper.formatHoursClock(row.hours),

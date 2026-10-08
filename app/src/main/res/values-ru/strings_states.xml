@@ -20,4 +20,9 @@
     <string name="a11y_clock_in_hint">Начинает новую смену</string>
     <string name="a11y_clock_out_hint">Завершает текущую смену и показывает итог</string>
     <string name="export_creating">Создание…</string>
+    <string name="history_selected_count">Выбрано: %1$d</string>
+    <string name="history_delete_selected">Удалить выбранные</string>
+    <string name="history_delete_selected_confirm">Удалить выбранные смены (%1$d)?</string>
+    <string name="history_bulk_deleted">Удалено смен: %1$d</string>
+    <string name="history_cancel_selection">Отменить выбор</string>
 </resources>

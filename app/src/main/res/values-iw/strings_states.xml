@@ -20,4 +20,9 @@
     <string name="a11y_clock_in_hint">מתחיל משמרת חדשה</string>
     <string name="a11y_clock_out_hint">מסיים את המשמרת הפעילה ומציג סיכום</string>
     <string name="export_creating">יוצר…</string>
+    <string name="history_selected_count">נבחרו: %1$d</string>
+    <string name="history_delete_selected">מחיקת הנבחרות</string>
+    <string name="history_delete_selected_confirm">למחוק את המשמרות שנבחרו (%1$d)?</string>
+    <string name="history_bulk_deleted">משמרות שנמחקו: %1$d</string>
+    <string name="history_cancel_selection">ביטול הבחירה</string>
 </resources>
