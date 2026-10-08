@@ -1,0 +1,39 @@
+Know what you earn, minute by minute.
+
+HoursTracker is a simple work-hours and pay tracker for hourly workers in Israel. Clock in with one tap, watch your estimated pay grow live, and see exactly how overtime, rest days and taxes change your take-home pay.
+
+CLOCK IN AND OUT
+• One big button to start and end a shift
+• Live timer and live estimated pay while you work
+• Breaks that stop the clock (or stay paid, as you choose) with a gentle reminder before the break ends
+• A clear summary when the shift is done: regular hours, overtime, deductions, net and gross
+
+BUILT FOR ISRAELI LABOR RULES
+• Daily overtime at 125% and 150%
+• Weekly overtime on hours above the weekly standard
+• Rest-day, holiday and sick-day rules, and night shifts
+• Estimated income tax, National Insurance and health tax, shown as net pay
+• Your hourly rate, daily allowance and payroll month day, all adjustable
+
+HISTORY YOU CAN TRUST
+• Every shift in a clean table, by payroll month
+• Add a missed shift by hand, edit it, or swipe to delete (with undo)
+• Totals for hours and pay, net or gross, always in view
+
+EXPORT IN ONE TAP
+• Share a report as PDF or CSV for your employer, accountant or your own records
+• Choose the date range, the day types and the language of the report
+
+YOUR DATA STAYS YOURS
+• Shifts and pay are stored only on your phone
+• No account, no ads, no tracking
+• Your ID number, if you add it, is encrypted with the Android Keystore
+
+FOR EVERYONE
+• Hebrew, English, Arabic and Russian, with full right-to-left layout
+• Light, dark or automatic theme
+• Screen-reader friendly, with large touch targets
+
+Important: HoursTracker gives estimates based on the details you enter and general rules. It is not legal, tax or accounting advice and does not replace your payslip.
+
+Questions or ideas? Write to info.hourstracker@gmail.com.

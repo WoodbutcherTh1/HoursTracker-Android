@@ -4,10 +4,10 @@
     <string name="legal_gate_body">כדי להשתמש ב-HoursTracker, יש לקרוא את תנאי השימוש ואת מדיניות הפרטיות ולהסכים להם.</string>
     <string name="legal_gate_checkbox">קראתי ואני מסכים/ה לתנאי השימוש ולמדיניות הפרטיות</string>
     <string name="legal_gate_decline">אני לא מסכים/ה</string>
-    <string name="legal_gate_decline_message">המידע שלכם נשאר באייפון הזה. אפשר לייצא אותו עכשיו, למחוק את האפליקציה, או לחזור ולהסכים בכל עת.</string>
+    <string name="legal_gate_decline_message">המידע שלכם נשאר בטלפון הזה. אפשר לייצא אותו עכשיו, למחוק את האפליקציה, או לחזור ולהסכים בכל עת.</string>
     <string name="legal_gate_decline_title">אי אפשר להשתמש ב-HoursTracker בלי להסכים</string>
     <string name="legal_gate_point_control">אפשר לייצא או למחוק את המידע בכל עת.</string>
-    <string name="legal_gate_point_data">המידע נשאר באייפון שלכם, אלא אם תפעילו גיבוי, סנכרון או תכונה חכמה.</string>
+    <string name="legal_gate_point_data">המידע נשאר בטלפון שלכם, אלא אם תפעילו גיבוי.</string>
     <string name="legal_gate_point_estimates">סכומי השכר הם הערכה. תלוש השכר והחוק קובעים את השכר בפועל.</string>
     <string name="legal_gate_read_again">לקרוא שוב</string>
     <string name="legal_gate_title">לפני שמתחילים</string>

@@ -4,10 +4,10 @@
     <string name="legal_gate_body">Чтобы пользоваться HoursTracker, прочитайте Условия использования и Политику конфиденциальности и согласитесь с ними.</string>
     <string name="legal_gate_checkbox">Я прочитал(а) и принимаю Условия использования и Политику конфиденциальности</string>
     <string name="legal_gate_decline">Я не согласен(на)</string>
-    <string name="legal_gate_decline_message">Ваши данные остаются на этом iPhone. Можно экспортировать их сейчас, удалить приложение или вернуться и согласиться в любой момент.</string>
+    <string name="legal_gate_decline_message">Ваши данные остаются на этом телефоне. Можно экспортировать их сейчас, удалить приложение или вернуться и согласиться в любой момент.</string>
     <string name="legal_gate_decline_title">Без согласия пользоваться HoursTracker нельзя</string>
     <string name="legal_gate_point_control">Вы можете экспортировать или удалить свои данные в любой момент.</string>
-    <string name="legal_gate_point_data">Данные остаются на вашем iPhone, если вы не включите копию, синхронизацию или умную функцию.</string>
+    <string name="legal_gate_point_data">Данные остаются на вашем телефоне, если вы не включите резервную копию.</string>
     <string name="legal_gate_point_estimates">Суммы зарплаты — оценка. Реальную зарплату определяют расчётный лист и закон.</string>
     <string name="legal_gate_read_again">Прочитать снова</string>
     <string name="legal_gate_title">Прежде чем начать</string>

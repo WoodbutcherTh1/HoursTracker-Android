@@ -1,4 +1,5 @@
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import java.util.Properties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -9,6 +10,13 @@ plugins {
     jacoco
 }
 
+// Release signing comes from untracked local.properties or from CI secrets (environment variables); never from the repo.
+val localProperties = Properties().apply {
+    rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
+}
+
+fun signingValue(name: String): String? = localProperties.getProperty(name) ?: System.getenv(name)
+
 android {
     namespace = "com.hourstracker.app"
     compileSdk = 36
@@ -18,7 +26,19 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0-alpha1"
+    }
+
+    signingConfigs {
+        create("release") {
+            val storePath = signingValue("RELEASE_STORE_FILE")
+            if (storePath != null) {
+                storeFile = rootProject.file(storePath)
+                storePassword = signingValue("RELEASE_STORE_PASSWORD")
+                keyAlias = signingValue("RELEASE_KEY_ALIAS")
+                keyPassword = signingValue("RELEASE_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -28,6 +48,8 @@ android {
         }
         release {
             isMinifyEnabled = false
+            // Unsigned when no key is configured (CI, other machines); signed bundles are built on the owner's machine.
+            if (signingValue("RELEASE_STORE_FILE") != null) signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -118,6 +140,8 @@ roborazzi {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+    // `-PplayScreenshots` also renders the Play Store pictures (see PlayScreenshots); ordinary runs skip them.
+    if (providers.gradleProperty("playScreenshots").isPresent) systemProperty("playScreenshots", "true")
     // Robolectric loads classes through its own loader; without these the coverage report comes out empty.
     extensions.configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true

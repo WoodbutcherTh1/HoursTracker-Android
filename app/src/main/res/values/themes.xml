@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Dark only, like the iOS app. The window background matches the app background so there is no flash. -->
+    <!-- The window background matches the app background so there is no flash before Compose draws. -->
     <style name="Theme.HoursTracker" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/background_base</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

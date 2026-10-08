@@ -32,7 +32,6 @@ private val termsSections = listOf(
     Section(R.string.terms_section_estimates, R.string.terms_body_estimates),
     Section(R.string.terms_section_responsibility, R.string.terms_body_responsibility),
     Section(R.string.terms_section_account, R.string.terms_body_account),
-    Section(R.string.terms_section_ai, R.string.terms_body_ai),
     Section(R.string.terms_section_use, R.string.terms_body_use),
     Section(R.string.terms_section_liability, R.string.terms_body_liability),
     Section(R.string.terms_section_changes, R.string.terms_body_changes),
@@ -40,14 +39,10 @@ private val termsSections = listOf(
     Section(R.string.terms_section_contact, R.string.terms_body_contact),
 )
 
-// The iOS iCloud section is left out: it does not apply on Android.
 private val privacySections = listOf(
     Section(R.string.privacy_section_data, R.string.privacy_body_data),
     Section(R.string.privacy_section_account, R.string.privacy_body_account),
-    Section(R.string.privacy_section_ai, R.string.privacy_body_ai),
     Section(R.string.privacy_section_support, R.string.privacy_body_support),
-    Section(R.string.privacy_section_location, R.string.privacy_body_location),
-    Section(R.string.privacy_section_camera, R.string.privacy_body_camera),
     Section(R.string.privacy_section_tracking, R.string.privacy_body_tracking),
     Section(R.string.privacy_section_retention, R.string.privacy_body_retention),
     Section(R.string.privacy_section_rights, R.string.privacy_body_rights),
@@ -59,8 +54,8 @@ private val privacySections = listOf(
 )
 
 /**
- * The in-app Terms of Use and Privacy Policy. DRAFT text: it is the iOS wording, which still mentions
- * iPhone, Apple and iCloud in places and must be adapted for Android before the closed test.
+ * The in-app Terms of Use and Privacy Policy, in the Android wording. The same text is published for Google Play
+ * in `store/legal/`; change both together. This version has no AI, camera or location features, so those sections are absent.
  */
 @Composable
 fun LegalTextScreen(document: LegalDocument, onBack: () -> Unit) {

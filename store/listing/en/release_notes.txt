@@ -1,0 +1,8 @@
+First closed-test release (1.0.0-alpha1).
+• Clock in and out with live pay and breaks
+• History by payroll month, manual entry, swipe to delete with undo
+• Overtime, rest-day and tax estimates for Israel
+• PDF and CSV export
+• Hebrew, English, Arabic and Russian
+• Light, dark and automatic themes
+Please tell us what is missing or confusing: info.hourstracker@gmail.com

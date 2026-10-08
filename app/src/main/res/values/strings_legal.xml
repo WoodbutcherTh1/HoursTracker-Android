@@ -4,10 +4,10 @@
     <string name="legal_gate_body">To use HoursTracker, please read and agree to the Terms of Use and the Privacy Policy.</string>
     <string name="legal_gate_checkbox">I have read and agree to the Terms of Use and the Privacy Policy</string>
     <string name="legal_gate_decline">I don\'t agree</string>
-    <string name="legal_gate_decline_message">Your data stays on this iPhone. You can export it now, delete the app, or come back and agree at any time.</string>
+    <string name="legal_gate_decline_message">Your data stays on this phone. You can export it now, delete the app, or come back and agree at any time.</string>
     <string name="legal_gate_decline_title">HoursTracker can\'t be used without agreeing</string>
     <string name="legal_gate_point_control">You can export or delete your data at any time.</string>
-    <string name="legal_gate_point_data">Your data stays on your iPhone, unless you turn on a backup, sync or a smart feature.</string>
+    <string name="legal_gate_point_data">Your data stays on your phone, unless you turn on a backup.</string>
     <string name="legal_gate_point_estimates">Pay figures are estimates. Your payslip and the law decide your real pay.</string>
     <string name="legal_gate_read_again">Read again</string>
     <string name="legal_gate_title">Before you start</string>
