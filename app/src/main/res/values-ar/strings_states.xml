@@ -31,4 +31,8 @@
     <string name="history_filter_year">سنة</string>
     <string name="history_filter_all">الكل</string>
     <string name="history_filter_all_title">كل الورديات</string>
+    <string name="history_search_hint">ابحث بالتاريخ أو المبلغ</string>
+    <string name="history_search_clear">مسح البحث</string>
+    <string name="history_search_empty_title">لا توجد ورديات مطابقة</string>
+    <string name="history_search_empty_body">جرّب تاريخًا أو مبلغًا آخر.</string>
 </resources>

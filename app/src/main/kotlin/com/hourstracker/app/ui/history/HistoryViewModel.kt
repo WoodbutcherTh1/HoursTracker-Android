@@ -24,6 +24,15 @@ class HistoryViewModel(val calendar: IosCalendar) : ViewModel() {
         clearSelection()
     }
 
+    /** What is typed in the search box; empty shows everything. */
+    var query: String by mutableStateOf("")
+        private set
+
+    fun search(text: String) {
+        query = text
+        clearSelection()
+    }
+
     var showNet: Boolean by mutableStateOf(true)
 
     /** The shifts ticked for bulk delete. Selection mode is on while this is not empty. */

@@ -31,4 +31,8 @@
     <string name="history_filter_year">שנה</string>
     <string name="history_filter_all">הכול</string>
     <string name="history_filter_all_title">כל המשמרות</string>
+    <string name="history_search_hint">חיפוש לפי תאריך או סכום</string>
+    <string name="history_search_clear">ניקוי החיפוש</string>
+    <string name="history_search_empty_title">אין משמרות תואמות</string>
+    <string name="history_search_empty_body">נסו תאריך או סכום אחר.</string>
 </resources>

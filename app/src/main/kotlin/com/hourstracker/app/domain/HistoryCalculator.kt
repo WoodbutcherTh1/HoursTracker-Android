@@ -74,6 +74,8 @@ object HistoryCalculator {
         calendar: IosCalendar,
         monthOffset: Int,
         filter: HistoryFilter = HistoryFilter.Payroll,
+        query: String = "",
+        locale: java.util.Locale = java.util.Locale.getDefault(),
     ): HistoryState {
         val period = windowFor(filter, settings, calendar, monthOffset)
         val all = records.map { it.session }
@@ -94,7 +96,10 @@ object HistoryCalculator {
                 dayType = session.dayType,
             )
         }
-        val totals = OvertimeCalculator.aggregate(inPeriod, settings, calendar)
-        return HistoryState(period, rows, totals.totalPay, totals.netPay, totals.totalHours, settings.currencyCode)
+        // A search narrows the rows and the totals with them.
+        val shown = rows.filter { HistorySearch.matches(it, query, calendar.zone, locale) }
+        val shownIds = shown.map { it.id }.toSet()
+        val totals = OvertimeCalculator.aggregate(inPeriod.filter { it.id in shownIds }, settings, calendar)
+        return HistoryState(period, shown, totals.totalPay, totals.netPay, totals.totalHours, settings.currencyCode)
     }
 }

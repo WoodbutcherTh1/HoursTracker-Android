@@ -31,4 +31,8 @@
     <string name="history_filter_year">Год</string>
     <string name="history_filter_all">Все</string>
     <string name="history_filter_all_title">Все смены</string>
+    <string name="history_search_hint">Поиск по дате или сумме</string>
+    <string name="history_search_clear">Очистить поиск</string>
+    <string name="history_search_empty_title">Подходящих смен нет</string>
+    <string name="history_search_empty_body">Попробуйте другую дату или сумму.</string>
 </resources>

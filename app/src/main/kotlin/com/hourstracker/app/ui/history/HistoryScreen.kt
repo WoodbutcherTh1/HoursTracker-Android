@@ -84,7 +84,7 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     val records = loadedRecords ?: emptyList()
     val settings by container.settings.settings.collectAsState()
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
-    val state = remember(records, settings, vm.monthOffset, vm.filter) { HistoryCalculator.build(records, settings, vm.calendar, vm.monthOffset, vm.filter) }
+    val state = remember(records, settings, vm.monthOffset, vm.filter, vm.query, locale) { HistoryCalculator.build(records, settings, vm.calendar, vm.monthOffset, vm.filter, vm.query, locale) }
     val cal = vm.calendar
     val monthTitle = when (vm.filter) {
         HistoryFilter.All -> stringResource(R.string.history_filter_all_title)
@@ -164,6 +164,13 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                 Toggle(stringResource(filterLabel(option)), vm.filter == option, horizontalPadding = Space.sm) { vm.selectFilter(option) }
             }
         }
+        SearchField(
+            value = vm.query,
+            onValueChange = vm::search,
+            hint = stringResource(R.string.history_search_hint),
+            clearLabel = stringResource(R.string.history_search_clear),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = Space.md, vertical = Space.xxs),
+        )
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = Space.md),
             verticalAlignment = Alignment.CenterVertically,
@@ -205,7 +212,13 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
         } else if (state.rows.isEmpty()) {
             val noShiftsAtAll = records.isEmpty()
             Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                EmptyState(
+                if (vm.query.isNotBlank()) {
+                    EmptyState(
+                        icon = TabIcons.History,
+                        title = stringResource(R.string.history_search_empty_title),
+                        body = stringResource(R.string.history_search_empty_body),
+                    )
+                } else EmptyState(
                     icon = TabIcons.History,
                     title = stringResource(if (noShiftsAtAll) R.string.history_empty else R.string.history_empty_period),
                     body = stringResource(if (noShiftsAtAll) R.string.history_empty_description else R.string.history_empty_period_hint),
@@ -392,6 +405,39 @@ private fun filterLabel(filter: HistoryFilter): Int = when (filter) {
     HistoryFilter.Payroll -> R.string.history_filter_payroll
     HistoryFilter.Year -> R.string.history_filter_year
     HistoryFilter.All -> R.string.history_filter_all
+}
+
+@Composable
+private fun SearchField(value: String, onValueChange: (String) -> Unit, hint: String, clearLabel: String, modifier: Modifier = Modifier) {
+    androidx.compose.material3.OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        singleLine = true,
+        placeholder = { Text(hint, style = DsText.sub, color = Palette.textTertiary) },
+        textStyle = DsText.body.copy(color = Palette.textPrimary),
+        trailingIcon = {
+            if (value.isNotEmpty()) {
+                Text(
+                    text = "✕",
+                    style = DsText.headline,
+                    color = Palette.textSecondary,
+                    modifier = Modifier
+                        .clickable(role = Role.Button) { onValueChange("") }
+                        .semantics { contentDescription = clearLabel }
+                        .padding(Space.sm),
+                )
+            }
+        },
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(Radius.lg),
+        colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Palette.accent,
+            unfocusedBorderColor = Palette.hairline,
+            focusedContainerColor = Palette.card,
+            unfocusedContainerColor = Palette.card,
+            cursorColor = Palette.accent,
+        ),
+    )
 }
 
 @Composable
