@@ -36,4 +36,11 @@
     <string name="retention_10_years">10 лет</string>
     <string name="retention_confirm_title">Удалить смены старше %1$s (%2$d)?</string>
     <string name="retention_confirm_body">Они будут удалены сейчас без возможности восстановления. Выберите «Никогда», чтобы сохранить всё.</string>
+    <string name="settings_erase">Удалить все мои данные</string>
+    <string name="erase_title">Удалить все мои данные?</string>
+    <string name="erase_body">Будут безвозвратно удалены все смены, ваши настройки и данные, номер удостоверения, журнал действий и отчёты в кэше, а все напоминания отключены. Отменить это нельзя. Отчёт, который вы уже отправили, остаётся там, куда вы его отправили. Сначала скачайте свои данные, если нужна копия.</string>
+    <string name="erase_type_prompt">Введите %1$s для подтверждения</string>
+    <string name="erase_word">УДАЛИТЬ</string>
+    <string name="erase_confirm">Удалить всё</string>
+    <string name="erase_failed">Не удалось удалить часть данных: %1$s. Перезапустите приложение и повторите.</string>
 </resources>

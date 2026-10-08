@@ -36,4 +36,11 @@
     <string name="retention_10_years">10 years</string>
     <string name="retention_confirm_title">Delete shifts older than %1$s (%2$d)?</string>
     <string name="retention_confirm_body">They are removed now and cannot be restored. Choose Never to keep everything.</string>
+    <string name="settings_erase">Delete all my data</string>
+    <string name="erase_title">Delete all my data?</string>
+    <string name="erase_body">This permanently deletes every shift, your settings and details, your ID number, the activity log and the reports kept in the cache, and turns off all reminders. It cannot be undone. A report you already shared stays wherever you sent it. Download your data first if you want a copy.</string>
+    <string name="erase_type_prompt">Type %1$s to confirm</string>
+    <string name="erase_word">DELETE</string>
+    <string name="erase_confirm">Delete everything</string>
+    <string name="erase_failed">Some data could not be deleted: %1$s. Restart the app and try again.</string>
 </resources>

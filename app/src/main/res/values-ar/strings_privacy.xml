@@ -36,4 +36,11 @@
     <string name="retention_10_years">10 سنوات</string>
     <string name="retention_confirm_title">هل تريد حذف الورديات الأقدم من %1$s (%2$d)؟</string>
     <string name="retention_confirm_body">ستُحذف الآن ولا يمكن استعادتها. اختر «أبدًا» للاحتفاظ بكل شيء.</string>
+    <string name="settings_erase">حذف كل بياناتي</string>
+    <string name="erase_title">هل تريد حذف كل بياناتي؟</string>
+    <string name="erase_body">يحذف هذا نهائيًا كل وردية وإعداداتك وتفاصيلك ورقم هويتك وسجل النشاط والتقارير المحفوظة مؤقتًا، ويوقف كل التذكيرات. لا يمكن التراجع عنه. يبقى أي تقرير شاركته سابقًا حيث أرسلته. نزّل بياناتك أولًا إن أردت نسخة.</string>
+    <string name="erase_type_prompt">اكتب %1$s للتأكيد</string>
+    <string name="erase_word">حذف</string>
+    <string name="erase_confirm">حذف كل شيء</string>
+    <string name="erase_failed">تعذّر حذف بعض البيانات: %1$s. أعد تشغيل التطبيق وحاول مجددًا.</string>
 </resources>

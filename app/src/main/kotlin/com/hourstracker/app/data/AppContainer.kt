@@ -30,6 +30,7 @@ class AppContainer(
     // Tests pass an ordinary AES key: the Android Keystore does not exist on the JVM.
     idCipher: IdCipher? = null,
 ) {
+    private val appContext = context.applicationContext
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     val flags = AppFlags(context)
@@ -38,7 +39,8 @@ class AppContainer(
     /** The activity log: what changed on this phone, without any personal values. */
     val audit = AuditLog(database.auditLog(), appScope)
 
-    val settings: SettingsRepository = AuditedSettingsRepository(PrefsSettingsRepository(context, SecureIdStore(context, idCipher)), audit)
+    private val idStore = SecureIdStore(context, idCipher)
+    val settings: SettingsRepository = AuditedSettingsRepository(PrefsSettingsRepository(context, idStore), audit)
 
     // Seeding and cleanup use the plain repository: only what a person does belongs in the activity log.
     private val plainShifts: ShiftRepository = RoomShiftRepository(database.workSessions())
@@ -62,6 +64,13 @@ class AppContainer(
                 .collect { rescheduleShiftReminder() }
         }
     }
+
+    /** Deletes everything the app keeps on the phone ("Delete all my data"). Returns the steps that failed; empty means all done. */
+    suspend fun eraseAllData(): List<String> =
+        DataEraser(appContext, database, audit, idStore) {
+            shiftReminders.schedule(null)
+            breakReminderManager.cancelBreakEndReminder()
+        }.erase()
 
     /** The day before which shifts count as too old for [years], or null when nothing is ever too old. */
     fun retentionCutoff(years: Int): java.time.Instant? {

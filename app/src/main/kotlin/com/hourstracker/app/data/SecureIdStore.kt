@@ -29,6 +29,15 @@ class SecureIdStore(context: Context, private val cipher: IdCipher? = null) {
         }
     }
 
+    /** Removes the stored ID number and destroys the Keystore key that protected it. */
+    fun erase() {
+        prefs.edit { clear() }
+        // A test cipher has no Keystore entry. On a phone the key goes with the data, so no copy of the ciphertext can ever be read.
+        if (cipher == null) {
+            runCatching { KeyStore.getInstance(KEYSTORE).apply { load(null) }.deleteEntry(ALIAS) }
+        }
+    }
+
     private fun keystoreKey(): SecretKey {
         val store = KeyStore.getInstance(KEYSTORE).apply { load(null) }
         (store.getKey(ALIAS, null) as? SecretKey)?.let { return it }

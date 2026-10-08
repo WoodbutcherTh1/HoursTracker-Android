@@ -88,6 +88,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
     })
     val d = vm.draft
     val guard = LocalUnsavedGuard.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     DisposableEffect(vm, guard) {
         guard.register(hasUnsaved = { vm.hasUnsavedChanges }, save = vm::save, discard = vm::discard)
         onDispose { guard.unregister() }
@@ -385,7 +386,7 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
 
             NotificationSettingsSection()
 
-            PrivacySettingsSection(onOpenActivityLog)
+            PrivacySettingsSection(onOpenActivityLog, onRestart = { restartApp(context) })
 
             // Language
             SectionHeader(stringResource(R.string.settings_app_language))
