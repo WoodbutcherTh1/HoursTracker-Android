@@ -6,7 +6,7 @@ This policy explains what HoursTracker ("we") collects, why, where it is kept, a
 
 ## Data on your device
 
-Your shifts, notes, workplace settings and marked days are kept only on this phone, in the app's private storage, and Android does not copy them to Google Drive or any other backup. Your national ID number is kept encrypted with a key in the Android Keystore and is never sent anywhere. We don't sell your data and don't use it for advertising.
+Your shifts, notes, workplace settings and marked days are kept only on this phone, in the app's private storage, and Android does not copy them to Google Drive or any other backup. The app also keeps an activity log of what changed on the phone (never amounts, times or notes). Your national ID number is kept encrypted with a key in the Android Keystore and is never sent anywhere. We don't sell your data and don't use it for advertising.
 
 ## Account and cloud backup
 
@@ -22,7 +22,7 @@ The app does not track you across apps or websites, does not show ads, and does 
 
 ## How long we keep data
 
-Data on your phone stays until you delete it, clear the app's storage in Android settings, or uninstall the app. Shifts you delete from History are removed right away (you can undo for a few seconds). Support messages are kept only as long as needed to answer them.
+Data on your phone stays until you delete it, clear the app's storage in Android settings, or uninstall the app. Shifts you delete from History are removed right away (you can undo for a few seconds). You can choose to delete shifts automatically after 1 to 10 years. The activity log is kept for one year unless you choose another period; its consent and deletion lines hold no personal data and are kept longer as proof. Support messages are kept only as long as needed to answer them.
 
 ## Your rights
 
@@ -34,7 +34,7 @@ Data on your phone sits in the app's private storage, which Android encrypts whe
 
 ## Your controls
 
-In Settings you can edit your details, turn break reminders off, delete shifts, and export your shifts as CSV or PDF. To delete everything on this phone, clear the app's storage in Android settings or uninstall the app.
+In Settings you can edit your details, turn reminders off, delete shifts (one by one, several at once, or automatically after 1 to 10 years), export your shifts as CSV or PDF, look through the activity log, download all your data as a JSON file (everything except your ID number), and delete all your data from the phone. Uninstalling the app also removes everything.
 
 ## Minors
 

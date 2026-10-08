@@ -3,7 +3,7 @@
     <string name="settings_privacy_section">Конфиденциальность и данные</string>
     <string name="settings_activity_log">Журнал действий</string>
     <string name="settings_audit_retention">Хранить журнал действий</string>
-    <string name="settings_privacy_hint">Журнал действий записывает, что изменилось на этом телефоне, но никогда не суммы, время или заметки.</string>
+    <string name="settings_privacy_hint">Журнал действий записывает, что изменилось на этом телефоне, но никогда не суммы, время или заметки. «Скачать мои данные» сохраняет всё, кроме номера удостоверения, в файл JSON.</string>
     <string name="retention_3_months">3 месяца</string>
     <string name="retention_1_year">1 год</string>
     <string name="retention_2_years">2 года</string>
@@ -43,4 +43,6 @@
     <string name="erase_word">УДАЛИТЬ</string>
     <string name="erase_confirm">Удалить всё</string>
     <string name="erase_failed">Не удалось удалить часть данных: %1$s. Перезапустите приложение и повторите.</string>
+    <string name="settings_download_data">Скачать мои данные</string>
+    <string name="download_failed">Не удалось создать файл. Убедитесь, что на телефоне есть свободное место, и повторите.</string>
 </resources>

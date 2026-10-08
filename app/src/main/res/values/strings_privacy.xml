@@ -3,7 +3,7 @@
     <string name="settings_privacy_section">Privacy &amp; data</string>
     <string name="settings_activity_log">Activity log</string>
     <string name="settings_audit_retention">Keep the activity log for</string>
-    <string name="settings_privacy_hint">The activity log records what changed on this phone, never amounts, times or notes.</string>
+    <string name="settings_privacy_hint">The activity log records what changed on this phone, never amounts, times or notes. Download my data saves everything except your ID number as a JSON file.</string>
     <string name="retention_3_months">3 months</string>
     <string name="retention_1_year">1 year</string>
     <string name="retention_2_years">2 years</string>
@@ -43,4 +43,6 @@
     <string name="erase_word">DELETE</string>
     <string name="erase_confirm">Delete everything</string>
     <string name="erase_failed">Some data could not be deleted: %1$s. Restart the app and try again.</string>
+    <string name="settings_download_data">Download my data</string>
+    <string name="download_failed">Couldn\'t create the file. Check that your phone has free storage and try again.</string>
 </resources>

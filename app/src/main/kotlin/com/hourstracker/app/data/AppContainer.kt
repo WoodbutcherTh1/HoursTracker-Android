@@ -2,6 +2,8 @@ package com.hourstracker.app.data
 
 import android.content.Context
 import com.hourstracker.app.BuildConfig
+import com.hourstracker.app.domain.AppChoices
+import com.hourstracker.app.domain.PersonalDataExport
 import com.hourstracker.app.domain.ShiftReminderSchedule
 import com.hourstracker.app.service.ServiceNotifier
 import com.hourstracker.app.service.ShiftController
@@ -73,6 +75,37 @@ class AppContainer(
             AuditAction.CONSENT_ACCEPTED,
             metadata = mapOf("version" to version, "appVersion" to BuildConfig.VERSION_NAME, "reconsent" to (previous > 0)),
         )
+    }
+
+    /** The personal data file ("Download my data") as JSON text. The ID number is never part of it. */
+    suspend fun buildPersonalDataExport(): String {
+        audit.awaitIdle()
+        val shiftList = plainShifts.shifts.first()
+        val auditLines = audit.entries()
+        val json = PersonalDataExport.build(
+            exportedAt = deviceCalendar().now(),
+            appVersion = BuildConfig.VERSION_NAME,
+            shifts = shiftList,
+            settings = settings.settings.value,
+            profile = settings.profile.value,
+            choices = AppChoices(
+                language = flags.language.name,
+                theme = settings.themeMode.value.name,
+                showNet = flags.showNet.value,
+                breakRemindersEnabled = settings.breakRemindersEnabled.value,
+                breakReminderMinutesBefore = settings.breakReminderMinutesBefore.value,
+                shiftReminderEnabled = settings.shiftReminderEnabled.value,
+                shiftReminderMinutesBefore = settings.shiftReminderMinutesBefore.value,
+                shiftSummaryEnabled = settings.shiftSummaryEnabled.value,
+                auditRetentionDays = settings.auditRetentionDays.value,
+                shiftRetentionYears = settings.shiftRetentionYears.value,
+                statCardOrder = settings.statCardOrder.value.map { it.name },
+            ),
+            auditLog = auditLines,
+            consent = flags.consentRecord(),
+        )
+        audit.log(AuditAction.EXPORT_PERSONAL_DATA, metadata = mapOf("shifts" to shiftList.size, "auditLines" to auditLines.size, "schemaVersion" to PersonalDataExport.SCHEMA_VERSION))
+        return json
     }
 
     /** Deletes everything the app keeps on the phone ("Delete all my data"). Returns the steps that failed; empty means all done. */

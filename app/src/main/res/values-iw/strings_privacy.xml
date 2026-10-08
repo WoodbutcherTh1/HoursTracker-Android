@@ -3,7 +3,7 @@
     <string name="settings_privacy_section">פרטיות ונתונים</string>
     <string name="settings_activity_log">יומן פעילות</string>
     <string name="settings_audit_retention">שמירת יומן הפעילות למשך</string>
-    <string name="settings_privacy_hint">יומן הפעילות מתעד מה השתנה בטלפון הזה, אף פעם לא סכומים, שעות או הערות.</string>
+    <string name="settings_privacy_hint">יומן הפעילות מתעד מה השתנה בטלפון הזה, אף פעם לא סכומים, שעות או הערות. ״הורדת הנתונים שלי״ שומרת הכול חוץ ממספר תעודת הזהות בקובץ JSON.</string>
     <string name="retention_3_months">3 חודשים</string>
     <string name="retention_1_year">שנה</string>
     <string name="retention_2_years">שנתיים</string>
@@ -43,4 +43,6 @@
     <string name="erase_word">מחק</string>
     <string name="erase_confirm">מחיקת הכול</string>
     <string name="erase_failed">חלק מהנתונים לא נמחקו: %1$s. הפעילו את האפליקציה מחדש ונסו שוב.</string>
+    <string name="settings_download_data">הורדת הנתונים שלי</string>
+    <string name="download_failed">לא ניתן היה ליצור את הקובץ. ודאו שיש מקום פנוי בטלפון ונסו שוב.</string>
 </resources>

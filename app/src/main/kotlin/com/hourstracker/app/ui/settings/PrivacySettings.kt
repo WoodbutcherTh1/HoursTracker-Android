@@ -15,7 +15,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import android.widget.Toast
+import com.hourstracker.app.ui.export.FileSharing
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,6 +41,7 @@ import com.hourstracker.app.ui.theme.Space
 fun PrivacySettingsSection(onOpenActivityLog: () -> Unit, onRestart: () -> Unit = { }) {
     val settings = LocalAppContainer.current.settings
     val container = LocalAppContainer.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     val auditDays by settings.auditRetentionDays.collectAsState()
     val shiftYears by settings.shiftRetentionYears.collectAsState()
     val scope = rememberCoroutineScope()
@@ -77,6 +83,26 @@ fun PrivacySettingsSection(onOpenActivityLog: () -> Unit, onRestart: () -> Unit 
             optionLabel = { stringResource(auditRetentionLabel(it)) },
             onSelect = settings::saveAuditRetentionDays,
         )
+        RowDivider()
+        FormRow(stringResource(R.string.settings_download_data), modifier = Modifier.clickable {
+            scope.launch {
+                try {
+                    val text = container.buildPersonalDataExport()
+                    val stamp = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm", java.util.Locale.ROOT).format(container.deviceCalendar().now().atZone(container.deviceCalendar().zone))
+                    val file = withContext(Dispatchers.IO) {
+                        FileSharing.cacheFile(context, "HoursTracker_my_data_$stamp.json").also { it.writeText(text, Charsets.UTF_8) }
+                    }
+                    FileSharing.share(context, file, "application/json")
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    android.util.Log.w("PersonalData", "Download failed", e)
+                    Toast.makeText(context, R.string.download_failed, Toast.LENGTH_LONG).show()
+                }
+            }
+        }) {
+            Text("›", style = DsText.titleSection, color = Palette.accent)
+        }
         RowDivider()
         FormRow(stringResource(R.string.settings_erase), modifier = Modifier.clickable { confirmErase = true }) {
             Text(if (erasing) "…" else "›", style = DsText.titleSection, color = Palette.overdue)

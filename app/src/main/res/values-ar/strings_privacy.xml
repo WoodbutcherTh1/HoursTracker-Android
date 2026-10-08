@@ -3,7 +3,7 @@
     <string name="settings_privacy_section">الخصوصية والبيانات</string>
     <string name="settings_activity_log">سجل النشاط</string>
     <string name="settings_audit_retention">مدة الاحتفاظ بسجل النشاط</string>
-    <string name="settings_privacy_hint">يسجّل سجل النشاط ما تغيّر على هذا الهاتف، ولا يسجّل المبالغ أو الأوقات أو الملاحظات أبدًا.</string>
+    <string name="settings_privacy_hint">يسجّل سجل النشاط ما تغيّر على هذا الهاتف، ولا يسجّل المبالغ أو الأوقات أو الملاحظات أبدًا. «تنزيل بياناتي» يحفظ كل شيء عدا رقم الهوية في ملف JSON.</string>
     <string name="retention_3_months">3 أشهر</string>
     <string name="retention_1_year">سنة</string>
     <string name="retention_2_years">سنتان</string>
@@ -43,4 +43,6 @@
     <string name="erase_word">حذف</string>
     <string name="erase_confirm">حذف كل شيء</string>
     <string name="erase_failed">تعذّر حذف بعض البيانات: %1$s. أعد تشغيل التطبيق وحاول مجددًا.</string>
+    <string name="settings_download_data">تنزيل بياناتي</string>
+    <string name="download_failed">تعذّر إنشاء الملف. تأكد من وجود مساحة تخزين فارغة على هاتفك ثم حاول مجددًا.</string>
 </resources>
