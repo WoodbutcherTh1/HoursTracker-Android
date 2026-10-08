@@ -134,7 +134,7 @@ class StatesUiTest {
     fun `the export language option never shows a raw placeholder`() {
         fixture.show { ExportScreen() }
         assertEquals(0, compose.onAllNodesWithText("%1\$s", substring = true).fetchSemanticsNodes().size)
-        compose.onNodeWithText("Phone language (English)").assertExists()
+        compose.onNodeWithText("Phone language (English) ▾").assertExists()
     }
 
     @Test

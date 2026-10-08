@@ -155,7 +155,8 @@ fun <T> PickerRow(
 ) {
     var open by remember { mutableStateOf(false) }
     FormRow(label = label, modifier = modifier.clickable { open = true }) {
-        Text(text = optionLabel(selected), style = DsText.body, color = Palette.accent)
+        // The chevron says "this opens a list"; the menu itself is anchored to this row.
+        Text(text = optionLabel(selected) + " ▾", style = DsText.body, color = Palette.accent)
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
             options.forEach { option ->
                 DropdownMenuItem(

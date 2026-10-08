@@ -63,9 +63,10 @@ android {
         buildConfig = true
     }
 
-    // First closed test ships Hebrew and English; Arabic and Russian follow in M2c.
+    // All four app languages ship (iw is the legacy code for Hebrew). A language missing here is silently dropped
+    // from the APK and the in-app picker would fall back to English.
     androidResources {
-        localeFilters += listOf("en", "he", "iw")
+        localeFilters += listOf("en", "he", "iw", "ar", "ru")
     }
 
     // The language is switchable inside the app, so every language must ship in the base APK/bundle.

@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.asStateFlow
 
 /** The app-language choice. [System] follows the device. */
 enum class AppLanguage(val tag: String?, val label: String?) {
-    System(null, null),
-    English("en", "English"),
     Hebrew("iw", "עברית"),
+    English("en", "English"),
     Arabic("ar", "العربية"),
     Russian("ru", "Русский"),
+    System(null, null),
     ;
 
     /** Whether text runs right to left in this language; null for [System], which depends on the device. */
