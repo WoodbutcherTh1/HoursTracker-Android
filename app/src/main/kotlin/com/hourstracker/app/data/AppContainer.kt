@@ -22,8 +22,9 @@ class AppContainer(context: Context) {
     val settings: SettingsRepository = PrefsSettingsRepository(context, SecureIdStore(context))
     private val database = AppDatabase.open(context)
     val shifts: ShiftRepository = RoomShiftRepository(database.workSessions())
+    private val breakReminderManager = BreakReminderManager(context)
 
-    val controller = ShiftController(shifts, settings, ::deviceCalendar, ServiceNotifier(context))
+    val controller = ShiftController(shifts, settings, ::deviceCalendar, ServiceNotifier(context), breakReminderManager)
 
     init {
         if (BuildConfig.DEBUG) seedMockShiftsOnce()

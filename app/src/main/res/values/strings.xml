@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">HoursTracker</string>
+
+    <!-- Break reminders -->
+    <string name="notification_channel_break_reminders">Break Reminders</string>
+    <string name="notification_channel_break_reminders_description">Notifications before your break ends</string>
+    <string name="break_reminder_title">Break ending soon</string>
+    <plurals name="break_reminder_message">
+        <item quantity="one">Your break ends in %d minute</item>
+        <item quantity="other">Your break ends in %d minutes</item>
+    </plurals>
 </resources>

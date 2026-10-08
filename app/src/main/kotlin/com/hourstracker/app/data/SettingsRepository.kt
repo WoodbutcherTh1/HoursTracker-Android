@@ -18,6 +18,8 @@ interface SettingsRepository {
     val profile: StateFlow<UserProfile>
     val statCardOrder: StateFlow<List<StatType>>
     val themeMode: StateFlow<ThemeMode>
+    val breakRemindersEnabled: StateFlow<Boolean>
+    val breakReminderMinutesBefore: StateFlow<Int>
 
     /** The ID number is read on demand and never held in a flow. */
     fun readIdNumber(): String
@@ -25,6 +27,8 @@ interface SettingsRepository {
     fun save(settings: WorkplaceSettings, profile: UserProfile, idNumber: String?)
     fun saveStatCardOrder(order: List<StatType>)
     fun saveThemeMode(mode: ThemeMode)
+    fun saveBreakRemindersEnabled(enabled: Boolean)
+    fun saveBreakReminderMinutesBefore(minutes: Int)
 }
 
 /** SharedPreferences-backed settings. Values pass through `WorkplaceSettings`, so the iOS clamping applies. */
@@ -35,11 +39,15 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
     private val profileFlow = MutableStateFlow(loadProfile())
     private val statCardOrderFlow = MutableStateFlow(loadStatCardOrder())
     private val themeModeFlow = MutableStateFlow(loadThemeMode())
+    private val breakRemindersEnabledFlow = MutableStateFlow(prefs.getBoolean("breakRemindersEnabled", true))
+    private val breakReminderMinutesBeforeFlow = MutableStateFlow(prefs.getInt("breakReminderMinutesBefore", 5))
 
     override val settings: StateFlow<WorkplaceSettings> = settingsFlow.asStateFlow()
     override val profile: StateFlow<UserProfile> = profileFlow.asStateFlow()
     override val statCardOrder: StateFlow<List<StatType>> = statCardOrderFlow.asStateFlow()
     override val themeMode: StateFlow<ThemeMode> = themeModeFlow.asStateFlow()
+    override val breakRemindersEnabled: StateFlow<Boolean> = breakRemindersEnabledFlow.asStateFlow()
+    override val breakReminderMinutesBefore: StateFlow<Int> = breakReminderMinutesBeforeFlow.asStateFlow()
 
     override fun readIdNumber(): String = idStore.read().orEmpty()
 
@@ -90,6 +98,20 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
             putString("themeMode", mode.name.lowercase())
         }
         themeModeFlow.value = mode
+    }
+
+    override fun saveBreakRemindersEnabled(enabled: Boolean) {
+        prefs.edit {
+            putBoolean("breakRemindersEnabled", enabled)
+        }
+        breakRemindersEnabledFlow.value = enabled
+    }
+
+    override fun saveBreakReminderMinutesBefore(minutes: Int) {
+        prefs.edit {
+            putInt("breakReminderMinutesBefore", minutes.coerceIn(1, 30))
+        }
+        breakReminderMinutesBeforeFlow.value = minutes.coerceIn(1, 30)
     }
 
     private fun load(): WorkplaceSettings {
