@@ -6,7 +6,6 @@ import androidx.core.content.edit
 import com.hourstracker.app.domain.StatType
 import com.hourstracker.model.MaritalStatus
 import com.hourstracker.model.WorkplaceSettings
-import com.hourstracker.app.data.UserProfile
 import java.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,11 +15,13 @@ import kotlinx.coroutines.flow.asStateFlow
 interface SettingsRepository {
     val settings: StateFlow<WorkplaceSettings>
     val profile: StateFlow<UserProfile>
+    val statCardOrder: StateFlow<List<StatType>>
 
     /** The ID number is read on demand and never held in a flow. */
     fun readIdNumber(): String
 
-    fun save(settings: WorkplaceSettings, profile: UserProfile, idNumber: String? = null)
+    fun save(settings: WorkplaceSettings, profile: UserProfile, idNumber: String?)
+    fun saveStatCardOrder(order: List<StatType>)
 }
 
 /** SharedPreferences-backed settings. Values pass through `WorkplaceSettings`, so the iOS clamping applies. */
@@ -29,13 +30,15 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
 
     private val settingsFlow = MutableStateFlow(load())
     private val profileFlow = MutableStateFlow(loadProfile())
+    private val statCardOrderFlow = MutableStateFlow(loadStatCardOrder())
 
     override val settings: StateFlow<WorkplaceSettings> = settingsFlow.asStateFlow()
     override val profile: StateFlow<UserProfile> = profileFlow.asStateFlow()
+    override val statCardOrder: StateFlow<List<StatType>> = statCardOrderFlow.asStateFlow()
 
     override fun readIdNumber(): String = idStore.read().orEmpty()
 
-    override fun save(settings: WorkplaceSettings, profile: UserProfile, idNumber: String? = null) {
+    override fun save(settings: WorkplaceSettings, profile: UserProfile, idNumber: String?) {
         // Re-create through the constructor so the validated fields are clamped exactly as on iOS.
         val clamped = settings.copy()
         prefs.edit {
@@ -60,20 +63,27 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
             putString("currencyCode", clamped.currencyCode)
             putInt("expectedShiftStartHour", clamped.expectedShiftStartHour)
             putInt("expectedShiftStartMinute", clamped.expectedShiftStartMinute)
-            
-            // Save stat card order
-            clamped.statCardOrder.joinToString(separator = ",") { it.name }.let { putString("statCardOrder", it) }
+            putString("fullName", profile.fullName)
+            putString("employeeNumber", profile.employeeNumber)
+            putString("workplaceName", profile.workplaceName)
+            putString("contractorName", profile.contractorName)
         }
+        if (idNumber != null) idStore.write(idNumber)
+        settingsFlow.value = clamped
+        profileFlow.value = profile
+    }
+
+    override fun saveStatCardOrder(order: List<StatType>) {
+        prefs.edit {
+            putString("statCardOrder", order.joinToString(separator = ",") { it.name })
+        }
+        statCardOrderFlow.value = order
     }
 
     private fun load(): WorkplaceSettings {
         fun double(key: String, default: Double) = prefs.getString(key, null)?.toDoubleOrNull() ?: default
         fun int(key: String, default: Int) = prefs.getInt(key, default)
-        fun stringList(key: String): List<StatType> {
-            return prefs.getString(key, null)?.split(",")?.map { StatType.valueOf(it) } 
-                ?: listOf(StatType.TODAY, StatType.WEEK, StatType.MONTH)  // Default order
-        }
-        
+
         return WorkplaceSettings(
             hourlyRate = double("hourlyRate", 0.0),
             dailyGasAllowance = double("dailyGasAllowance", 35.0),
@@ -87,7 +97,7 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
             birthDate = if (prefs.contains("birthDate")) Instant.ofEpochMilli(prefs.getLong("birthDate", 0)) else null,
             payrollStartDay = int("payrollStartDay", 1),
             restDayWeekday = int("restDayWeekday", 7),
-            secondRestDayWeekday = prefs.getString("secondRestDayWeekday", null)?.toIntOrNull(),
+            secondRestDayWeekday = if (prefs.contains("secondRestDayWeekday")) prefs.getInt("secondRestDayWeekday", 6) else null,
             defaultBreakMinutes = prefs.getInt("defaultBreakMinutes", 0),
             breaksArePaid = prefs.getBoolean("breaksArePaid", false),
             nightStandardDayHours = double("nightStandardDayHours", 7.0),
@@ -96,7 +106,28 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
             currencyCode = prefs.getString("currencyCode", null) ?: "ILS",
             expectedShiftStartHour = int("expectedShiftStartHour", 8),
             expectedShiftStartMinute = int("expectedShiftStartMinute", 0),
-            statCardOrder = stringList("statCardOrder")
         )
+    }
+
+    private fun loadProfile() = UserProfile(
+        fullName = prefs.getString("fullName", "").orEmpty(),
+        employeeNumber = prefs.getString("employeeNumber", "").orEmpty(),
+        workplaceName = prefs.getString("workplaceName", "").orEmpty(),
+        contractorName = prefs.getString("contractorName", "").orEmpty(),
+    )
+
+    private fun loadStatCardOrder(): List<StatType> {
+        val orderString = prefs.getString("statCardOrder", null)
+        return if (orderString != null) {
+            orderString.split(",").mapNotNull { name ->
+                try {
+                    StatType.valueOf(name)
+                } catch (e: IllegalArgumentException) {
+                    null
+                }
+            }.takeIf { it.size == 3 } ?: listOf(StatType.TODAY, StatType.WEEK, StatType.MONTH)
+        } else {
+            listOf(StatType.TODAY, StatType.WEEK, StatType.MONTH)
+        }
     }
 }

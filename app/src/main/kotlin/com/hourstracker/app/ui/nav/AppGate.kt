@@ -34,7 +34,7 @@ fun AppGate(container: AppContainer, onLanguageChange: (AppLanguage) -> Unit) {
                 onFinish = { answers ->
                     // Only what was answered is saved: the rate goes into the pay settings, the rest is display only.
                     answers.rate?.let { rate ->
-                        container.settings.save(settings.copy(hourlyRate = rate), container.settings.profile.value)
+                        container.settings.save(settings.copy(hourlyRate = rate), container.settings.profile.value, null)
                     }
                     answers.pattern?.let {
                         container.flags.weekPattern = it.name

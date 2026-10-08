@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hourstracker.app.data.AppContainer
 import com.hourstracker.app.domain.ShiftClock
+import com.hourstracker.app.domain.StatType
 import com.hourstracker.data.ShiftRecord
 import com.hourstracker.model.DayPayBreakdown
 import com.hourstracker.model.IosCalendar
@@ -32,6 +33,7 @@ class HomeViewModel(private val container: AppContainer) : ViewModel() {
     val calendar: IosCalendar = container.deviceCalendar()
     val settings = container.settings.settings
     val profile = container.settings.profile
+    val statCardOrder = container.settings.statCardOrder
     val showNet: StateFlow<Boolean> = container.flags.showNet
 
     val records: StateFlow<List<ShiftRecord>> = container.shifts.shifts.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
@@ -83,14 +85,12 @@ class HomeViewModel(private val container: AppContainer) : ViewModel() {
 
     fun setShowNet(value: Boolean) = container.flags.setShowNet(value)
 
+    fun updateStatCardOrder(newOrder: List<StatType>) {
+        viewModelScope.launch {
+            container.settings.saveStatCardOrder(newOrder)
+        }
+    }
+
     /** Brings the timer notification back if a shift is still running after the app was restarted. */
     suspend fun restoreNotification() = container.controller.restoreNotification()
 }
-
-    fun updateStatCardOrder(newOrder: List<StatType>) {
-        viewModelScope.launch {
-            val currentSettings = settings.value
-            val updatedSettings = currentSettings.copy(statCardOrder = newOrder)
-            container.settings.save(updatedSettings, profile.value)
-        }
-    }
