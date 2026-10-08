@@ -2,6 +2,7 @@ package com.hourstracker.app.domain
 
 import com.hourstracker.data.ShiftRecord
 import com.hourstracker.model.IosCalendar
+import com.hourstracker.app.ui.home.HistoryPeriodHelper
 import java.time.Instant
 
 /** The three numbers on Home: hours today, hours this week, and the number of shifts this month. Completed shifts only. */
@@ -23,4 +24,24 @@ data class HomeStats(val todayHours: Double, val weekHours: Double, val monthShi
             return HomeStats(todayHours, weekHours, monthCount)
         }
     }
+}
+
+/** Types of stats that can be displayed in StatCards */
+enum class StatType(val titleResId: Int, val accessibilityTitleResId: Int, val valueFormatter: (HomeStats) -> String) {
+    TODAY(
+        R.string.home_stat_today_short,
+        R.string.home_stat_today
+    ) { stats -> HistoryPeriodHelper.formatHoursClock(stats.todayHours) },
+    WEEK(
+        R.string.home_stat_week_short,
+        R.string.home_stat_week
+    ) { stats -> HistoryPeriodHelper.formatHoursClock(stats.weekHours) },
+    MONTH(
+        R.string.home_stat_month_short,
+        R.string.home_stat_month
+    ) { stats -> stats.monthShiftCount.toString() };
+
+    abstract val titleResId: Int
+    abstract val accessibilityTitleResId: Int
+    abstract val valueFormatter: (HomeStats) -> String
 }

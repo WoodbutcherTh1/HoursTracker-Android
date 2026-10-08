@@ -6,9 +6,12 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.drag.dragGestureDetector
+import androidx.compose.foundation.gestures.pointerInput
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +29,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,9 +37,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer
+import androidx.compose.ui.node.LayoutCoordinate
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.UintPx
+import androidx.compose.ui.util.annotation.atLeastOnce
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.createChildTransition
+import androidx.compose.animation.InfiniteTransition
+import androidx.compose.animation.rememberInfiniteTransition
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -132,7 +150,7 @@ fun HomeScreen() {
         val shift = active
         if (shift == null) {
             // Clocked-out state: greeting, hours today/week, and Clock In button
-            StatCards(stats)
+            StatCards(stats, settings.statCardOrder) { newOrder -> vm.updateStatCardOrder(newOrder) }
             ClockInDoor(onClick = ::requestClockIn)
         } else {
             val onBreak = shift.session.isOnBreak
@@ -176,29 +194,96 @@ private fun Greeting(vm: HomeViewModel, firstName: String, now: Instant) {
 }
 
 @Composable
-private fun StatCards(stats: HomeStats) {
-    Row(horizontalArrangement = Arrangement.spacedBy(Space.xs), modifier = Modifier.fillMaxWidth()) {
-        StatCard(stringResource(R.string.home_stat_today_short), stringResource(R.string.home_stat_today), HistoryPeriodHelper.formatHoursClock(stats.todayHours), Modifier.weight(1f))
-        StatCard(stringResource(R.string.home_stat_week_short), stringResource(R.string.home_stat_week), HistoryPeriodHelper.formatHoursClock(stats.weekHours), Modifier.weight(1f))
-        StatCard(stringResource(R.string.home_stat_month_short), stringResource(R.string.home_stat_month), stats.monthShiftCount.toString(), Modifier.weight(1f))
-    }
-}
-
 @Composable
-private fun StatCard(title: String, accessibilityTitle: String, value: String, modifier: Modifier) {
-    Column(
-        modifier = modifier.dsCard(Radius.lg).padding(Space.md).semantics(mergeDescendants = true) { contentDescription = "$accessibilityTitle: $value" },
-        verticalArrangement = Arrangement.spacedBy(Space.xs),
+private fun StatCards(stats: HomeStats, statCardOrder: List<StatType>, onStatCardOrderChanged: (List<StatType>) -> Unit) {
+    // Convert stat types to display items with their values
+    val items = remember(statCardOrder, stats.todayHours, stats.weekHours, stats.monthShiftCount) {
+        statCardOrder.map { statType ->
+            val value = when (statType) {
+                StatType.TODAY -> HistoryPeriodHelper.formatHoursClock(stats.todayHours)
+                StatType.WEEK -> HistoryPeriodHelper.formatHoursClock(stats.weekHours)
+                StatType.MONTH -> stats.monthShiftCount.toString()
+            }
+            Pair(statType, value)
+        }
+    }
+
+    // State for drag operations
+    var dragOffset by remember { mutableStateOf(0) }
+    var isDragging by remember { mutableStateOf(false) }
+    var draggedIndex by remember { mutableStateOf(-1) }
+    
+    // Calculate item width (equal distribution)
+    val itemWidth = remember { mutableStateOf(0f) }
+    LaunchedEffect(Unit) {
+        // Wait for layout to measure
+        itemWidth.value = with(LocalDensity.current) { 120.dp } // Default width, will be updated by onGloballyPositioned
+    }
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(Space.xs),
+        modifier = Modifier
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectDragGestures { change, dragAmount ->
+                    // Get the width of each item to determine which one is being dragged
+                    val itemSize = size.width / items.size
+                    val index = (dragAmount.x / itemSize).coerceIn(0, items.size - 1).toInt()
+                    
+                    change.consumeAllChanges()
+                    if (!isDragging && change.pressedDown) {
+                        isDragging = true
+                        draggedIndex = index
+                        dragOffset = (index * itemSize) - dragAmount.x
+                    } else if (isDragging && !change.pressedUp) {
+                        // Update drag offset
+                        dragOffset = (index * itemSize) - dragAmount.x
+                    } else if (isDragging && change.pressedUp) {
+                        // Drop occurred, reorder items
+                        isDragging = false
+                        if (draggedIndex != -1 && index != draggedIndex) {
+                            val newOrder = mutableListOf<StatType>(*statCardOrder.toTypedArray())
+                            val movedItem = newOrder.removeAt(draggedIndex)
+                            newOrder.add(index.coerceAt(0, newOrder.size), movedItem)
+                            onStatCardOrderChanged(List(newOrder))
+                        }
+                        draggedIndex = -1
+                    }
+                }
+            }
     ) {
-        Text(text = title, style = DsText.meta, color = Palette.textSecondary)
-        // Numbers are always laid out left to right so digits never reorder inside Hebrew or Arabic text.
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            Text(text = value, style = DsText.numLarge, color = Palette.textPrimary, maxLines = 1)
+        items.forEachIndexed { index, item ->
+            val (statType, value) = item
+            val isDraggingItem = index == draggedIndex
+            val dragTranslationX = if (isDraggingItem) dragOffset else 0
+            
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .offset { IntOffset(dragTranslationX.roundToInt(), 0) }
+                    .pointerInput(Unit) {
+                        // Detect long press to initiate drag
+                        detectTapGestures(
+                            onLongPress = {
+                                isDragging = true
+                                draggedIndex = index
+                                // Notify parent that we're starting to drag
+                            }
+                        )
+                    }
+            ) {
+                StatCard(
+                    title = stringResource(statType.titleResId),
+                    accessibilityTitle = stringResource(statType.accessibilityTitleResId),
+                    value = value,
+                    modifier = Modifier
+                        .opacity(if (isDraggingItem) 0.5f else 1.0f)
+                        .scale(if (isDraggingItem) 0.95f else 1.0f)
+                )
+            }
         }
     }
 }
-
-@Composable
 private fun CompactStats(stats: HomeStats) {
     Row(modifier = Modifier.fillMaxWidth().dsCard(Radius.lg).padding(Space.md), horizontalArrangement = Arrangement.SpaceEvenly) {
         listOf(

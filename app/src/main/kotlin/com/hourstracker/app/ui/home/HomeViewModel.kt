@@ -86,3 +86,11 @@ class HomeViewModel(private val container: AppContainer) : ViewModel() {
     /** Brings the timer notification back if a shift is still running after the app was restarted. */
     suspend fun restoreNotification() = container.controller.restoreNotification()
 }
+
+    fun updateStatCardOrder(newOrder: List<StatType>) {
+        viewModelScope.launch {
+            val currentSettings = settings.value
+            val updatedSettings = currentSettings.copy(statCardOrder = newOrder)
+            container.settings.save(updatedSettings, profile.value)
+        }
+    }
