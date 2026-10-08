@@ -1,5 +1,10 @@
 package com.hourstracker.app.ui.nav
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,6 +48,11 @@ fun AppRoot(language: AppLanguage, onLanguageChange: (AppLanguage) -> Unit) {
         NavHost(
             navController = navController,
             startDestination = TopLevelTab.Home.route,
+            // Tabs cross-fade; pushed screens (manual entry, edit) slide in from the end edge.
+            enterTransition = { fadeIn(tween(220)) + slideInHorizontally(tween(260)) { it / 12 } },
+            exitTransition = { fadeOut(tween(160)) },
+            popEnterTransition = { fadeIn(tween(220)) },
+            popExitTransition = { fadeOut(tween(160)) + slideOutHorizontally(tween(240)) { it / 12 } },
             modifier = Modifier.fillMaxSize().statusBarsPadding(),
         ) {
             composable(TopLevelTab.Home.route) { HomeScreen() }

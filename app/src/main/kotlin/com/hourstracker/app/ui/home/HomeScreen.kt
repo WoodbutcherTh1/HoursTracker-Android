@@ -1,6 +1,25 @@
 package com.hourstracker.app.ui.home
 
 import android.Manifest
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.zIndex
+import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import com.hourstracker.app.ui.components.NoticeBanner
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,6 +39,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -127,6 +147,14 @@ fun HomeScreen() {
 
     LaunchedEffect(Unit) { vm.restoreNotification() }
 
+    val haptics = LocalHapticFeedback.current
+    var notificationsAllowed by remember { mutableStateOf(true) }
+    // Re-check on every return to the app: the worker may have just turned them on in system settings.
+    LifecycleResumeEffect(Unit) {
+        notificationsAllowed = NotificationManagerCompat.from(context).areNotificationsEnabled()
+        onPauseOrDispose { }
+    }
+
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = Space.md), verticalArrangement = Arrangement.spacedBy(Space.lg)) {
         Greeting(vm, profile.fullName.trim().substringBefore(' '), nowAlways)
         
@@ -141,30 +169,66 @@ fun HomeScreen() {
                 .padding(vertical = Space.xs)
         )
 
-        val shift = active
-        if (shift == null) {
-            // Clocked-out state: greeting, hours today/week, and Clock In button
-            StatCards(stats, statCardOrder, vm::updateStatCardOrder)
-            ClockInDoor(onClick = ::requestClockIn)
-        } else {
-            val onBreak = shift.session.isOnBreak
-            val paused = onBreak && !settings.breaksArePaid
-            val stateColor = if (onBreak) Palette.onBreak else Palette.clockedIn
-            StatusRow(shift, stateColor, vm)
-            LiveCard(
-                shift = shift,
-                paused = paused,
-                paidElapsedSeconds = workedTimeSeconds.toDouble(),
-                pay = curve?.takeIf { it.sessionId == shift.id }?.pay(epochSeconds(nowAlways)),
-                rateMissing = settings.hourlyRate <= 0,
-                currencyCode = settings.currencyCode,
-                locale = locale,
-                showNet = showNet,
-                onShowNet = vm::setShowNet,
+        if (shift != null && !notificationsAllowed) {
+            NoticeBanner(
+                text = stringResource(R.string.error_notifications_banner),
+                actionLabel = stringResource(R.string.error_open_settings),
+                onAction = {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    runCatching { context.startActivity(intent) }
+                },
             )
-            CompactStats(stats)
-            BreakButton(onBreak = onBreak, paidBreaks = settings.breaksArePaid, onClick = vm::toggleBreak)
-            ClockOutDoor(onClick = vm::clockOut)
+        }
+
+        // Clocking in or out cross-fades between the two layouts. Keyed on "is a shift running" so
+        // the per-second and per-break updates inside one layout do not animate.
+        AnimatedContent(
+            targetState = shift,
+            contentKey = { it == null },
+            transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(120)) },
+            label = "home-mode",
+        ) { current ->
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.lg)) {
+                if (current == null) {
+                    // Clocked-out state: greeting, hours today/week, and Clock In button
+                    StatCards(stats, statCardOrder, vm::updateStatCardOrder)
+                    ClockInDoor(onClick = {
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        requestClockIn()
+                    })
+                } else {
+                    val onBreak = current.session.isOnBreak
+                    val paused = onBreak && !settings.breaksArePaid
+                    val stateColor = if (onBreak) Palette.onBreak else Palette.clockedIn
+                    StatusRow(current, stateColor, vm)
+                    LiveCard(
+                        shift = current,
+                        paused = paused,
+                        paidElapsedSeconds = workedTimeSeconds.toDouble(),
+                        pay = curve?.takeIf { it.sessionId == current.id }?.pay(epochSeconds(nowAlways)),
+                        rateMissing = settings.hourlyRate <= 0,
+                        currencyCode = settings.currencyCode,
+                        locale = locale,
+                        showNet = showNet,
+                        onShowNet = vm::setShowNet,
+                    )
+                    CompactStats(stats)
+                    BreakButton(
+                        onBreak = onBreak,
+                        paidBreaks = settings.breaksArePaid,
+                        onClick = {
+                            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            vm.toggleBreak()
+                        },
+                    )
+                    ClockOutDoor(onClick = {
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        vm.clockOut()
+                    })
+                }
+            }
         }
         // Room for the floating tab bar.
         Spacer(Modifier.height(120.dp))
@@ -192,6 +256,10 @@ private fun StatCards(stats: HomeStats, statCardOrder: List<StatType>, onStatCar
     var draggedIndex by remember { mutableIntStateOf(-1) }
     var targetIndex by remember { mutableIntStateOf(-1) }
     var dragOffsetX by remember { mutableFloatStateOf(0f) }
+    var slot by remember { mutableFloatStateOf(0f) }
+    val spacingPx = with(LocalDensity.current) { Space.xs.toPx() }
+    // In Hebrew and Arabic the row is mirrored, so a drag to the right moves a card toward the start.
+    val direction = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1f else 1f
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(Space.xs),
@@ -201,24 +269,25 @@ private fun StatCards(stats: HomeStats, statCardOrder: List<StatType>, onStatCar
             val isDragging = draggedIndex == index
             val isTarget = targetIndex == index && !isDragging
 
-            // Calculate offsets for reordering animation
-            val offsetX = when {
+            // The dragged card follows the finger; the cards it passes slide one slot out of the way.
+            val targetShift = when {
                 isDragging -> dragOffsetX
-                isTarget && draggedIndex >= 0 -> {
-                    // Shift items to make room for the dragged item
-                    if (draggedIndex < targetIndex) -1f else 1f
-                }
+                draggedIndex in 0 until targetIndex && index in (draggedIndex + 1)..targetIndex -> -slot * direction
+                draggedIndex > targetIndex && targetIndex >= 0 && index in targetIndex until draggedIndex -> slot * direction
                 else -> 0f
             }
+            val offsetX by animateFloatAsState(targetShift, spring(stiffness = Spring.StiffnessMediumLow), label = "stat-slide")
 
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .offset { androidx.compose.ui.unit.IntOffset(offsetX.toInt(), 0) }
+                    .onSizeChanged { slot = it.width.toFloat() + spacingPx }
+                    .offset { androidx.compose.ui.unit.IntOffset(if (isDragging) dragOffsetX.toInt() else offsetX.toInt(), 0) }
+                    .zIndex(if (isDragging) 1f else 0f)
                     .graphicsLayer {
-                        alpha = if (isDragging) 0.5f else 1f
-                        scaleX = if (isDragging) 0.95f else 1f
-                        scaleY = if (isDragging) 0.95f else 1f
+                        alpha = if (isDragging) 0.85f else 1f
+                        scaleX = if (isDragging) 1.04f else 1f
+                        scaleY = if (isDragging) 1.04f else 1f
                     }
                     .pointerInput(statCardOrder) {
                         detectDragGesturesAfterLongPress(
@@ -229,11 +298,9 @@ private fun StatCards(stats: HomeStats, statCardOrder: List<StatType>, onStatCar
                             },
                             onDrag = { _, dragAmount ->
                                 dragOffsetX += dragAmount.x
-                                // Calculate which position the item is over
-                                val cardWidth = size.width.toFloat()
-                                val newTarget = ((index * cardWidth + dragOffsetX) / cardWidth).toInt()
-                                    .coerceIn(0, statCardOrder.size - 1)
-                                targetIndex = newTarget
+                                // Which slot the dragged card is over, counted in the reading direction.
+                                val moved = if (slot > 0f) Math.round(dragOffsetX * direction / slot) else 0
+                                targetIndex = (index + moved).coerceIn(0, statCardOrder.size - 1)
                             },
                             onDragEnd = {
                                 if (draggedIndex != targetIndex && draggedIndex >= 0 && targetIndex >= 0) {
@@ -396,24 +463,41 @@ private fun ModeChip(label: String, selected: Boolean, onClick: () -> Unit) {
         color = if (selected) Palette.ink else Palette.textPrimary,
         modifier = Modifier
             .background(if (selected) Palette.accent else Palette.raised, CircleShape)
-            .clickable(onClick = onClick)
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
             .padding(horizontal = Space.md, vertical = Space.xs),
     )
 }
 
 @Composable
 private fun ClockInDoor(onClick: () -> Unit) {
-    Door(label = stringResource(R.string.home_clock_in), fill = Palette.accent, textColor = Palette.ink, glow = Palette.accent, onClick = onClick)
+    Door(
+        label = stringResource(R.string.home_clock_in),
+        hint = stringResource(R.string.a11y_clock_in_hint),
+        fill = Palette.accent,
+        textColor = Palette.ink,
+        glow = Palette.accent,
+        onClick = onClick,
+    )
 }
 
 @Composable
 private fun ClockOutDoor(onClick: () -> Unit) {
-    Door(label = stringResource(R.string.home_clock_out), fill = Palette.clockedIn, textColor = Palette.ink, glow = Palette.clockedIn, onClick = onClick)
+    Door(
+        label = stringResource(R.string.home_clock_out),
+        hint = stringResource(R.string.a11y_clock_out_hint),
+        fill = Palette.clockedIn,
+        textColor = Palette.ink,
+        glow = Palette.clockedIn,
+        onClick = onClick,
+    )
 }
 
 /** The big round button. One static glow sits behind it. */
 @Composable
-private fun Door(label: String, fill: Color, textColor: Color, glow: Color, onClick: () -> Unit) {
+private fun Door(label: String, hint: String, fill: Color, textColor: Color, glow: Color, onClick: () -> Unit) {
+    val interaction = remember { MutableInteractionSource() }
+    val pressed by interaction.collectIsPressedAsState()
+    val scale by animateFloatAsState(if (pressed) 0.94f else 1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium), label = "door-press")
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -426,8 +510,12 @@ private fun Door(label: String, fill: Color, textColor: Color, glow: Color, onCl
         Box(
             modifier = Modifier
                 .size(168.dp)
+                .graphicsLayer {
+                    scaleX = scale
+                    scaleY = scale
+                }
                 .background(fill, CircleShape)
-                .clickable(onClick = onClick, role = Role.Button),
+                .clickable(interactionSource = interaction, indication = null, onClickLabel = hint, role = Role.Button, onClick = onClick),
             contentAlignment = Alignment.Center,
         ) {
             Text(text = label, style = DsText.titleSection, color = textColor, textAlign = TextAlign.Center, modifier = Modifier.padding(Space.md))
@@ -447,7 +535,7 @@ private fun BreakButton(onBreak: Boolean, paidBreaks: Boolean, onClick: () -> Un
                 .fillMaxWidth()
                 .height(56.dp)
                 .background(if (onBreak) Palette.onBreak else Palette.card, RoundedCornerShape(28.dp))
-                .clickable(onClick = onClick)
+                .clickable(role = Role.Button, onClick = onClick)
                 .padding(top = 16.dp),
         )
         Text(

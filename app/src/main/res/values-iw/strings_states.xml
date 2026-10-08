@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="state_loading">טוען</string>
+    <string name="history_deleted">המשמרת נמחקה</string>
+    <string name="history_undo">ביטול</string>
+    <string name="history_delete">מחיקה</string>
+    <string name="history_add_shift">הוספת משמרת</string>
+    <string name="history_previous_period">התקופה הקודמת</string>
+    <string name="history_next_period">התקופה הבאה</string>
+    <string name="payslips_empty_title">אין עדיין תלושי שכר</string>
+    <string name="payslips_empty_body">תלושי שכר שתוסיפו יישמרו כאן, בטלפון הזה בלבד.</string>
+    <string name="export_empty_title">אין משמרות בטווח הזה</string>
+    <string name="error_export_title">לא ניתן היה ליצור את הדוח</string>
+    <string name="error_export_body">ודאו שיש מקום פנוי בטלפון ונסו שוב.</string>
+    <string name="error_retry">ניסיון נוסף</string>
+    <string name="error_notifications_banner">ההתראות כבויות, ולכן שעון המשמרת לא מוצג בשורת הסטטוס.</string>
+    <string name="error_open_settings">הגדרות</string>
+    <string name="error_network_title" tools:ignore="UnusedResources">אין חיבור</string>
+    <string name="error_network_body" tools:ignore="UnusedResources">בדקו את חיבור האינטרנט ונסו שוב. המשמרות שלכם שמורות בטלפון.</string>
+    <string name="a11y_clock_in_hint">מתחיל משמרת חדשה</string>
+    <string name="a11y_clock_out_hint">מסיים את המשמרת הפעילה ומציג סיכום</string>
+    <string name="export_creating">יוצר…</string>
+</resources>

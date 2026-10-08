@@ -59,6 +59,10 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
+import com.hourstracker.app.ui.components.EmptyState
+import com.hourstracker.app.ui.components.ErrorState
+import com.hourstracker.app.ui.nav.TabIcons
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -90,6 +94,7 @@ fun ExportScreen() {
     var includeNotes by rememberSaveable { mutableStateOf(false) }
     var pickDate by remember { mutableStateOf<String?>(null) }
     var busy by remember { mutableStateOf(false) }
+    var failed by remember { mutableStateOf(false) }
 
     val month = YearMonth.from(LocalDate.ofEpochDay(monthEpoch))
     val range: ExportRange = when (rangeMode) {
@@ -102,6 +107,43 @@ fun ExportScreen() {
         ExportBuilder.build(records, settings, calendar, range, dayFilter, includeNotes)
     }
     val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)
+
+    fun createReport() {
+        busy = true
+        failed = false
+        scope.launch {
+            try {
+                val deviceLanguage = Locale.getDefault().language.let { if (it == "iw") "he" else it }
+                val copy = ExportCopy(language.resolve(deviceLanguage))
+                val idNumber = container.settings.readIdNumber()
+                val file = withContext(Dispatchers.IO) {
+                    val directory = File(context.cacheDir, "exports").apply { mkdirs() }
+                    directory.listFiles()?.filter { System.currentTimeMillis() - it.lastModified() > 24 * 3600 * 1000 }?.forEach { it.delete() }
+                    val stamp = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm", Locale.ROOT).format(calendar.now().atZone(calendar.zone))
+                    File(directory, "HoursTracker_$stamp.${format.extension}").also { out ->
+                        if (format == Format.Csv) {
+                            out.writeText(CsvExporter.write(report, copy, calendar), Charsets.UTF_8)
+                        } else {
+                            out.writeBytes(PdfReportWriter.write(report, copy, profile, idNumber, calendar))
+                        }
+                    }
+                }
+                val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
+                val send = Intent(Intent.ACTION_SEND)
+                    .setType(format.mime)
+                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                // Out of storage, no app to share to, or a rendering fault: say so and offer a retry.
+                failed = true
+            } finally {
+                busy = false
+            }
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
@@ -217,7 +259,11 @@ fun ExportScreen() {
             SectionHeader(stringResource(R.string.export_preview_title))
             FormCard {
                 if (report.rows.isEmpty()) {
-                    Text(stringResource(R.string.export_preview_empty), style = DsText.sub, color = Palette.textSecondary, modifier = Modifier.padding(Space.md))
+                    EmptyState(
+                        icon = TabIcons.Export,
+                        title = stringResource(R.string.export_empty_title),
+                        body = stringResource(R.string.export_preview_empty),
+                    )
                 } else {
                     Row(modifier = Modifier.fillMaxWidth().padding(Space.md), horizontalArrangement = Arrangement.SpaceBetween) {
                         PreviewCell(stringResource(R.string.export_preview_days), report.rows.map { calendar.localDate(it.session.date) }.toSet().size.toString())
@@ -230,39 +276,20 @@ fun ExportScreen() {
             Spacer(Modifier.height(24.dp))
         }
         Column(modifier = Modifier.padding(horizontal = Space.md).padding(bottom = 96.dp)) {
+            if (failed) {
+                ErrorState(
+                    icon = TabIcons.Export,
+                    title = stringResource(R.string.error_export_title),
+                    body = stringResource(R.string.error_export_body),
+                    actionLabel = stringResource(R.string.error_retry),
+                    onAction = ::createReport,
+                )
+            }
             PrimaryButton(
-                text = stringResource(R.string.export_report),
-                enabled = report.rows.isNotEmpty() && !busy,
-                onClick = {
-                    busy = true
-                    scope.launch {
-                        try {
-                            val deviceLanguage = Locale.getDefault().language.let { if (it == "iw") "he" else it }
-                            val copy = ExportCopy(language.resolve(deviceLanguage))
-                            val idNumber = container.settings.readIdNumber()
-                            val file = withContext(Dispatchers.IO) {
-                                val directory = File(context.cacheDir, "exports").apply { mkdirs() }
-                                directory.listFiles()?.filter { System.currentTimeMillis() - it.lastModified() > 24 * 3600 * 1000 }?.forEach { it.delete() }
-                                val stamp = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm", Locale.ROOT).format(calendar.now().atZone(calendar.zone))
-                                File(directory, "HoursTracker_$stamp.${format.extension}").also { out ->
-                                    if (format == Format.Csv) {
-                                        out.writeText(CsvExporter.write(report, copy, calendar), Charsets.UTF_8)
-                                    } else {
-                                        out.writeBytes(PdfReportWriter.write(report, copy, profile, idNumber, calendar))
-                                    }
-                                }
-                            }
-                            val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
-                            val send = Intent(Intent.ACTION_SEND)
-                                .setType(format.mime)
-                                .putExtra(Intent.EXTRA_STREAM, uri)
-                                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                        } finally {
-                            busy = false
-                        }
-                    }
-                },
+                text = stringResource(if (busy) R.string.export_creating else R.string.export_report),
+                enabled = report.rows.isNotEmpty(),
+                loading = busy,
+                onClick = ::createReport,
             )
         }
     }

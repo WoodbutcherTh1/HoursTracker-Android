@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="state_loading">جارٍ التحميل</string>
+    <string name="history_deleted">تم حذف الوردية</string>
+    <string name="history_undo">تراجع</string>
+    <string name="history_delete">حذف</string>
+    <string name="history_add_shift">إضافة وردية</string>
+    <string name="history_previous_period">الفترة السابقة</string>
+    <string name="history_next_period">الفترة التالية</string>
+    <string name="payslips_empty_title">لا توجد قسائم راتب بعد</string>
+    <string name="payslips_empty_body">قسائم الراتب التي تضيفها ستُحفظ هنا، على هذا الهاتف فقط.</string>
+    <string name="export_empty_title">لا توجد ورديات في هذا النطاق</string>
+    <string name="error_export_title">تعذّر إنشاء التقرير</string>
+    <string name="error_export_body">تأكد من وجود مساحة تخزين فارغة على هاتفك ثم حاول مجددًا.</string>
+    <string name="error_retry">حاول مجددًا</string>
+    <string name="error_notifications_banner">الإشعارات متوقفة، لذا لا يظهر مؤقّت الوردية في شريط الحالة.</string>
+    <string name="error_open_settings">الإعدادات</string>
+    <string name="error_network_title" tools:ignore="UnusedResources">لا يوجد اتصال</string>
+    <string name="error_network_body" tools:ignore="UnusedResources">تحقق من اتصالك بالإنترنت وحاول مجددًا. ورديّاتك محفوظة على هذا الهاتف.</string>
+    <string name="a11y_clock_in_hint">يبدأ وردية جديدة</string>
+    <string name="a11y_clock_out_hint">ينهي الوردية الجارية ويعرض ملخّصها</string>
+    <string name="export_creating">جارٍ الإنشاء…</string>
+</resources>

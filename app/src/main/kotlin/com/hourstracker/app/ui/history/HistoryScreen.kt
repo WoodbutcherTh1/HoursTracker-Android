@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -37,6 +38,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,6 +48,9 @@ import kotlinx.coroutines.launch
 import com.hourstracker.app.R
 import com.hourstracker.app.domain.HistoryCalculator
 import com.hourstracker.app.domain.HistoryRow
+import com.hourstracker.app.ui.components.EmptyState
+import com.hourstracker.app.ui.components.HistorySkeleton
+import com.hourstracker.app.ui.nav.TabIcons
 import com.hourstracker.app.ui.theme.DsText
 import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Radius
@@ -63,7 +70,9 @@ import java.util.Locale
 fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     val container = com.hourstracker.app.LocalAppContainer.current
     val vm: HistoryViewModel = viewModel(factory = viewModelFactory { HistoryViewModel(it.deviceCalendar()) })
-    val records by container.shifts.shifts.collectAsState(initial = emptyList())
+    // null until the first read finishes, so an empty list means "no shifts" and not "still loading".
+    val loadedRecords by container.shifts.shifts.collectAsState<List<com.hourstracker.data.ShiftRecord>, List<com.hourstracker.data.ShiftRecord>?>(initial = null)
+    val records = loadedRecords ?: emptyList()
     val settings by container.settings.settings.collectAsState()
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
     val state = remember(records, settings, vm.monthOffset) { HistoryCalculator.build(records, settings, vm.calendar, vm.monthOffset) }
@@ -75,6 +84,11 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val addLabel = stringResource(R.string.history_add_shift)
+    val previousLabel = stringResource(R.string.history_previous_period)
+    val nextLabel = stringResource(R.string.history_next_period)
+    val deletedMessage = stringResource(R.string.history_deleted)
+    val undoLabel = stringResource(R.string.history_undo)
     var pendingDelete by remember { mutableStateOf<Pair<java.util.UUID, com.hourstracker.data.ShiftRecord>?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -89,7 +103,11 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                 text = "+",
                 style = DsText.titleScreen,
                 color = Palette.accent,
-                modifier = Modifier.background(Palette.card, CircleShape).clickable(onClick = onAdd).padding(horizontal = Space.md),
+                modifier = Modifier
+                    .background(Palette.card, CircleShape)
+                    .clickable(onClickLabel = addLabel, role = Role.Button, onClick = onAdd)
+                    .semantics { contentDescription = addLabel }
+                    .padding(horizontal = Space.md),
             )
         }
         Row(
@@ -98,7 +116,15 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             // Arrows follow the reading direction: "previous" points to the start side.
-            Text("‹", style = DsText.titleScreen, color = Palette.textPrimary, modifier = Modifier.clickable(onClick = vm::previous).padding(Space.sm))
+            Text(
+                "‹",
+                style = DsText.titleScreen,
+                color = Palette.textPrimary,
+                modifier = Modifier
+                    .clickable(role = Role.Button, onClick = vm::previous)
+                    .semantics { contentDescription = previousLabel }
+                    .padding(Space.sm),
+            )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(monthTitle, style = DsText.titleSection, color = Palette.textPrimary)
                 Text(
@@ -107,22 +133,28 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                     color = Palette.textSecondary,
                 )
             }
-            Text("›", style = DsText.titleScreen, color = Palette.textPrimary, modifier = Modifier.clickable(onClick = vm::next).padding(Space.sm))
+            Text(
+                "›",
+                style = DsText.titleScreen,
+                color = Palette.textPrimary,
+                modifier = Modifier
+                    .clickable(role = Role.Button, onClick = vm::next)
+                    .semantics { contentDescription = nextLabel }
+                    .padding(Space.sm),
+            )
         }
 
-        if (state.rows.isEmpty()) {
-            Column(modifier = Modifier.weight(1f).fillMaxWidth().padding(Space.xl), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                val noShiftsAtAll = records.isEmpty()
-                Text(
-                    stringResource(if (noShiftsAtAll) R.string.history_empty else R.string.history_empty_period),
-                    style = DsText.headline,
-                    color = Palette.textPrimary,
-                )
-                Text(
-                    stringResource(if (noShiftsAtAll) R.string.history_empty_description else R.string.history_empty_period_hint),
-                    style = DsText.sub,
-                    color = Palette.textSecondary,
-                    textAlign = TextAlign.Center,
+        if (loadedRecords == null) {
+            HistorySkeleton(modifier = Modifier.weight(1f).fillMaxWidth().padding(Space.md))
+        } else if (state.rows.isEmpty()) {
+            val noShiftsAtAll = records.isEmpty()
+            Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                EmptyState(
+                    icon = TabIcons.History,
+                    title = stringResource(if (noShiftsAtAll) R.string.history_empty else R.string.history_empty_period),
+                    body = stringResource(if (noShiftsAtAll) R.string.history_empty_description else R.string.history_empty_period_hint),
+                    actionLabel = if (noShiftsAtAll) stringResource(R.string.history_add_shift) else null,
+                    onAction = if (noShiftsAtAll) onAdd else null,
                 )
             }
         } else {
@@ -155,8 +187,8 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
                                     scope.launch {
                                         container.shifts.delete(deletedRow.id)
                                         val result = snackbarHostState.showSnackbar(
-                                            message = "Shift deleted",
-                                            actionLabel = "Undo",
+                                            message = deletedMessage,
+                                            actionLabel = undoLabel,
                                             duration = SnackbarDuration.Short
                                         )
                                         if (result == SnackbarResult.ActionPerformed) {
@@ -240,7 +272,7 @@ private fun SwipeableRowItem(
                     .padding(horizontal = Space.md),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Text("Delete", color = Color.White, style = DsText.headline)
+                Text(stringResource(R.string.history_delete), color = Color.White, style = DsText.headline)
             }
         },
         content = {
@@ -257,7 +289,7 @@ private fun Toggle(label: String, selected: Boolean, onClick: () -> Unit) {
         color = if (selected) Palette.ink else Palette.textPrimary,
         modifier = Modifier
             .background(if (selected) Palette.accent else Palette.raised, CircleShape)
-            .clickable(onClick = onClick)
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
             .padding(horizontal = Space.md, vertical = Space.xs),
     )
 }
@@ -290,7 +322,7 @@ private fun RowItem(
     onClick: () -> Unit,
 ) {
     val amount = if (showNet) row.net else row.gross
-    Box(modifier = Modifier.clickable(onClick = onClick)) {
+    Box(modifier = Modifier.clickable(role = Role.Button, onClick = onClick).semantics(mergeDescendants = true) {}) {
         TableRow(
             listOf(
                 day(row.day),

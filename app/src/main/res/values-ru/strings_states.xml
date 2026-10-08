@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="state_loading">Загрузка</string>
+    <string name="history_deleted">Смена удалена</string>
+    <string name="history_undo">Отменить</string>
+    <string name="history_delete">Удалить</string>
+    <string name="history_add_shift">Добавить смену</string>
+    <string name="history_previous_period">Предыдущий период</string>
+    <string name="history_next_period">Следующий период</string>
+    <string name="payslips_empty_title">Расчётных листков пока нет</string>
+    <string name="payslips_empty_body">Добавленные листки хранятся здесь, только на этом телефоне.</string>
+    <string name="export_empty_title">В этом периоде нет смен</string>
+    <string name="error_export_title">Не удалось создать отчёт</string>
+    <string name="error_export_body">Убедитесь, что на телефоне есть свободное место, и повторите попытку.</string>
+    <string name="error_retry">Повторить</string>
+    <string name="error_notifications_banner">Уведомления отключены, поэтому таймер смены не виден в строке состояния.</string>
+    <string name="error_open_settings">Настройки</string>
+    <string name="error_network_title" tools:ignore="UnusedResources">Нет соединения</string>
+    <string name="error_network_body" tools:ignore="UnusedResources">Проверьте подключение к интернету и повторите попытку. Ваши смены сохранены на этом телефоне.</string>
+    <string name="a11y_clock_in_hint">Начинает новую смену</string>
+    <string name="a11y_clock_out_hint">Завершает текущую смену и показывает итог</string>
+    <string name="export_creating">Создание…</string>
+</resources>

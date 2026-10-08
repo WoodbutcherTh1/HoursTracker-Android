@@ -206,17 +206,24 @@ private fun StepperButton(symbol: String, description: String, enabled: Boolean,
 
 /** The primary call to action: accent fill, ink text, 56dp capsule. */
 @Composable
-fun PrimaryButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
-    val alpha = if (enabled) 1f else 0.35f
+fun PrimaryButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, loading: Boolean = false) {
+    val alpha = if (enabled || loading) 1f else 0.35f
     androidx.compose.foundation.layout.Box(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
             .background(Palette.accent.copy(alpha = alpha), CircleShape)
-            .clickable(enabled = enabled, onClick = onClick),
+            .clickable(enabled = enabled && !loading, role = androidx.compose.ui.semantics.Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = text, style = DsText.headline, color = Palette.ink.copy(alpha = if (enabled) 1f else 0.5f))
+        if (loading) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(Space.xs)) {
+                androidx.compose.material3.CircularProgressIndicator(color = Palette.ink, strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+                Text(text = text, style = DsText.headline, color = Palette.ink)
+            }
+        } else {
+            Text(text = text, style = DsText.headline, color = Palette.ink.copy(alpha = if (enabled) 1f else 0.5f))
+        }
     }
 }
 
