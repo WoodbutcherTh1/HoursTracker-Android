@@ -47,7 +47,10 @@ android {
             enableUnitTestCoverage = true
         }
         release {
-            isMinifyEnabled = false
+            // R8 shrinks and obfuscates the release build. The bundle carries mapping.txt, so Play can decode crash traces.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // Unsigned when no key is configured (CI, other machines); signed bundles are built on the owner's machine.
             if (signingValue("RELEASE_STORE_FILE") != null) signingConfig = signingConfigs.getByName("release")
         }

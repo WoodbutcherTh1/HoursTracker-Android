@@ -136,8 +136,9 @@ fun ExportScreen() {
                 context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             } catch (e: CancellationException) {
                 throw e
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 // Out of storage, no app to share to, or a rendering fault: say so and offer a retry.
+                android.util.Log.w("Export", "Report failed", e)
                 failed = true
             } finally {
                 busy = false

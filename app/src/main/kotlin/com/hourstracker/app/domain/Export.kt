@@ -95,13 +95,13 @@ class ExportCopy(val language: ReportLanguage) {
     val summaryNet get() = t("report.summary.netPay")
     val summaryDeductions get() = t("report.summary.deductions")
 
-    fun worker(name: String) = t("report.worker %@").replace("%s", name)
-    fun idNumber(id: String) = t("report.id %@").replace("%s", id)
-    fun employee(number: String) = t("report.employee %@").replace("%s", number)
-    fun workplace(name: String) = t("report.workplace %@").replace("%s", name)
-    fun contractor(name: String) = t("report.contractor %@").replace("%s", name)
-    fun period(text: String) = t("report.period %@").replace("%s", text)
-    fun creditPoints(points: String) = t("report.creditPoints %@").replace("%s", points)
+    fun worker(name: String) = t("report.worker").replace("%s", name)
+    fun idNumber(id: String) = t("report.id").replace("%s", id)
+    fun employee(number: String) = t("report.employee").replace("%s", number)
+    fun workplace(name: String) = t("report.workplace").replace("%s", name)
+    fun contractor(name: String) = t("report.contractor").replace("%s", name)
+    fun period(text: String) = t("report.period").replace("%s", text)
+    fun creditPoints(points: String) = t("report.creditPoints").replace("%s", points)
 
     /** Rate columns stay numeric in every language. */
     val tableColumns: List<String>
