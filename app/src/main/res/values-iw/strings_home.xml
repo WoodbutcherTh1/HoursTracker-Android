@@ -42,4 +42,5 @@
     <string name="tax_national_insurance">ביטוח לאומי</string>
     <string name="tax_health_tax">מס בריאות</string>
     <string name="settings_notifications_minutes">%1$s דק׳</string>
+    <string name="home_sparkline_a11y">שעות עבודה ביום ב-7 הימים האחרונים</string>
 </resources>

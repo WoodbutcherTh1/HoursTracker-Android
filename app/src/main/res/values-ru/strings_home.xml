@@ -42,4 +42,5 @@
     <string name="tax_national_insurance">Битуах леуми</string>
     <string name="tax_health_tax">Налог на здравоохранение</string>
     <string name="settings_notifications_minutes">%1$s мин</string>
+    <string name="home_sparkline_a11y">Рабочие часы по дням за последние 7 дней</string>
 </resources>

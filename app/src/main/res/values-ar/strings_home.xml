@@ -42,4 +42,5 @@
     <string name="tax_national_insurance">التأمين الوطني</string>
     <string name="tax_health_tax">ضريبة الصحة</string>
     <string name="settings_notifications_minutes">%1$s د</string>
+    <string name="home_sparkline_a11y">ساعات العمل في اليوم خلال آخر 7 أيام</string>
 </resources>

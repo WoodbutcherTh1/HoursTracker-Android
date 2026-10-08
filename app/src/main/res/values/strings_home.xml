@@ -42,4 +42,5 @@
     <string name="tax_national_insurance">National Insurance</string>
     <string name="tax_health_tax">Health Tax</string>
     <string name="settings_notifications_minutes">%1$s min</string>
+    <string name="home_sparkline_a11y">Hours worked per day over the last 7 days</string>
 </resources>
