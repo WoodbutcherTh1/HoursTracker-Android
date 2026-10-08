@@ -1,0 +1,7 @@
+# security.txt for HoursTracker (RFC 9116)
+# This repository has no website. If a website is added, serve this file at
+# https://<site>/.well-known/security.txt (and add a Canonical line with that URL).
+Contact: mailto:info.hourstracker@gmail.com
+Expires: 2027-10-01T00:00:00.000Z
+Preferred-Languages: en, he, ar, ru
+Policy: https://github.com/WoodbutcherTh1/HoursTracker-Android/blob/main/SECURITY.md

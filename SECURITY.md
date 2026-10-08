@@ -18,3 +18,12 @@ Helpful details: what you found, how to reproduce it, the app version, and the A
 ## Scope
 
 This repository is the Android app, its tests, and supporting documentation. Secrets are never stored in it. If you find a committed secret, report it the same way.
+
+## Machine-readable contact
+
+`docs/security.txt` follows RFC 9116 (contact, expiry, languages, policy link). This project has no website to serve it from today; if one is added, publish the file at `/.well-known/security.txt` and renew its `Expires` date at least once a year (the current one is 1 October 2027).
+
+## What to expect
+
+We acknowledge a report within 5 working days, tell you what we found, and credit you if you wish. Please do not publish details before a fix is available. The app has no server today and cannot send your data anywhere (see `docs/COMPLIANCE_AUDIT.md`), so the most useful reports concern the exported files, notifications and local storage.
+
