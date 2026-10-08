@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.hourstracker.app.data.AppFlags
 import com.hourstracker.app.data.AppLanguage
 import com.hourstracker.app.ui.nav.AppGate
@@ -34,7 +36,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            HoursTrackerTheme {
+            val themeMode by container.settings.themeMode.collectAsState()
+            HoursTrackerTheme(themeMode = themeMode) {
                 androidx.compose.runtime.CompositionLocalProvider(LocalAppContainer provides container) {
                     AppGate(
                     container = container,

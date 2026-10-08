@@ -37,7 +37,11 @@ fun SparklineChart(
     val maxHours = dailyHours.maxOrNull() ?: 0.0
     val chartHeight = 48.dp
     val chartWidth = 120.dp
-    
+
+    // Capture theme colors before Canvas (which is not @Composable context)
+    val accentColor = Palette.accent
+    val textSecondaryColor = Palette.textSecondary
+
     Canvas(
         modifier = modifier
             .size(chartWidth, chartHeight)
@@ -45,17 +49,17 @@ fun SparklineChart(
         if (dailyHours.isEmpty() || maxHours == 0.0) {
             // Draw empty state - just a horizontal line
             drawLine(
-                color = Palette.textSecondary.copy(alpha = 0.2f),
+                color = textSecondaryColor.copy(alpha = 0.2f),
                 start = Offset(x = 0f, y = size.height / 2f),
                 end = Offset(x = size.width, y = size.height / 2f),
                 strokeWidth = 1f
             )
             return@Canvas
         }
-        
+
         val pointCount = dailyHours.size
         val pointSpacing = if (pointCount > 1) size.width / (pointCount - 1) else 0f
-        
+
         // Draw the line connecting points
         for (i in 0 until pointCount - 1) {
             val x1 = i * pointSpacing
@@ -64,22 +68,22 @@ fun SparklineChart(
             val x2 = (i + 1) * pointSpacing
             val ratio2 = if (maxHours > 0.0) (dailyHours[i + 1] / maxHours).toFloat() else 0f
             val y2 = size.height - ratio2 * size.height
-            
+
             drawLine(
-                color = Palette.accent,
+                color = accentColor,
                 start = Offset(x1, y1),
                 end = Offset(x2, y2),
                 strokeWidth = 2f
             )
         }
-        
+
         // Draw points
         for (i in 0 until pointCount) {
             val x = i * pointSpacing
             val ratio = if (maxHours > 0.0) (dailyHours[i] / maxHours).toFloat() else 0f
             val y = size.height - ratio * size.height
             drawCircle(
-                color = Palette.accent,
+                color = accentColor,
                 radius = 2f,
                 center = Offset(x, y)
             )

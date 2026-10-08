@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.hourstracker.app.domain.StatType
+import com.hourstracker.app.ui.theme.ThemeMode
 import com.hourstracker.model.MaritalStatus
 import com.hourstracker.model.WorkplaceSettings
 import java.time.Instant
@@ -16,12 +17,14 @@ interface SettingsRepository {
     val settings: StateFlow<WorkplaceSettings>
     val profile: StateFlow<UserProfile>
     val statCardOrder: StateFlow<List<StatType>>
+    val themeMode: StateFlow<ThemeMode>
 
     /** The ID number is read on demand and never held in a flow. */
     fun readIdNumber(): String
 
     fun save(settings: WorkplaceSettings, profile: UserProfile, idNumber: String?)
     fun saveStatCardOrder(order: List<StatType>)
+    fun saveThemeMode(mode: ThemeMode)
 }
 
 /** SharedPreferences-backed settings. Values pass through `WorkplaceSettings`, so the iOS clamping applies. */
@@ -31,10 +34,12 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
     private val settingsFlow = MutableStateFlow(load())
     private val profileFlow = MutableStateFlow(loadProfile())
     private val statCardOrderFlow = MutableStateFlow(loadStatCardOrder())
+    private val themeModeFlow = MutableStateFlow(loadThemeMode())
 
     override val settings: StateFlow<WorkplaceSettings> = settingsFlow.asStateFlow()
     override val profile: StateFlow<UserProfile> = profileFlow.asStateFlow()
     override val statCardOrder: StateFlow<List<StatType>> = statCardOrderFlow.asStateFlow()
+    override val themeMode: StateFlow<ThemeMode> = themeModeFlow.asStateFlow()
 
     override fun readIdNumber(): String = idStore.read().orEmpty()
 
@@ -78,6 +83,13 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
             putString("statCardOrder", order.joinToString(separator = ",") { it.name })
         }
         statCardOrderFlow.value = order
+    }
+
+    override fun saveThemeMode(mode: ThemeMode) {
+        prefs.edit {
+            putString("themeMode", mode.name.lowercase())
+        }
+        themeModeFlow.value = mode
     }
 
     private fun load(): WorkplaceSettings {
@@ -129,5 +141,9 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
         } else {
             listOf(StatType.TODAY, StatType.WEEK, StatType.MONTH)
         }
+    }
+
+    private fun loadThemeMode(): ThemeMode {
+        return ThemeMode.fromString(prefs.getString("themeMode", null))
     }
 }
