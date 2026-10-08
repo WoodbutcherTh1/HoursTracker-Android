@@ -18,4 +18,9 @@
         <item quantity="many">تنتهي استراحتك بعد %d دقيقة</item>
         <item quantity="other">تنتهي استراحتك بعد %d دقيقة</item>
     </plurals>
+    <string name="shift_reminder_title">ورديتك تبدأ قريبًا</string>
+    <string name="shift_reminder_text">وقت بدئك المعتاد هو %1$s.</string>
+    <string name="shift_summary_title">انتهت الوردية</string>
+    <string name="shift_summary_text">عملت %1$s · كسبت %2$s</string>
+    <string name="shift_summary_text_hours">عملت %1$s</string>
 </resources>

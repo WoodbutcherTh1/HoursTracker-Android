@@ -16,4 +16,9 @@
         <item quantity="many">Перерыв закончится через %d минут</item>
         <item quantity="other">Перерыв закончится через %d минуты</item>
     </plurals>
+    <string name="shift_reminder_title">Скоро начало смены</string>
+    <string name="shift_reminder_text">Обычное время начала: %1$s.</string>
+    <string name="shift_summary_title">Смена завершена</string>
+    <string name="shift_summary_text">Отработано: %1$s · Заработано: %2$s</string>
+    <string name="shift_summary_text_hours">Отработано: %1$s</string>
 </resources>

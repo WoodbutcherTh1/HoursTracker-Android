@@ -21,6 +21,13 @@ interface SettingsRepository {
     val breakRemindersEnabled: StateFlow<Boolean>
     val breakReminderMinutesBefore: StateFlow<Int>
 
+    /** A reminder before the usual shift start time, on working days. Off until the worker turns it on. */
+    val shiftReminderEnabled: StateFlow<Boolean>
+    val shiftReminderMinutesBefore: StateFlow<Int>
+
+    /** A notification with hours and pay after clocking out from the notification. */
+    val shiftSummaryEnabled: StateFlow<Boolean>
+
     /** The ID number is read on demand and never held in a flow. */
     fun readIdNumber(): String
 
@@ -29,6 +36,9 @@ interface SettingsRepository {
     fun saveThemeMode(mode: ThemeMode)
     fun saveBreakRemindersEnabled(enabled: Boolean)
     fun saveBreakReminderMinutesBefore(minutes: Int)
+    fun saveShiftReminderEnabled(enabled: Boolean)
+    fun saveShiftReminderMinutesBefore(minutes: Int)
+    fun saveShiftSummaryEnabled(enabled: Boolean)
 }
 
 /** SharedPreferences-backed settings. Values pass through `WorkplaceSettings`, so the iOS clamping applies. */
@@ -42,12 +52,19 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
     private val breakRemindersEnabledFlow = MutableStateFlow(prefs.getBoolean("breakRemindersEnabled", true))
     private val breakReminderMinutesBeforeFlow = MutableStateFlow(prefs.getInt("breakReminderMinutesBefore", 5))
 
+    private val shiftReminderEnabledFlow = MutableStateFlow(prefs.getBoolean("shiftReminderEnabled", false))
+    private val shiftReminderMinutesBeforeFlow = MutableStateFlow(prefs.getInt("shiftReminderMinutesBefore", 15))
+    private val shiftSummaryEnabledFlow = MutableStateFlow(prefs.getBoolean("shiftSummaryEnabled", true))
+
     override val settings: StateFlow<WorkplaceSettings> = settingsFlow.asStateFlow()
     override val profile: StateFlow<UserProfile> = profileFlow.asStateFlow()
     override val statCardOrder: StateFlow<List<StatType>> = statCardOrderFlow.asStateFlow()
     override val themeMode: StateFlow<ThemeMode> = themeModeFlow.asStateFlow()
     override val breakRemindersEnabled: StateFlow<Boolean> = breakRemindersEnabledFlow.asStateFlow()
     override val breakReminderMinutesBefore: StateFlow<Int> = breakReminderMinutesBeforeFlow.asStateFlow()
+    override val shiftReminderEnabled: StateFlow<Boolean> = shiftReminderEnabledFlow.asStateFlow()
+    override val shiftReminderMinutesBefore: StateFlow<Int> = shiftReminderMinutesBeforeFlow.asStateFlow()
+    override val shiftSummaryEnabled: StateFlow<Boolean> = shiftSummaryEnabledFlow.asStateFlow()
 
     override fun readIdNumber(): String = idStore.read().orEmpty()
 
@@ -112,6 +129,22 @@ class PrefsSettingsRepository(context: Context, private val idStore: SecureIdSto
             putInt("breakReminderMinutesBefore", minutes.coerceIn(1, 30))
         }
         breakReminderMinutesBeforeFlow.value = minutes.coerceIn(1, 30)
+    }
+
+    override fun saveShiftReminderEnabled(enabled: Boolean) {
+        prefs.edit { putBoolean("shiftReminderEnabled", enabled) }
+        shiftReminderEnabledFlow.value = enabled
+    }
+
+    override fun saveShiftReminderMinutesBefore(minutes: Int) {
+        val clamped = minutes.coerceIn(5, 120)
+        prefs.edit { putInt("shiftReminderMinutesBefore", clamped) }
+        shiftReminderMinutesBeforeFlow.value = clamped
+    }
+
+    override fun saveShiftSummaryEnabled(enabled: Boolean) {
+        prefs.edit { putBoolean("shiftSummaryEnabled", enabled) }
+        shiftSummaryEnabledFlow.value = enabled
     }
 
     private fun load(): WorkplaceSettings {

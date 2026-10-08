@@ -35,4 +35,13 @@
     <string name="history_search_clear">Очистить поиск</string>
     <string name="history_search_empty_title">Подходящих смен нет</string>
     <string name="history_search_empty_body">Попробуйте другую дату или сумму.</string>
+    <string name="settings_notifications_section">Уведомления</string>
+    <string name="settings_break_reminders">Напоминания о перерыве</string>
+    <string name="settings_break_reminders_minutes">Минут до конца перерыва</string>
+    <string name="settings_shift_reminder">Напоминание о начале смены</string>
+    <string name="settings_shift_reminder_minutes">Минут до обычного времени начала</string>
+    <string name="settings_shift_summary">Итоги смены после завершения</string>
+    <string name="settings_notifications_hint">Напоминания действуют сразу и не входят в «Сохранить». Напоминание о начале смены использует обычное время начала и дни отдыха из настроек. Итоги появляются, когда вы завершаете смену из уведомления.</string>
+    <string name="a11y_decrease">Уменьшить</string>
+    <string name="a11y_increase">Увеличить</string>
 </resources>

@@ -15,4 +15,9 @@
         <item quantity="two">ההפסקה מסתיימת בעוד %d דקות</item>
         <item quantity="other">ההפסקה מסתיימת בעוד %d דקות</item>
     </plurals>
+    <string name="shift_reminder_title">המשמרת שלכם מתחילה בקרוב</string>
+    <string name="shift_reminder_text">שעת ההתחלה הרגילה שלכם היא %1$s.</string>
+    <string name="shift_summary_title">המשמרת הסתיימה</string>
+    <string name="shift_summary_text">עבדתם %1$s · הרווחתם %2$s</string>
+    <string name="shift_summary_text_hours">עבדתם %1$s</string>
 </resources>

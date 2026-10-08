@@ -14,4 +14,9 @@
         <item quantity="one">Your break ends in %d minute</item>
         <item quantity="other">Your break ends in %d minutes</item>
     </plurals>
+    <string name="shift_reminder_title">Your shift starts soon</string>
+    <string name="shift_reminder_text">Your usual start time is %1$s.</string>
+    <string name="shift_summary_title">Shift complete</string>
+    <string name="shift_summary_text">Worked %1$s · Earned %2$s</string>
+    <string name="shift_summary_text_hours">Worked %1$s</string>
 </resources>

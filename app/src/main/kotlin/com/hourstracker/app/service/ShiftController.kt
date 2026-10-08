@@ -1,6 +1,7 @@
 package com.hourstracker.app.service
 
 import com.hourstracker.app.data.BreakReminderManager
+import com.hourstracker.app.data.ShiftSummaryNotifier
 import com.hourstracker.app.data.SettingsRepository
 import com.hourstracker.app.domain.ShiftClock
 import com.hourstracker.data.ShiftRecord
@@ -26,6 +27,7 @@ class ShiftController(
     private val calendar: () -> IosCalendar,
     private val notifier: ShiftNotifier,
     private val breakReminder: BreakReminderManager? = null,
+    private val summary: ShiftSummaryNotifier? = null,
 ) {
     suspend fun clockIn(): ShiftRecord? {
         val cal = calendar()
@@ -64,14 +66,18 @@ class ShiftController(
         return updated
     }
 
-    /** Closes the running shift and returns it, or null when nothing was running. */
-    suspend fun clockOut(): ShiftRecord? {
+    /**
+     * Closes the running shift and returns it, or null when nothing was running. Home shows its own summary sheet, so it
+     * passes `notifySummary = false`; the notification's Clock out button keeps the default and posts the summary.
+     */
+    suspend fun clockOut(notifySummary: Boolean = true): ShiftRecord? {
         val active = ShiftClock.active(shifts.shifts.first()) ?: return null
         val cal = calendar()
         val closed = ShiftClock.clockOut(active, settings.settings.value, cal, cal.now())
         shifts.upsert(closed)
         notifier.hide()
         breakReminder?.cancelBreakEndReminder() // Cancel any pending break reminder
+        if (notifySummary) summary?.notifyClosed(closed)
         return closed
     }
 

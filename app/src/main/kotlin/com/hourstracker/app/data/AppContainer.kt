@@ -2,6 +2,7 @@ package com.hourstracker.app.data
 
 import android.content.Context
 import com.hourstracker.app.BuildConfig
+import com.hourstracker.app.domain.ShiftReminderSchedule
 import com.hourstracker.app.service.ServiceNotifier
 import com.hourstracker.app.service.ShiftController
 import com.hourstracker.data.RoomShiftRepository
@@ -11,6 +12,7 @@ import com.hourstracker.model.IosCalendar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -30,10 +32,29 @@ class AppContainer(
     val shifts: ShiftRepository = RoomShiftRepository(database.workSessions())
     private val breakReminderManager = BreakReminderManager(context)
 
-    val controller = ShiftController(shifts, settings, ::deviceCalendar, ServiceNotifier(context), breakReminderManager)
+    private val shiftReminders = ShiftReminderManager(context)
+    private val summaryNotifier = ShiftSummaryNotifier(context, shifts, settings, flags, ::deviceCalendar)
+
+    val controller = ShiftController(shifts, settings, ::deviceCalendar, ServiceNotifier(context), breakReminderManager, summaryNotifier)
 
     init {
         if (seedMockShifts) seedMockShiftsOnce()
+        // Re-arm the shift reminder whenever it, the usual start time or the rest days change (and at every app start).
+        appScope.launch {
+            combine(settings.settings, settings.shiftReminderEnabled, settings.shiftReminderMinutesBefore) { _, _, _ -> }
+                .collect { rescheduleShiftReminder() }
+        }
+    }
+
+    /** Arms the alarm for the next shift reminder, or clears it when the reminder is off. */
+    fun rescheduleShiftReminder() {
+        val calendar = deviceCalendar()
+        val next = if (settings.shiftReminderEnabled.value) {
+            ShiftReminderSchedule.next(calendar.now(), settings.settings.value, settings.shiftReminderMinutesBefore.value, calendar)
+        } else {
+            null
+        }
+        shiftReminders.schedule(next)
     }
 
     /** `Calendar.current`: time zone, first weekday and minimal days follow the device. */

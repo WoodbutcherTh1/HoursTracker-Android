@@ -72,7 +72,7 @@ class HomeViewModel(private val container: AppContainer) : ViewModel() {
 
     fun clockOut() {
         viewModelScope.launch {
-            val closed = container.controller.clockOut() ?: return@launch
+            val closed = container.controller.clockOut(notifySummary = false) ?: return@launch
             lastClosed = closed
             val sessions = records.value.map { it.session }.filter { it.clockOut != null || it.id == closed.id }
             summaryFlow.value = DaySummary(OvertimeCalculator.breakdown(closed.session, sessions, settings.value, calendar), closed.session.breakMinutes)

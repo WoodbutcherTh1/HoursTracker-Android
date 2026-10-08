@@ -32,7 +32,7 @@ Everything the app can supply is in this folder. The items marked **Owner** need
 | Government app / news / health / financial features | Not a government app. Not a financial service: it estimates pay and tax for the user's own records and says so. Declare "no" to loan, banking and trading features |
 | Advertising ID | Not used (no ads SDK). Answer "No" |
 | Foreground service: `specialUse` | **Owner:** Play asks for a description and a short video. Description: "While the user has a shift running, a notification shows the running timer and live pay until they clock out. No other foreground service type fits a work timer." Video: clock in, pull down the notification shade, clock out |
-| Permissions | `POST_NOTIFICATIONS` (shift timer, break reminder), `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SPECIAL_USE` (above). No sensitive permissions |
+| Permissions | `POST_NOTIFICATIONS` (shift timer, reminders, summary), `RECEIVE_BOOT_COMPLETED` (re-arm the optional shift-start reminder after a restart), `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SPECIAL_USE` (above). No sensitive permissions |
 | Exact alarms | Not used (break reminders use an inexact alarm) |
 
 ## Closed test (personal account)

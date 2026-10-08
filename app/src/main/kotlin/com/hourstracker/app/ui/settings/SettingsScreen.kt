@@ -359,6 +359,8 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
                 )
             }
 
+            NotificationSettingsSection()
+
             // Language
             SectionHeader(stringResource(R.string.settings_app_language))
             FormCard {

@@ -35,4 +35,13 @@
     <string name="history_search_clear">ניקוי החיפוש</string>
     <string name="history_search_empty_title">אין משמרות תואמות</string>
     <string name="history_search_empty_body">נסו תאריך או סכום אחר.</string>
+    <string name="settings_notifications_section">התראות</string>
+    <string name="settings_break_reminders">תזכורות הפסקה</string>
+    <string name="settings_break_reminders_minutes">דקות לפני סיום ההפסקה</string>
+    <string name="settings_shift_reminder">תזכורת לתחילת משמרת</string>
+    <string name="settings_shift_reminder_minutes">דקות לפני שעת ההתחלה הרגילה</string>
+    <string name="settings_shift_summary">סיכום משמרת אחרי יציאה</string>
+    <string name="settings_notifications_hint">התזכורות חלות מיד ואינן חלק מהשמירה. תזכורת תחילת המשמרת נשענת על שעת ההתחלה הרגילה ועל ימי המנוחה שהגדרתם. הסיכום מופיע כשיוצאים מהמשמרת דרך ההתראה.</string>
+    <string name="a11y_decrease">הפחתה</string>
+    <string name="a11y_increase">הגדלה</string>
 </resources>

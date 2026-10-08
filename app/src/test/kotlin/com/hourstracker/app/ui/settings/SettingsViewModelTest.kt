@@ -37,6 +37,18 @@ private class FakeSettingsRepository(initial: WorkplaceSettings = WorkplaceSetti
     override val breakRemindersEnabled: StateFlow<Boolean> = breakEnabledFlow
     override val breakReminderMinutesBefore: StateFlow<Int> = breakMinutesFlow
 
+    private val shiftReminderFlow = MutableStateFlow(false)
+    private val shiftReminderMinutesFlow = MutableStateFlow(15)
+    private val shiftSummaryFlow = MutableStateFlow(true)
+
+    override val shiftReminderEnabled: StateFlow<Boolean> = shiftReminderFlow
+    override val shiftReminderMinutesBefore: StateFlow<Int> = shiftReminderMinutesFlow
+    override val shiftSummaryEnabled: StateFlow<Boolean> = shiftSummaryFlow
+
+    override fun saveShiftReminderEnabled(enabled: Boolean) { shiftReminderFlow.value = enabled }
+    override fun saveShiftReminderMinutesBefore(minutes: Int) { shiftReminderMinutesFlow.value = minutes }
+    override fun saveShiftSummaryEnabled(enabled: Boolean) { shiftSummaryFlow.value = enabled }
+
     override fun saveStatCardOrder(order: List<StatType>) { statOrderFlow.value = order }
     override fun saveThemeMode(mode: ThemeMode) { themeFlow.value = mode }
     override fun saveBreakRemindersEnabled(enabled: Boolean) { breakEnabledFlow.value = enabled }

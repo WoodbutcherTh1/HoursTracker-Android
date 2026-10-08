@@ -35,4 +35,13 @@
     <string name="history_search_clear">Clear search</string>
     <string name="history_search_empty_title">No matching shifts</string>
     <string name="history_search_empty_body">Try another date or amount.</string>
+    <string name="settings_notifications_section">Notifications</string>
+    <string name="settings_break_reminders">Break reminders</string>
+    <string name="settings_break_reminders_minutes">Minutes before the break ends</string>
+    <string name="settings_shift_reminder">Shift start reminder</string>
+    <string name="settings_shift_reminder_minutes">Minutes before your usual start time</string>
+    <string name="settings_shift_summary">Shift summary after clock out</string>
+    <string name="settings_notifications_hint">Reminders apply at once and are not part of Save. The start reminder uses your usual start time and rest days from Pay &amp; Hours. The summary appears when you clock out from the notification.</string>
+    <string name="a11y_decrease">Decrease</string>
+    <string name="a11y_increase">Increase</string>
 </resources>
