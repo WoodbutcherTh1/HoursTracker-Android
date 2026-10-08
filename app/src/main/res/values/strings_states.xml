@@ -44,4 +44,9 @@
     <string name="settings_notifications_hint">Reminders apply at once and are not part of Save. The start reminder uses your usual start time and rest days from Pay &amp; Hours. The summary appears when you clock out from the notification.</string>
     <string name="a11y_decrease">Decrease</string>
     <string name="a11y_increase">Increase</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_auto">Auto (like the phone)</string>
 </resources>

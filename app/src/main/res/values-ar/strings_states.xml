@@ -44,4 +44,9 @@
     <string name="settings_notifications_hint">تسري التذكيرات فورًا وليست جزءًا من الحفظ. يعتمد تذكير بدء الوردية على وقت البدء المعتاد وأيام الراحة التي حدّدتها. يظهر الملخّص عند إنهاء الوردية من الإشعار.</string>
     <string name="a11y_decrease">إنقاص</string>
     <string name="a11y_increase">زيادة</string>
+    <string name="settings_appearance">المظهر</string>
+    <string name="settings_theme">السمة</string>
+    <string name="theme_light">فاتحة</string>
+    <string name="theme_dark">داكنة</string>
+    <string name="theme_auto">تلقائية (حسب الهاتف)</string>
 </resources>

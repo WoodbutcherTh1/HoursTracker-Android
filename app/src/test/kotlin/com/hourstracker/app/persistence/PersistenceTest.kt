@@ -108,4 +108,23 @@ class PersistenceTest {
             }
         }
     }
+
+    @Test
+    fun `the theme and the reminder switches are still there after a restart`() {
+        val first = PrefsSettingsRepository(app, idStore())
+        first.saveThemeMode(com.hourstracker.app.ui.theme.ThemeMode.DARK)
+        first.saveBreakRemindersEnabled(false)
+        first.saveBreakReminderMinutesBefore(9)
+        first.saveShiftReminderEnabled(true)
+        first.saveShiftReminderMinutesBefore(45)
+        first.saveShiftSummaryEnabled(false)
+
+        val second = PrefsSettingsRepository(app, idStore())
+        assertEquals(com.hourstracker.app.ui.theme.ThemeMode.DARK, second.themeMode.value)
+        assertEquals(false, second.breakRemindersEnabled.value)
+        assertEquals(9, second.breakReminderMinutesBefore.value)
+        assertEquals(true, second.shiftReminderEnabled.value)
+        assertEquals(45, second.shiftReminderMinutesBefore.value)
+        assertEquals(false, second.shiftSummaryEnabled.value)
+    }
 }

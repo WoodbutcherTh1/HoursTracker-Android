@@ -32,6 +32,7 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.DisposableEffect
 import com.hourstracker.app.ui.nav.LocalUnsavedGuard
 import androidx.compose.runtime.LaunchedEffect
@@ -64,6 +65,7 @@ import com.hourstracker.app.ui.components.ToggleRow
 import com.hourstracker.app.ui.theme.DsText
 import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Space
+import com.hourstracker.app.ui.theme.ThemeMode
 import com.hourstracker.app.util.IsraeliIdValidator
 import com.hourstracker.app.viewModelFactory
 import com.hourstracker.model.HistoryPeriodHelper
@@ -356,6 +358,28 @@ fun SettingsScreen(language: AppLanguage, onLanguageChange: (AppLanguage) -> Uni
                     style = DsText.meta,
                     color = Palette.textSecondary,
                     modifier = Modifier.padding(horizontal = Space.md, vertical = Space.xs),
+                )
+            }
+
+            // Appearance: applies at once, like the language.
+            SectionHeader(stringResource(R.string.settings_appearance))
+            FormCard {
+                val container = com.hourstracker.app.LocalAppContainer.current
+                val themeMode by container.settings.themeMode.collectAsState()
+                PickerRow(
+                    label = stringResource(R.string.settings_theme),
+                    selected = themeMode,
+                    options = listOf(ThemeMode.LIGHT, ThemeMode.DARK, ThemeMode.AUTO),
+                    optionLabel = {
+                        stringResource(
+                            when (it) {
+                                ThemeMode.LIGHT -> R.string.theme_light
+                                ThemeMode.DARK -> R.string.theme_dark
+                                ThemeMode.AUTO -> R.string.theme_auto
+                            },
+                        )
+                    },
+                    onSelect = container.settings::saveThemeMode,
                 )
             }
 

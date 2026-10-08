@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,6 +13,7 @@ import com.hourstracker.app.data.AppFlags
 import com.hourstracker.app.data.AppLanguage
 import com.hourstracker.app.ui.nav.AppGate
 import com.hourstracker.app.ui.theme.HoursTrackerTheme
+import com.hourstracker.app.ui.theme.ThemeMode
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -37,6 +39,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val themeMode by container.settings.themeMode.collectAsState()
+            // The status and navigation bar icons must contrast with the app's own theme, which can differ from the phone's.
+            val dark = when (themeMode) {
+                ThemeMode.DARK -> true
+                ThemeMode.LIGHT -> false
+                ThemeMode.AUTO -> androidx.compose.foundation.isSystemInDarkTheme()
+            }
+            androidx.compose.runtime.LaunchedEffect(dark) {
+                val bars = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT) { dark }
+                enableEdgeToEdge(statusBarStyle = bars, navigationBarStyle = bars)
+            }
             HoursTrackerTheme(themeMode = themeMode) {
                 androidx.compose.runtime.CompositionLocalProvider(LocalAppContainer provides container) {
                     AppGate(

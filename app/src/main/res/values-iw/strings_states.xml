@@ -44,4 +44,9 @@
     <string name="settings_notifications_hint">התזכורות חלות מיד ואינן חלק מהשמירה. תזכורת תחילת המשמרת נשענת על שעת ההתחלה הרגילה ועל ימי המנוחה שהגדרתם. הסיכום מופיע כשיוצאים מהמשמרת דרך ההתראה.</string>
     <string name="a11y_decrease">הפחתה</string>
     <string name="a11y_increase">הגדלה</string>
+    <string name="settings_appearance">מראה</string>
+    <string name="settings_theme">ערכת נושא</string>
+    <string name="theme_light">בהירה</string>
+    <string name="theme_dark">כהה</string>
+    <string name="theme_auto">אוטומטית (לפי הטלפון)</string>
 </resources>

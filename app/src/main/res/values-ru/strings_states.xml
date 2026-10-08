@@ -44,4 +44,9 @@
     <string name="settings_notifications_hint">Напоминания действуют сразу и не входят в «Сохранить». Напоминание о начале смены использует обычное время начала и дни отдыха из настроек. Итоги появляются, когда вы завершаете смену из уведомления.</string>
     <string name="a11y_decrease">Уменьшить</string>
     <string name="a11y_increase">Увеличить</string>
+    <string name="settings_appearance">Оформление</string>
+    <string name="settings_theme">Тема</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_auto">Авто (как на телефоне)</string>
 </resources>
