@@ -5,7 +5,7 @@ import com.hourstracker.app.data.AppContainer
 
 class HoursTrackerApp : Application() {
     lateinit var container: AppContainer
-        private set
+        internal set
 
     override fun onCreate() {
         super.onCreate()

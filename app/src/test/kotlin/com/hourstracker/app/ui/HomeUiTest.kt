@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import com.hourstracker.app.HoursTrackerApp
 import com.hourstracker.app.LocalAppContainer
+import com.hourstracker.app.data.AppContainer
 import com.hourstracker.app.domain.ShiftClock
 import com.hourstracker.app.ui.home.HomeScreen
 import com.hourstracker.app.ui.theme.HoursTrackerTheme
@@ -36,21 +37,24 @@ class HomeUiTest {
     val compose = createComposeRule()
 
     private val app get() = ApplicationProvider.getApplicationContext<Application>() as HoursTrackerApp
+    private lateinit var testContainer: AppContainer
 
     @Before
-    fun grantNotifications() {
+    fun setUp() {
         shadowOf(app).grantPermissions(Manifest.permission.POST_NOTIFICATIONS)
+        testContainer = AppContainer(app)
+        app.container = testContainer
     }
 
     private fun show() {
         compose.setContent {
             HoursTrackerTheme {
-                CompositionLocalProvider(LocalAppContainer provides app.container) { HomeScreen() }
+                CompositionLocalProvider(LocalAppContainer provides testContainer) { HomeScreen() }
             }
         }
     }
 
-    private fun running() = runBlocking { ShiftClock.active(app.container.shifts.shifts.first()) }
+    private fun running() = runBlocking { ShiftClock.active(testContainer.shifts.shifts.first()) }
 
     /** Waits for [condition], letting the main looper run: the view model and Room hand results back through it. */
     private fun awaitUntil(condition: () -> Boolean) {
@@ -73,8 +77,8 @@ class HomeUiTest {
         compose.onNodeWithText("Clock In").performClick()
         awaitUntil { running() != null }
         awaitText("Clock Out")
-        compose.onNodeWithText("00:00:0", substring = true).assertIsDisplayed()
         compose.onNodeWithText("Clock Out").assertExists()
+        compose.onNodeWithText("00:00:0", substring = true).assertIsDisplayed()
     }
 
     @Test
@@ -87,6 +91,11 @@ class HomeUiTest {
         awaitUntil { running()?.session?.isOnBreak == true }
         compose.waitForIdle()
         assertNotNull(running()!!.session.activeBreak)
+        awaitText("End break")
+        compose.onNodeWithText("End break").performScrollTo().performClick()
+        awaitUntil { running()?.session?.isOnBreak == false }
+        compose.waitForIdle()
+        assertNull(running()!!.session.activeBreak)
     }
 
     @Test
@@ -95,10 +104,9 @@ class HomeUiTest {
         compose.onNodeWithText("Clock In").performClick()
         awaitUntil { running() != null }
         awaitText("Clock Out")
-        compose.onNodeWithText("Clock Out").performScrollTo().performClick()
+        compose.onNodeWithText("Clock Out").performClick()
         awaitUntil { running() == null }
-        awaitText("Shift complete")
-        compose.onNodeWithText("Shift complete").assertIsDisplayed()
-        assertNull(running())
+        awaitText("Summary")
+        compose.onNodeWithText("Summary").assertIsDisplayed()
     }
 }

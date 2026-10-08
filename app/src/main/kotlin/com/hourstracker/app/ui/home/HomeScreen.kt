@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hourstracker.app.R
 import com.hourstracker.app.domain.HomeStats
+import com.hourstracker.app.ui.home.components.SparklineChart
 import com.hourstracker.app.ui.theme.DsText
 import com.hourstracker.app.ui.theme.Palette
 import com.hourstracker.app.ui.theme.Radius
@@ -55,12 +56,16 @@ import com.hourstracker.app.ui.theme.dsCard
 import com.hourstracker.app.viewModelFactory
 import com.hourstracker.data.ShiftRecord
 import com.hourstracker.model.HistoryPeriodHelper
+import com.hourstracker.model.IosCalendar
 import com.hourstracker.model.PayFormatter
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 import kotlinx.coroutines.delay
+
+private fun Instant.secondsSince(other: Instant): Double =
+    (epochSecond - other.epochSecond).toDouble() + (nano - other.nano).toDouble() / 1e9
 
 /** Home: the door (clock in), or while a shift runs, its timer, live pay and the break and clock-out buttons. */
 @Composable
@@ -75,15 +80,29 @@ fun HomeScreen() {
     val summary by vm.summary.collectAsState()
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
 
-    // One tick a second while a shift runs; nothing ticks when clocked out.
-    val now by produceState(initialValue = Instant.now(), active?.id) {
-        while (active != null) {
+    val shift = active
+    val onBreak = shift != null && shift.session.isOnBreak
+    val paused = onBreak && !settings.breaksArePaid
+
+    // Real-time clock (always updates every second)
+    val nowAlways by produceState(initialValue = Instant.now()) {
+        while (true) {
             value = Instant.now()
             delay(1000 - (System.currentTimeMillis() % 1000))
         }
-        value = Instant.now()
     }
-    val stats = remember(records, now.epochSecond / 30) { HomeStats.compute(records, vm.calendar, now) }
+
+    // Stats are based on real-time clock and records
+    val stats = remember(records, nowAlways.epochSecond / 30) { HomeStats.compute(records, vm.calendar, nowAlways) }
+
+    // Worked time in seconds (for timer and LiveCard) - updates every second based on nowAlways and break state
+    val workedTimeSeconds by produceState(initialValue = 0L, shift, nowAlways, onBreak, settings.breaksArePaid) {
+        val currentShift = shift ?: return@produceState
+        val nowVal = nowAlways
+        val elapsed = nowVal.secondsSince(currentShift.session.clockIn)
+        val breakTime = if (settings.breaksArePaid) 0L else currentShift.session.recordedBreakSeconds(nowVal).toLong()
+        value = (elapsed - breakTime).coerceAtLeast(0.0).toLong()
+    }
 
     val notificationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { vm.clockIn() }
     val context = LocalContext.current
@@ -97,7 +116,18 @@ fun HomeScreen() {
     LaunchedEffect(Unit) { vm.restoreNotification() }
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = Space.md), verticalArrangement = Arrangement.spacedBy(Space.lg)) {
-        Greeting(vm, profile.fullName.trim().substringBefore(' '), now)
+        Greeting(vm, profile.fullName.trim().substringBefore(' '), nowAlways)
+        
+        // Sparkline for weekly hours
+        SparklineChart(
+            records = records,
+            calendar = vm.calendar,
+            now = nowAlways,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .padding(vertical = Space.xs)
+        )
 
         val shift = active
         if (shift == null) {
@@ -112,8 +142,8 @@ fun HomeScreen() {
             LiveCard(
                 shift = shift,
                 paused = paused,
-                paidElapsedSeconds = shift.session.paidElapsedSeconds(now, settings.breaksArePaid),
-                pay = curve?.takeIf { it.sessionId == shift.id }?.pay(epochSeconds(now)),
+                paidElapsedSeconds = workedTimeSeconds.toDouble(),
+                pay = curve?.takeIf { it.sessionId == shift.id }?.pay(epochSeconds(nowAlways)),
                 rateMissing = settings.hourlyRate <= 0,
                 currencyCode = settings.currencyCode,
                 locale = locale,
