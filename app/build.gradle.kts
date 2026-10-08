@@ -1,9 +1,12 @@
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.roborazzi)
+    jacoco
 }
 
 android {
@@ -19,6 +22,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // `./gradlew :app:createDebugUnitTestCoverageReport` writes the HTML report under build/reports/coverage.
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
         }
@@ -97,8 +104,23 @@ dependencies {
     testImplementation(libs.compose.ui.test.junit4)
     testRuntimeOnly(libs.junit.vintage.engine)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    // Test-only (dev): screenshot comparison of the key screens.
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.junit.rule)
+}
+
+roborazzi {
+    // Golden images are committed here; `recordRoborazziDebug` rewrites them, `verifyRoborazziDebug` compares.
+    outputDir.set(layout.projectDirectory.dir("src/test/screenshots"))
 }
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+    // Robolectric loads classes through its own loader; without these the coverage report comes out empty.
+    extensions.configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
 }

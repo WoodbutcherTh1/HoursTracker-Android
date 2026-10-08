@@ -117,9 +117,9 @@ fun HomeScreen() {
     val paused = onBreak && !settings.breaksArePaid
 
     // Real-time clock (always updates every second)
-    val nowAlways by produceState(initialValue = Instant.now()) {
+    val nowAlways by produceState(initialValue = vm.calendar.now()) {
         while (true) {
-            value = Instant.now()
+            value = vm.calendar.now()
             delay(1000 - (System.currentTimeMillis() % 1000))
         }
     }
@@ -376,7 +376,7 @@ private fun StatusRow(shift: ShiftRecord, color: Color, vm: HomeViewModel) {
             Box(Modifier.size(8.dp).background(color, CircleShape))
             Text(text = text, style = DsText.headline, color = Palette.textPrimary)
         }
-        val startedYesterday = !vm.calendar.isSameDay(session.clockIn, Instant.now())
+        val startedYesterday = !vm.calendar.isSameDay(session.clockIn, vm.calendar.now())
         if (startedYesterday) {
             Text(
                 text = stringResource(R.string.home_night_started_yesterday),

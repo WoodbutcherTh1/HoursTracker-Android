@@ -239,15 +239,18 @@ fun ExportScreen() {
                     selected = language,
                     options = ReportLanguage.entries,
                     optionLabel = {
-                        stringResource(
-                            when (it) {
-                                ReportLanguage.Phone -> R.string.export_language_phone
-                                ReportLanguage.English -> R.string.export_language_english
-                                ReportLanguage.Hebrew -> R.string.export_language_hebrew
-                                ReportLanguage.Arabic -> R.string.export_language_arabic
-                                ReportLanguage.Russian -> R.string.export_language_russian
-                            },
-                        )
+                        if (it == ReportLanguage.Phone) {
+                            stringResource(R.string.export_language_phone, locale.getDisplayLanguage(locale).replaceFirstChar { c -> c.titlecase(locale) })
+                        } else {
+                            stringResource(
+                                when (it) {
+                                    ReportLanguage.English -> R.string.export_language_english
+                                    ReportLanguage.Hebrew -> R.string.export_language_hebrew
+                                    ReportLanguage.Arabic -> R.string.export_language_arabic
+                                    else -> R.string.export_language_russian
+                                },
+                            )
+                        }
                     },
                     onSelect = { language = it },
                 )

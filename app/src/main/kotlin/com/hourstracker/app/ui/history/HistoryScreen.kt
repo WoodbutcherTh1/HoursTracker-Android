@@ -235,6 +235,11 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     }
 }
 
+/** How far the row has been dragged; zero before the first layout and at rest. */
+@OptIn(ExperimentalMaterial3Api::class)
+private fun androidx.compose.material3.SwipeToDismissBoxState.offset(): Float =
+    runCatching { requireOffset() }.getOrDefault(0f).let { if (it.isNaN()) 0f else it }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SwipeableRowItem(
@@ -265,18 +270,22 @@ private fun SwipeableRowItem(
     SwipeToDismissBox(
         state = dismissState,
         backgroundContent = {
+            // Only red while a swipe is under way; at rest the row covers it completely.
+            val swiping = dismissState.targetValue != SwipeToDismissBoxValue.Settled || dismissState.offset() != 0f
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Red)
+                    .background(if (swiping) Color.Red else Color.Transparent)
                     .padding(horizontal = Space.md),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Text(stringResource(R.string.history_delete), color = Color.White, style = DsText.headline)
+                if (swiping) Text(stringResource(R.string.history_delete), color = Color.White, style = DsText.headline)
             }
         },
         content = {
-            RowItem(row, showNet, locale, currencyCode, day, timeFormat, zone, onClick)
+            Box(modifier = Modifier.background(Palette.card)) {
+                RowItem(row, showNet, locale, currencyCode, day, timeFormat, zone, onClick)
+            }
         }
     )
 }

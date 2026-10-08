@@ -43,65 +43,71 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DaySummarySheet(summary: DaySummary, showNet: Boolean, onShowNet: (Boolean) -> Unit, onDismiss: () -> Unit) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true), containerColor = Palette.background) {
+        DaySummaryContent(summary, showNet, onShowNet, onDismiss)
+    }
+}
+
+/** The sheet's body on its own, so it can be rendered without the dialog window around it. */
+@Composable
+internal fun DaySummaryContent(summary: DaySummary, showNet: Boolean, onShowNet: (Boolean) -> Unit, onDismiss: () -> Unit) {
     val breakdown = summary.breakdown
     val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
     var deductionsOpen by remember { mutableStateOf(false) }
     fun money(value: Double) = PayFormatter.string(value, breakdown.currencyCode, locale)
     fun hours(value: Double) = HistoryPeriodHelper.formatHoursClock(value)
 
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true), containerColor = Palette.background) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(horizontal = Space.lg).padding(bottom = Space.lg),
-            verticalArrangement = Arrangement.spacedBy(Space.lg),
-        ) {
-            Text(text = stringResource(R.string.sum_title), style = DsText.titleScreen, color = Palette.textPrimary)
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(horizontal = Space.lg).padding(bottom = Space.lg),
+        verticalArrangement = Arrangement.spacedBy(Space.lg),
+    ) {
+        Text(text = stringResource(R.string.sum_title), style = DsText.titleScreen, color = Palette.textPrimary)
 
-            val rows = buildList {
-                add(PayCardRow(stringResource(R.string.sum_row_regular), "${money(breakdown.basePay)} · ${hours(breakdown.regularHours)}", Palette.accent))
-                if (breakdown.ot125Hours > 0) add(PayCardRow(stringResource(R.string.sum_row_overtime, "125"), "${money(breakdown.ot125Pay)} · ${hours(breakdown.ot125Hours)}", Palette.ot125))
-                if (breakdown.ot150Hours > 0) add(PayCardRow(stringResource(R.string.sum_row_overtime, "150"), "${money(breakdown.ot150Pay)} · ${hours(breakdown.ot150Hours)}", Palette.ot150))
-                if (summary.breakMinutes > 0) add(PayCardRow(stringResource(R.string.sum_row_breaks), stringResource(R.string.settings_notifications_minutes, summary.breakMinutes.toString())))
-                if (breakdown.gasAllowance > 0) add(PayCardRow(stringResource(R.string.shift_gas), money(breakdown.gasAllowance)))
-            }
-            PayCard(
-                amount = breakdown.totalPay,
-                currencyCode = breakdown.currencyCode,
-                caption = stringResource(R.string.pay_gross),
-                note = stringResource(R.string.sum_note_gross),
-                segments = listOf(
-                    PayTierSegment(breakdown.regularHours, Palette.accent),
-                    PayTierSegment(breakdown.ot125Hours, Palette.ot125),
-                    PayTierSegment(breakdown.ot150Hours, Palette.ot150),
-                ),
-                rows = rows,
-            )
+        val rows = buildList {
+            add(PayCardRow(stringResource(R.string.sum_row_regular), "${money(breakdown.basePay)} · ${hours(breakdown.regularHours)}", Palette.accent))
+            if (breakdown.ot125Hours > 0) add(PayCardRow(stringResource(R.string.sum_row_overtime, "125"), "${money(breakdown.ot125Pay)} · ${hours(breakdown.ot125Hours)}", Palette.ot125))
+            if (breakdown.ot150Hours > 0) add(PayCardRow(stringResource(R.string.sum_row_overtime, "150"), "${money(breakdown.ot150Pay)} · ${hours(breakdown.ot150Hours)}", Palette.ot150))
+            if (summary.breakMinutes > 0) add(PayCardRow(stringResource(R.string.sum_row_breaks), stringResource(R.string.settings_notifications_minutes, summary.breakMinutes.toString())))
+            if (breakdown.gasAllowance > 0) add(PayCardRow(stringResource(R.string.shift_gas), money(breakdown.gasAllowance)))
+        }
+        PayCard(
+            amount = breakdown.totalPay,
+            currencyCode = breakdown.currencyCode,
+            caption = stringResource(R.string.pay_gross),
+            note = stringResource(R.string.sum_note_gross),
+            segments = listOf(
+                PayTierSegment(breakdown.regularHours, Palette.accent),
+                PayTierSegment(breakdown.ot125Hours, Palette.ot125),
+                PayTierSegment(breakdown.ot150Hours, Palette.ot150),
+            ),
+            rows = rows,
+        )
 
-            Row(horizontalArrangement = Arrangement.spacedBy(Space.xs)) {
-                SummaryChoice(stringResource(R.string.pay_net), money(breakdown.netPay), showNet, Modifier.weight(1f)) { onShowNet(true) }
-                SummaryChoice(stringResource(R.string.pay_gross), money(breakdown.totalPay), !showNet, Modifier.weight(1f)) { onShowNet(false) }
-            }
+        Row(horizontalArrangement = Arrangement.spacedBy(Space.xs)) {
+            SummaryChoice(stringResource(R.string.pay_net), money(breakdown.netPay), showNet, Modifier.weight(1f)) { onShowNet(true) }
+            SummaryChoice(stringResource(R.string.pay_gross), money(breakdown.totalPay), !showNet, Modifier.weight(1f)) { onShowNet(false) }
+        }
 
-            val deductions = breakdown.incomeTax + breakdown.nationalInsurance + breakdown.healthTax
-            Text(
-                text = stringResource(R.string.sum_deductions, money(deductions)),
-                style = DsText.callout,
-                color = Palette.textSecondary,
-                modifier = Modifier.fillMaxWidth().clickable { deductionsOpen = !deductionsOpen },
-            )
-            if (deductionsOpen) {
-                listOf(
-                    R.string.tax_income_tax to breakdown.incomeTax,
-                    R.string.tax_national_insurance to breakdown.nationalInsurance,
-                    R.string.tax_health_tax to breakdown.healthTax,
-                ).forEach { (label, value) ->
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(stringResource(label), style = DsText.sub, color = Palette.textSecondary)
-                        Text(money(value), style = DsText.sub.copy(fontFeatureSettings = "tnum"), color = Palette.textPrimary)
-                    }
+        val deductions = breakdown.incomeTax + breakdown.nationalInsurance + breakdown.healthTax
+        Text(
+            text = stringResource(R.string.sum_deductions, money(deductions)),
+            style = DsText.callout,
+            color = Palette.textSecondary,
+            modifier = Modifier.fillMaxWidth().clickable { deductionsOpen = !deductionsOpen },
+        )
+        if (deductionsOpen) {
+            listOf(
+                R.string.tax_income_tax to breakdown.incomeTax,
+                R.string.tax_national_insurance to breakdown.nationalInsurance,
+                R.string.tax_health_tax to breakdown.healthTax,
+            ).forEach { (label, value) ->
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(stringResource(label), style = DsText.sub, color = Palette.textSecondary)
+                    Text(money(value), style = DsText.sub.copy(fontFeatureSettings = "tnum"), color = Palette.textPrimary)
                 }
             }
-            PrimaryButton(text = stringResource(R.string.summary_done), onClick = onDismiss)
         }
+        PrimaryButton(text = stringResource(R.string.summary_done), onClick = onDismiss)
     }
 }
 

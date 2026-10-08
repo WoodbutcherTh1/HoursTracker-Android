@@ -15,7 +15,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /** Manual dependency injection: one place that builds the long-lived objects (no Hilt). */
-class AppContainer(context: Context) {
+class AppContainer(
+    context: Context,
+    // Tests pass a fixed clock here so screens render the same every run; production reads the device.
+    private val calendarFactory: () -> IosCalendar = { IosCalendar.device() },
+    // Debug builds fill History with mock shifts; screenshot tests turn that off and bring their own.
+    seedMockShifts: Boolean = BuildConfig.DEBUG,
+) {
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     val flags = AppFlags(context)
@@ -27,11 +33,11 @@ class AppContainer(context: Context) {
     val controller = ShiftController(shifts, settings, ::deviceCalendar, ServiceNotifier(context), breakReminderManager)
 
     init {
-        if (BuildConfig.DEBUG) seedMockShiftsOnce()
+        if (seedMockShifts) seedMockShiftsOnce()
     }
 
     /** `Calendar.current`: time zone, first weekday and minimal days follow the device. */
-    fun deviceCalendar(): IosCalendar = IosCalendar.device()
+    fun deviceCalendar(): IosCalendar = calendarFactory()
 
     /** Debug builds only: replaces last week's shifts with a known 54 hour week (see [com.hourstracker.app.domain.DebugScenarios]). */
     suspend fun loadOvertimeWeek() {

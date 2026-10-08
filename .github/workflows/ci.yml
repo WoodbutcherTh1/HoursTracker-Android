@@ -109,3 +109,56 @@ jobs:
           path: ${{ env.APK_NAME }}
           retention-days: 30
           if-no-files-found: error
+
+  screenshots:
+    name: screenshot comparison
+    needs: secret-scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      # actions/checkout@v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Verify the Gradle wrapper
+        run: |
+          set -euo pipefail
+          props=gradle/wrapper/gradle-wrapper.properties
+          grep -q '^distributionSha256Sum=' "$props" || { echo "distributionSha256Sum is missing"; exit 1; }
+          version=$(sed -n 's#.*gradle-\(.*\)-bin\.zip#\1#p' "$props")
+          expected=$(curl -fsSL "https://services.gradle.org/distributions/gradle-${version}-wrapper.jar.sha256")
+          actual=$(sha256sum gradle/wrapper/gradle-wrapper.jar | cut -d' ' -f1)
+          echo "version=$version expected=$expected actual=$actual"
+          [ "$expected" = "$actual" ] || { echo "gradle-wrapper.jar does not match the official checksum"; exit 1; }
+
+      - name: Use the runner's JDK 21
+        run: |
+          test -n "${JAVA_HOME_21_X64:-}" || { echo "JDK 21 not found on the runner"; exit 1; }
+          echo "JAVA_HOME=$JAVA_HOME_21_X64" >> "$GITHUB_ENV"
+
+      # Renders the ten key screens and compares them with app/src/test/screenshots (up to Roborazzi's default 1% pixel change).
+      # To accept an intended design change, run `./gradlew :app:recordRoborazziDebug` and commit the new pictures.
+      - name: Compare screenshots
+        run: ./gradlew :app:verifyRoborazziDebug --no-daemon --console=plain
+
+      # actions/upload-artifact@v4.6.2
+      - name: Upload the differences
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: screenshot-differences
+          path: app/build/outputs/roborazzi
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Coverage report
+        run: ./gradlew :app:createDebugUnitTestCoverageReport --no-daemon --console=plain
+
+      # actions/upload-artifact@v4.6.2
+      - name: Upload the coverage report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: coverage-report
+          path: app/build/reports/coverage/test/debug
+          retention-days: 14
+          if-no-files-found: error
+
