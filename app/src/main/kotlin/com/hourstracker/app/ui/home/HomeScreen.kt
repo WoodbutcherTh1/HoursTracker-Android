@@ -13,6 +13,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -457,14 +460,21 @@ private fun LiveCard(
 
 @Composable
 private fun ModeChip(label: String, selected: Boolean, onClick: () -> Unit) {
+    var isFocused by remember { mutableStateOf(false) }
+    val focusRingAlpha by animateFloatAsState(if (isFocused) 1f else 0f, label = "chip-focus-ring")
+
     Text(
         text = label,
         style = DsText.sub,
         color = if (selected) Palette.ink else Palette.textPrimary,
         modifier = Modifier
+            .height(48.dp)
             .background(if (selected) Palette.accent else Palette.raised, CircleShape)
+            .border(width = 2.dp, color = Palette.accent.copy(alpha = focusRingAlpha), shape = CircleShape)
             .selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
-            .padding(horizontal = Space.md, vertical = Space.xs),
+            .focusable()
+            .onFocusChanged { state -> isFocused = state.isFocused }
+            .padding(horizontal = Space.md, vertical = Space.md),
     )
 }
 
@@ -497,7 +507,10 @@ private fun ClockOutDoor(onClick: () -> Unit) {
 private fun Door(label: String, hint: String, fill: Color, textColor: Color, glow: Color, onClick: () -> Unit) {
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
+    var isFocused by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(if (pressed) 0.94f else 1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium), label = "door-press")
+    val focusRingAlpha by animateFloatAsState(if (isFocused) 1f else 0f, label = "door-focus-ring")
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -515,7 +528,10 @@ private fun Door(label: String, hint: String, fill: Color, textColor: Color, glo
                     scaleY = scale
                 }
                 .background(fill, CircleShape)
-                .clickable(interactionSource = interaction, indication = null, onClickLabel = hint, role = Role.Button, onClick = onClick),
+                .border(width = 3.dp, color = Palette.accent.copy(alpha = focusRingAlpha), shape = CircleShape)
+                .clickable(interactionSource = interaction, indication = null, onClickLabel = hint, role = Role.Button, onClick = onClick)
+                .focusable(interactionSource = interaction)
+                .onFocusChanged { state -> isFocused = state.isFocused },
             contentAlignment = Alignment.Center,
         ) {
             Text(text = label, style = DsText.titleSection, color = textColor, textAlign = TextAlign.Center, modifier = Modifier.padding(Space.md))
@@ -525,6 +541,9 @@ private fun Door(label: String, hint: String, fill: Color, textColor: Color, glo
 
 @Composable
 private fun BreakButton(onBreak: Boolean, paidBreaks: Boolean, onClick: () -> Unit) {
+    var isFocused by remember { mutableStateOf(false) }
+    val focusRingAlpha by animateFloatAsState(if (isFocused) 1f else 0f, label = "break-focus-ring")
+
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.xxs)) {
         Text(
             text = stringResource(if (onBreak) R.string.home_break_end else R.string.home_break_start),
@@ -535,7 +554,10 @@ private fun BreakButton(onBreak: Boolean, paidBreaks: Boolean, onClick: () -> Un
                 .fillMaxWidth()
                 .height(56.dp)
                 .background(if (onBreak) Palette.onBreak else Palette.card, RoundedCornerShape(28.dp))
+                .border(width = 2.dp, color = Palette.accent.copy(alpha = focusRingAlpha), shape = RoundedCornerShape(28.dp))
                 .clickable(role = Role.Button, onClick = onClick)
+                .focusable()
+                .onFocusChanged { state -> isFocused = state.isFocused }
                 .padding(top = 16.dp),
         )
         Text(
