@@ -12,6 +12,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -94,7 +95,11 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
     }
     val shortDay = remember(locale) { DateFormat.getInstanceForSkeleton("MMdd", locale) }
     fun day(instant: java.time.Instant) = shortDay.format(Date.from(instant))
-    val timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
+    val timeFormat = remember(locale) {
+        val pattern = java.time.format.DateTimeFormatterBuilder.getLocalizedDateTimePattern(null, FormatStyle.SHORT, java.time.chrono.IsoChronology.INSTANCE, locale)
+        if ("H" in pattern && "HH" !in pattern) DateTimeFormatter.ofPattern(pattern.replace("H", "HH"), locale)
+        else DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
+    }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -282,7 +287,7 @@ fun HistoryScreen(onAdd: () -> Unit, onEdit: (java.util.UUID) -> Unit) {
 
         // Total bar: net or gross, hours, always visible above the floating tab bar.
         Column(
-            modifier = Modifier.fillMaxWidth().background(Palette.card).padding(horizontal = Space.md, vertical = Space.sm).padding(bottom = 84.dp),
+            modifier = Modifier.fillMaxWidth().background(Palette.card).navigationBarsPadding().padding(horizontal = Space.md, vertical = Space.sm).padding(bottom = 84.dp),
             verticalArrangement = Arrangement.spacedBy(Space.xs),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(Space.xs), verticalAlignment = Alignment.CenterVertically) {

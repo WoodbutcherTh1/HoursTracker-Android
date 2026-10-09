@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,6 +57,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneOffset
+import com.hourstracker.model.HistoryPeriodHelper
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -198,7 +200,7 @@ fun ExportScreen() {
                     }
                 }
                 RowDivider()
-                val short = DateTimeFormatter.ofPattern("MM/dd", locale)
+                val short = DateTimeFormatter.ofPattern("dd/MM", locale)
                 Text(
                     text = "${short.format(report.from)} – ${short.format(report.to)}",
                     style = DsText.meta,
@@ -276,7 +278,7 @@ fun ExportScreen() {
                 } else {
                     Row(modifier = Modifier.fillMaxWidth().padding(Space.md), horizontalArrangement = Arrangement.SpaceBetween) {
                         PreviewCell(stringResource(R.string.export_preview_days), report.rows.map { calendar.localDate(it.session.date) }.toSet().size.toString())
-                        PreviewCell(stringResource(R.string.export_preview_hours), String.format(Locale.ROOT, "%.1f", report.totals.totalHours))
+                        PreviewCell(stringResource(R.string.export_preview_hours), HistoryPeriodHelper.formatHoursClock(report.totals.totalHours))
                         PreviewCell(stringResource(R.string.export_preview_gross), PayFormatter.string(report.totals.grossPay, report.totals.currencyCode, locale))
                         PreviewCell(stringResource(R.string.export_preview_net), PayFormatter.string(report.totals.netPay, report.totals.currencyCode, locale))
                     }
@@ -284,7 +286,7 @@ fun ExportScreen() {
             }
             Spacer(Modifier.height(24.dp))
         }
-        Column(modifier = Modifier.padding(horizontal = Space.md).padding(bottom = 96.dp)) {
+        Column(modifier = Modifier.navigationBarsPadding().padding(horizontal = Space.md).padding(bottom = 96.dp)) {
             if (failed) {
                 ErrorState(
                     icon = TabIcons.Export,
