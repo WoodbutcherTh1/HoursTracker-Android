@@ -14,7 +14,20 @@
 | Export (PDF + share sheet) | Yes | Works; 3 issues |
 | Payslips | Yes | Empty state OK; no add control found |
 
-## Findings
+## Status update (follow-up fixes)
+
+| # | Finding | Status |
+|---|---------|--------|
+| 1 | Pay period "reversed" | **False positive.** The label is built as start then end; Hebrew is right-to-left, so `01.10 – 31.10` is drawn as `31.10 – 01.10`. The calculator is correct. Invariant test added (`PayrollPeriodOrderTest`, all start days 1-28, all months). |
+| 2 | Export month-first dates | Fixed (`dd/MM`) |
+| 3 | Footer clipped by tab bar | Fixed (system nav inset added). Export preview was never clipped: it scrolls above a pinned button. |
+| 4 | Times not zero-padded | Fixed in History for 24-hour locales |
+| 5 | Decimal hours in Export | Fixed (`HH:mm`) |
+| 6 | Home month card bare "7" | Open: it is a shift count by design; needs a pluralized unit string in 4 languages |
+| 7 | Payslips add control | Open: payslips have no storage yet; a button needs a new feature, not just UI |
+| 8 | Onboarding numbers | **Verified correct.** Engine adds the daily fuel allowance (₪35): 8 h x 50 + 35 = 435; 42 h over 5 days = 8.4 h/day x 50 + 35 = 455, x 5 = 2,275 |
+
+## Findings (original)
 
 Severity: **High** = likely wrong behavior, **Med** = visible defect, **Low** = polish.
 
