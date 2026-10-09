@@ -28,6 +28,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.material3.ripple
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
@@ -529,7 +530,7 @@ private fun Door(label: String, hint: String, fill: Color, textColor: Color, glo
                 }
                 .background(fill, CircleShape)
                 .border(width = 3.dp, color = Palette.accent.copy(alpha = focusRingAlpha), shape = CircleShape)
-                .clickable(interactionSource = interaction, indication = null, onClickLabel = hint, role = Role.Button, onClick = onClick)
+                .clickable(interactionSource = interaction, indication = ripple(bounded = false), onClickLabel = hint, role = Role.Button, onClick = onClick)
                 .focusable(interactionSource = interaction)
                 .onFocusChanged { state -> isFocused = state.isFocused },
             contentAlignment = Alignment.Center,
