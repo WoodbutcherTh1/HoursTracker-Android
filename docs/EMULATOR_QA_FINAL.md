@@ -54,6 +54,23 @@ Severity: **High** = likely wrong behavior, **Med** = visible defect, **Low** = 
 - PDF export builds `HoursTracker_2026-10-09_1357.pdf` and opens the system share sheet; Back returns cleanly.
 - Bottom navigation and RTL ordering work on all five tabs.
 
+## Flow tests (follow-up run)
+
+| Flow | Result |
+|------|--------|
+| Clock in | Works. Live timer and net estimate shown; notification pre-prompt appears first ("not now" tested). |
+| Break start / end | Works. Timer and estimate freeze during the break, resume after. |
+| Clock out | Works only with a **long press**; a plain tap does nothing and there is no on-screen hint. The summary sheet then shows gross, net, break, fuel and deductions. |
+| Manual entry (History "+") | Works. New row appears in History and totals add up (2,747.95 + 411.62 + 0.03 = 3,159.60). |
+| Settings save | Works. Save button turns active on edit; "Changes saved" confirmation. Rate edited 50 → 55 and restored to 50. |
+
+New observations:
+- **Med** — Clock-out needs a long press with no hint; a user who taps will think the button is broken.
+- **Low** — While a shift runs, the Clock-out button sits below the fold on a 1080x2400 screen (reachable by scrolling).
+- **Verify** — Shift summary reports a "1 min" break for a break of about 20 seconds (possible round-up).
+- **Verify** — After saving the manual entry the form stayed on screen for about 3 s before returning to History (slow transition or lag).
+- The 1-minute shift row shows net ₪0.03 in History while its summary sheet showed net ₪33.80: the daily fuel allowance is applied once per day, to the manual shift. Consistent with the engine, but surprising to a user.
+
 ## Not tested
 
-Clock-in/out and break flows, adding or editing a shift, other export formats (not PDF), the report-language and notes options, Settings save, and the ID number field. Home was reached once with seeded data. Per the 50% context rule, nothing was skipped for context reasons.
+Clock-in/out and break flows, adding or editing a shift, other export formats (not PDF), the report-language and notes options, and the ID number field. Home was reached once with seeded data. Per the 50% context rule, nothing was skipped for context reasons.
