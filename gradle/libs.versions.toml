@@ -3,7 +3,7 @@
 # JUnit is intentionally on the 5.x line (the approved major version).
 
 [versions]
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 junit = "5.14.4"
 kotlinx-serialization = "1.11.0"
 # Android app (M2). The Android Gradle Plugin stays on 8.x: 9.x needs Gradle 9, and the wrapper is pinned and checksum-verified.
