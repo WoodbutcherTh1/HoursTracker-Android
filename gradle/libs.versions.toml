@@ -3,16 +3,16 @@
 # JUnit is intentionally on the 5.x line (the approved major version).
 
 [versions]
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 junit = "5.14.4"
-kotlinx-serialization = "1.11.0"
+kotlinx-serialization = "1.12.0"
 # Android app (M2). The Android Gradle Plugin stays on 8.x: 9.x needs Gradle 9, and the wrapper is pinned and checksum-verified.
 agp = "8.13.2"
 compose-bom = "2025.10.01"
 activity-compose = "1.11.0"
-navigation-compose = "2.9.5"
+navigation-compose = "2.10.2"
 lifecycle = "2.9.4"
-core-ktx = "1.17.0"
+core-ktx = "1.19.1"
 # Room needs KSP. KSP 2.x versions are independent of the Kotlin version; KSP1 ended before Kotlin 2.4, so Room 2.6 is not usable here.
 ksp = "2.3.12"
 room = "2.8.5"
@@ -21,7 +21,7 @@ junit4 = "4.13.2"
 robolectric = "4.17"
 androidx-test-core = "1.7.0"
 # Dev-only: screenshot tests on the JVM. Never part of the shipped app.
-roborazzi = "1.76.0"
+roborazzi = "1.77.0"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
